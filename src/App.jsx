@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 export default class App extends Component {
+
   constructor(...args) {
     super(...args);
 
@@ -27,7 +28,6 @@ export default class App extends Component {
 
   render() {
     const { shows } = this.state;
-
     return (
       <div>
         <h1>
@@ -50,4 +50,5 @@ export default class App extends Component {
       </div>
     );
   }
+
 }
