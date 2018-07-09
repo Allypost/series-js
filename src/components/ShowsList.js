@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import ShowsListItem, { ShowProp } from './ShowsListItem.jsx';
+import ShowsListItem, { ShowProp } from './ShowsListItem.js';
 
 export const ShowsProp = PropTypes.arrayOf(ShowProp);
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ShowsList from './components/ShowsList.jsx';
+import ShowsList from './components/ShowsList.js';
 
 export default class App extends Component {
 
