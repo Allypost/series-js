@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ShowsList from './components/ShowsList.jsx';
 
 export default class App extends Component {
 
@@ -33,14 +34,7 @@ export default class App extends Component {
         <h1>
           S3RI3S
         </h1>
-        <ul>
-          {
-            shows.map((show) => (
-              <li key={show._id}>
-                {show.title}
-              </li>))
-          }
-        </ul>
+        <ShowsList shows={shows} />
         <button
           onClick={this.handleLoadButtonClick}
           type="button"
