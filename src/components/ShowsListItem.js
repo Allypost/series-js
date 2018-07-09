@@ -12,8 +12,11 @@ export default class ShowsListItem extends Component {
     super(...args);
 
     this.state = {
+      selected: false,
       showData: {},
     };
+
+    this.handleItemClick = this.handleItemClick.bind(this);
   }
 
   async componentDidMount() {
@@ -40,12 +43,37 @@ export default class ShowsListItem extends Component {
     }
   }
 
+  handleItemClick() {
+    const { selected } = this.state;
+
+    // :(
+    // eslint-disable-next-line react/no-set-state
+    this.setState({ selected: !selected });
+  }
+
+  getClassList() {
+    const { selected } = this.state;
+    const classList = { selected };
+
+    return Object.entries(classList)
+      .filter(([, display]) => display)
+      .map(([className]) => className);
+  }
+
   render() {
     const { show } = this.props;
     const { showData } = this.state;
     return (
-      <li title={showData.description}>
-        {show.title}
+      <li
+        className={this.getClassList().join(' ')}
+        title={showData.description}
+      >
+        <a
+          href={`#show:${show._id}`}
+          onClick={this.handleItemClick}
+        >
+          {show.title}
+        </a>
       </li>
     );
   }
