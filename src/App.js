@@ -16,10 +16,19 @@ export default class App extends Component {
   }
 
   handleLoadingButtonClick() {
+    const { isLoading } = this.state;
+
+    if (isLoading) {
+      return;
+    }
+
+    this._toggleLoading(true);
+
     fetch('https://api.infinum.academy/api/shows')
       .then((resp) => resp.json())
       .then((resp) => this._updateShows(resp.data))
-      .catch((err) => console.warn(err));
+      .catch((err) => console.warn(err))
+      .finally(() => this._toggleLoading(false));
   }
 
   _updateShows(data) {
@@ -27,6 +36,20 @@ export default class App extends Component {
     // FORGIVE ME
     // eslint-disable-next-line react/no-set-state
     this.setState({ shows: data });
+  }
+
+  _toggleLoading(forceState = null) {
+    if (forceState !== null) {
+      // eslint-disable-next-line react/no-set-state
+      this.setState({ isLoading: !!forceState });
+      return;
+    }
+
+    const { isLoading } = this.state;
+
+    // Forgive me Father, for I have sinned...
+    // eslint-disable-next-line react/no-set-state
+    this.setState({ isLoading: !isLoading });
   }
 
   render() {
