@@ -53,7 +53,7 @@ export default class ShowsListItem extends Component {
 
   getClassList() {
     const { selected } = this.state;
-    const classList = { selected };
+    const classList = { 'show-link-container': true, selected };
 
     return Object.entries(classList)
       .filter(([, display]) => display)

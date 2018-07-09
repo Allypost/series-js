@@ -31,11 +31,12 @@ export default class App extends Component {
     const { shows } = this.state;
     return (
       <div>
-        <h1>
+        <h1 className="title">
           S3RI3S
         </h1>
         <ShowsList shows={shows} />
         <button
+          className="load-button"
           onClick={this.handleLoadButtonClick}
           type="button"
         >

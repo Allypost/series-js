@@ -1,0 +1,30 @@
+html,
+body {
+  margin: 0;
+  font-size: 16px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.selected {
+  font-weight: bold;
+}
+
+.js-app {
+  margin-top: 10vh;
+  text-align: center;
+}
+
+.js-app .title {
+  margin: 0;
+  font-size: 4em;
+}
+
+.js-app .shows-container {
+  display: inline-block;
+  text-align: left;
+}
+
+.js-app .load-button {
+  display: block;
+  margin: 0 auto;
+}
