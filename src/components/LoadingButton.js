@@ -45,3 +45,8 @@ export default class LoadingButton extends Component {
   }
 
 }
+
+LoadingButton.propTypes = LoadingButtonProp;
+LoadingButton.defaultProps = {
+  onClick() { },
+};
