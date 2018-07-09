@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ShowsList from './components/ShowsList.js';
+import LoadingButton from './components/LoadingButton.js';
 
 export default class App extends Component {
 
@@ -8,12 +9,13 @@ export default class App extends Component {
 
     this.state = {
       shows: [],
+      isLoading: false,
     };
 
-    this.handleLoadButtonClick = this.handleLoadButtonClick.bind(this);
+    this.handleLoadingButtonClick = this.handleLoadingButtonClick.bind(this);
   }
 
-  handleLoadButtonClick() {
+  handleLoadingButtonClick() {
     fetch('https://api.infinum.academy/api/shows')
       .then((resp) => resp.json())
       .then((resp) => this._updateShows(resp.data))
@@ -28,20 +30,17 @@ export default class App extends Component {
   }
 
   render() {
-    const { shows } = this.state;
+    const { isLoading, shows } = this.state;
     return (
       <div>
         <h1 className="title">
           S3RI3S
         </h1>
         <ShowsList shows={shows} />
-        <button
-          className="load-button"
-          onClick={this.handleLoadButtonClick}
-          type="button"
-        >
-          Load data
-        </button>
+        <LoadingButton
+          isLoading={isLoading}
+          onClick={this.handleLoadingButtonClick}
+        />
       </div>
     );
   }
