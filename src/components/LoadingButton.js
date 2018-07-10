@@ -32,10 +32,23 @@ export default class LoadingButton extends Component {
     return 'Load data';
   }
 
+  getClasses() {
+    const { isLoading } = this.props;
+
+    const classList = {
+      'load-button': true,
+      'is-loading': isLoading,
+    };
+
+    return Object.entries(classList)
+      .filter(([_k, v]) => v)
+      .map(([k, _v]) => k);
+  }
+
   render() {
     return (
       <button
-        className="load-button"
+        className={this.getClasses().join(' ')}
         onClick={this.handleClick}
         type="button"
       >

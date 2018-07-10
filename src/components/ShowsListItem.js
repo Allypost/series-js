@@ -69,6 +69,7 @@ export default class ShowsListItem extends Component {
         title={showData.description}
       >
         <a
+          className="show-link"
           href={`#show:${show._id}`}
           onClick={this.handleItemClick}
         >
