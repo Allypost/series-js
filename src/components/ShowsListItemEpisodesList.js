@@ -15,10 +15,7 @@ export default class EpisodesList extends Component {
   constructor(args) {
     super(args);
 
-    const { showID } = args;
-
     this.state = {
-      showID,
       isLoading: false,
       episodes: [],
     };
@@ -28,16 +25,29 @@ export default class EpisodesList extends Component {
     this.fetchEpisodes();
   }
 
-  fetchEpisodes() {
-    const { isLoading, showID } = this.state;
+  componentDidUpdate(oldProps) {
+    const { showId } = this.props;
 
-    if (isLoading) {
+    if (!showId) {
+      return;
+    }
+
+    if (oldProps.showId !== showId) {
+      this.fetchEpisodes();
+    }
+  }
+
+  fetchEpisodes() {
+    const { isLoading } = this.state;
+    const { showId } = this.props;
+
+    if (isLoading || !showId) {
       return;
     }
 
     this._toggleLoading(true);
 
-    fetch(`https://api.infinum.academy/api/shows/${showID}/episodes`)
+    fetch(`https://api.infinum.academy/api/shows/${showId}/episodes`)
       .then((resp) => resp.json())
       .then((resp) => resp.data)
       .then((data) => this.setState({ episodes: data }))
