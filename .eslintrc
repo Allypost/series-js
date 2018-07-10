@@ -5,6 +5,7 @@
   },
   "rules": {
     "react/prefer-stateless-function": [0, false],
-    "react/require-optimization": [0, false]
+    "react/require-optimization": [0, false],
+    "react/no-set-state": [0, false]
   }
 }

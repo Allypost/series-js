@@ -1,0 +1,59 @@
+html {
+  min-height: 100%;
+  min-width: 100%;
+  background-color: #eceff1;
+}
+
+html,
+body {
+  margin: 0;
+  font-size: 16px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.js-app {
+  margin-top: 10vh;
+  text-align: center;
+}
+
+.js-app .title {
+  margin: 0;
+  font-size: 4em;
+}
+
+.js-app .shows-container {
+  display: inline-block;
+  max-width: 350px;
+  text-align: left;
+}
+
+.js-app .show-link-container ul,
+.js-app .show-link-container .description-container,
+.js-app .show-link-container .episodes-container {
+  margin-left: 1.5em;
+}
+
+.js-app .show-link-container .show-link {
+  display: block;
+  color: #263238;
+  text-decoration: underline;
+}
+
+.js-app .show-link-container .show-link:hover {
+  text-decoration: none;
+}
+
+.js-app .show-link-container.selected .show-link {
+  font-size: 120%;
+  font-weight: bold;
+}
+
+.js-app .load-button {
+  display: block;
+  margin: 0 auto;
+}
+
+.js-app .load-button.is-loading {
+  cursor: default;
+  user-select: none;
+}
