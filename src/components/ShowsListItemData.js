@@ -13,12 +13,12 @@ export default class ShowsListItemDetails extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.fetchDetails()
       .then((data) => this.setState({ showData: data }));
   }
 
-  async fetchDetails() {
+  fetchDetails() {
     const { showId } = this.props;
     const url = `https://api.infinum.academy/api/shows/${showId}`;
 
