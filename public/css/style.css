@@ -27,10 +27,12 @@ body {
 
 .js-app .shows-container {
   display: inline-block;
+  max-width: 350px;
   text-align: left;
 }
 
 .js-app .show-link-container .show-link {
+  display: block;
   color: #263238;
 }
 
