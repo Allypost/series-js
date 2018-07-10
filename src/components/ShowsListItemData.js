@@ -9,6 +9,7 @@ export default class ShowsListItemDetails extends Component {
     const showData = Object.assign({}, args.showData);
     this.state = {
       showData,
+      isLoadingData: false,
     };
   }
 
@@ -26,18 +27,42 @@ export default class ShowsListItemDetails extends Component {
     const fetcher =
       (url) => fetch(url)
         .then((resp) => resp.json())
-        .then((resp) => resp.data);
+        .then((resp) => resp.data)
+        .finally(() => this._toggleLoading(false));
 
     try {
+      this._toggleLoading(true);
       return await fetcher(`https://api.infinum.academy/api/shows/${showId}`);
     } catch (e) {
       return {};
     }
   }
 
+  _toggleLoading(forceState = null) {
+    if (forceState !== null) {
+      // eslint-disable-next-line react/no-set-state
+      this.setState({ isLoadingData: !!forceState });
+      return;
+    }
+
+    const { isLoadingData } = this.state;
+
+    // Forgive me Father, for I have sinned...
+    // eslint-disable-next-line react/no-set-state
+    this.setState({ isLoadingData: !isLoadingData });
+  }
+
   renderDescriptionContent() {
-    const { showData } = this.state;
+    const { showData, isLoadingData } = this.state;
     const { description } = showData;
+
+    if (isLoadingData) {
+      return (
+        <em>
+          Loading...
+        </em>
+      );
+    }
 
     if (description) {
       return description;
