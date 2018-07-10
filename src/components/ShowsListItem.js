@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import EpisodesList from './EpisodesList';
+import ShowsListItemDetails from './ShowsListItemData';
 
 export const ShowProp = PropTypes.shape({
   _id: PropTypes.string.isRequired,
@@ -14,34 +14,9 @@ export default class ShowsListItem extends Component {
 
     this.state = {
       selected: false,
-      showData: {},
     };
 
     this.handleItemClick = this.handleItemClick.bind(this);
-  }
-
-  async componentDidMount() {
-    const details = await this.fetchDetails();
-
-    // I'm really sorry about this one too
-    // eslint-disable-next-line react/no-set-state,react/no-did-mount-set-state
-    this.setState({ showData: details });
-  }
-
-  async fetchDetails() {
-    const { show } = this.props;
-    const id = show._id;
-
-    const fetcher =
-      (url) => fetch(url)
-        .then((resp) => resp.json())
-        .then((resp) => resp.data);
-
-    try {
-      return await fetcher(`https://api.infinum.academy/api/shows/${id}`);
-    } catch (e) {
-      return {};
-    }
   }
 
   handleItemClick() {
@@ -54,7 +29,10 @@ export default class ShowsListItem extends Component {
 
   getClassList() {
     const { selected } = this.state;
-    const classList = { 'show-link-container': true, selected };
+    const classList = {
+      'show-link-container': true,
+      selected,
+    };
 
     return Object.entries(classList)
       .filter(([, display]) => display)
@@ -63,7 +41,7 @@ export default class ShowsListItem extends Component {
 
   render() {
     const { show } = this.props;
-    const { selected, showData } = this.state;
+    const { selected } = this.state;
     return (
       <li
         className={this.getClassList().join(' ')}
@@ -75,30 +53,7 @@ export default class ShowsListItem extends Component {
         >
           {show.title}
         </a>
-        {selected && (
-          <div>
-            Description:
-            <ul>
-              <li>
-                {
-                  showData.description ?
-                    showData.description :
-                    (
-                      <em>
-                        No description...
-                      </em>
-                    )
-                }
-              </li>
-            </ul>
-          </div>
-        )}
-        {selected && (
-          <div>
-            Episodes:
-            <EpisodesList showID={show._id} />
-          </div>
-        )}
+        {selected && <ShowsListItemDetails showId={show._id} />}
       </li>
     );
   }

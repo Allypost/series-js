@@ -66,34 +66,29 @@ export default class EpisodesList extends Component {
 
   render() {
     const { isLoading, episodes } = this.state;
+    const renderedEpisodes = this.renderItems(episodes);
+    const loadingElement = (
+      <li key="__loading">
+        <em>
+          Loading...
+        </em>
+      </li>
+    );
+    const noEpisodesElement = (
+      <li key="__no_episodes">
+        <em>
+          No episodes...
+        </em>
+      </li>
+    );
 
-    if (isLoading) {
-      return (
-        <ul>
-          <li>
-            <em>
-              Loading...
-            </em>
-          </li>
-        </ul>
-      );
-    }
-
-    if (!episodes.length) {
-      return (
-        <ul>
-          <li title="Yet...">
-            <em>
-              No episodes...
-            </em>
-          </li>
-        </ul>
-      );
+    if (!renderedEpisodes.length) {
+      renderedEpisodes.push(noEpisodesElement);
     }
 
     return (
-      <ul className="episodes-container">
-        {this.renderItems(episodes)}
+      <ul>
+        {isLoading ? loadingElement : renderedEpisodes}
       </ul>
     );
   }
