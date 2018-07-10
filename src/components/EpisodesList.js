@@ -22,7 +22,9 @@ export default class EpisodesList extends Component {
       isLoading: false,
       episodes: [],
     };
+  }
 
+  componentDidMount() {
     this.fetchEpisodes();
   }
 
