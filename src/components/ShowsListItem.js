@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import EpisodesList from './EpisodesList';
 
 export const ShowProp = PropTypes.shape({
   _id: PropTypes.string.isRequired,
@@ -62,7 +63,7 @@ export default class ShowsListItem extends Component {
 
   render() {
     const { show } = this.props;
-    const { showData } = this.state;
+    const { selected, showData } = this.state;
     return (
       <li
         className={this.getClassList().join(' ')}
@@ -75,6 +76,30 @@ export default class ShowsListItem extends Component {
         >
           {show.title}
         </a>
+        {selected && (
+          <div>
+            Description:
+            <ul>
+              <li>
+                {
+                  showData.description ?
+                    showData.description :
+                    (
+                      <em>
+                        No description...
+                      </em>
+                    )
+                }
+              </li>
+            </ul>
+          </div>
+        )}
+        {selected && (
+          <div>
+            Episodes:
+            <EpisodesList showID={show._id} />
+          </div>
+        )}
       </li>
     );
   }
