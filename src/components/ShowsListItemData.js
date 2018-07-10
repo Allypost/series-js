@@ -79,11 +79,11 @@ export default class ShowsListItemDetails extends Component {
   }
 
   renderEpisodeList() {
-    const { showData } = this.state;
+    const { showId } = this.props;
     return (
       <div className="episodes-container">
         Episodes:
-        <EpisodesList showID={showData._id} />
+        <EpisodesList showId={showId} />
       </div>
     );
   }
