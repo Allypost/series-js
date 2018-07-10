@@ -40,7 +40,6 @@ export default class EpisodesList extends Component {
     fetch(`https://api.infinum.academy/api/shows/${showID}/episodes`)
       .then((resp) => resp.json())
       .then((resp) => resp.data)
-      // eslint-disable-next-line react/no-set-state
       .then((data) => this.setState({ episodes: data }))
       .catch((e) => console.warn(e))
       .finally(() => this._toggleLoading(false));
@@ -48,16 +47,12 @@ export default class EpisodesList extends Component {
 
   _toggleLoading(forceState = null) {
     if (forceState !== null) {
-      // eslint-disable-next-line react/no-set-state
-      this.setState({ isLoading: !!forceState });
-      return;
+      return this.setState({ isLoading: !!forceState });
     }
 
     const { isLoading } = this.state;
 
-    // Forgive me Father, for I have sinned...
-    // eslint-disable-next-line react/no-set-state
-    this.setState({ isLoading: !isLoading });
+    return this.setState({ isLoading: !isLoading });
   }
 
   renderItems(episodes = []) {

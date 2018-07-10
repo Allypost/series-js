@@ -22,8 +22,6 @@ export default class ShowsListItem extends Component {
   handleItemClick() {
     const { selected } = this.state;
 
-    // :(
-    // eslint-disable-next-line react/no-set-state
     this.setState({ selected: !selected });
   }
 

@@ -33,16 +33,12 @@ export default class ShowsListItemDetails extends Component {
 
   _toggleLoading(forceState = null) {
     if (forceState !== null) {
-      // eslint-disable-next-line react/no-set-state
-      this.setState({ isLoadingData: !!forceState });
-      return;
+      return this.setState({ isLoadingData: !!forceState });
     }
 
     const { isLoadingData } = this.state;
 
-    // Forgive me Father, for I have sinned...
-    // eslint-disable-next-line react/no-set-state
-    this.setState({ isLoadingData: !isLoadingData });
+    return this.setState({ isLoadingData: !isLoadingData });
   }
 
   renderDescriptionContent() {

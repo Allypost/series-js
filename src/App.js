@@ -32,24 +32,17 @@ export default class App extends Component {
   }
 
   _updateShows(data) {
-
-    // FORGIVE ME
-    // eslint-disable-next-line react/no-set-state
     this.setState({ shows: data });
   }
 
   _toggleLoading(forceState = null) {
     if (forceState !== null) {
-      // eslint-disable-next-line react/no-set-state
-      this.setState({ isLoading: !!forceState });
-      return;
+      return this.setState({ isLoading: !!forceState });
     }
 
     const { isLoading } = this.state;
 
-    // Forgive me Father, for I have sinned...
-    // eslint-disable-next-line react/no-set-state
-    this.setState({ isLoading: !isLoading });
+    return this.setState({ isLoading: !isLoading });
   }
 
   render() {
