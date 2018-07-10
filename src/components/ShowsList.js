@@ -22,7 +22,7 @@ export default class ShowsList extends Component {
   render() {
     const { shows } = this.props;
     return (
-      <ul className="shows-container">
+      <ul className="shows-container collection">
         {this.renderItems(shows)}
       </ul>
     );

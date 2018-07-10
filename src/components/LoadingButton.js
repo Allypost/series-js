@@ -36,8 +36,12 @@ export default class LoadingButton extends Component {
     const { isLoading } = this.props;
 
     const classList = {
+      'btn-large': true,
+      'purple darken-3': true,
+      'waves waves-light': true,
       'load-button': true,
       'is-loading': isLoading,
+      pulse: isLoading,
     };
 
     return Object.entries(classList)

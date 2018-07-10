@@ -31,6 +31,7 @@ export default class ShowsListItem extends Component {
     const { selected } = this.state;
     const classList = {
       'show-link-container': true,
+      'collection-item': true,
       selected,
     };
 

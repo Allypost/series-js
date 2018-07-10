@@ -27,9 +27,16 @@ body {
   text-align: left;
 }
 
+.js-app .show-link-container ul,
+.js-app .show-link-container .description-container,
+.js-app .show-link-container .episodes-container {
+  margin-left: 1.5em;
+}
+
 .js-app .show-link-container .show-link {
   display: block;
   color: #263238;
+  text-decoration: underline;
 }
 
 .js-app .show-link-container .show-link:hover {
@@ -42,24 +49,11 @@ body {
 }
 
 .js-app .load-button {
-  cursor: pointer;
   display: block;
   margin: 0 auto;
-  font-size: 1.5em;
-  padding: .69em .91em;
-  border-radius: 6px;
-  border: none;
-  background-color: #673ab7;
-  color: #fff;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, .5);
-  transition: background-color .3s ease-in-out, box-shadow .3s ease-in-out;
-}
-
-.js-app .load-button:hover {
-  background-color: #4527a0;
-  box-shadow: 2px 2px 6px rgba(0, 0, 0, .5), 1px 1px 4px rgba(0, 0, 0, .69);
 }
 
 .js-app .load-button.is-loading {
-  background-color: #787878;
+  cursor: default;
+  user-select: none;
 }
