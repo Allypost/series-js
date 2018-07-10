@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import classNames from 'classnames/dedupe';
 import React, { Component } from 'react';
 import ShowsListItemDetails from './ShowsListItemData';
 
@@ -27,15 +28,15 @@ export default class ShowsListItem extends Component {
 
   getClassList() {
     const { selected } = this.state;
-    const classList = {
-      'show-link-container': true,
-      'collection-item': true,
+
+    const staticClasses = [
+      'show-link-container', 'collection-item',
+    ];
+    const dynamicClasses = {
       selected,
     };
 
-    return Object.entries(classList)
-      .filter(([, display]) => display)
-      .map(([className]) => className);
+    return classNames(staticClasses, dynamicClasses);
   }
 
   render() {
@@ -43,7 +44,7 @@ export default class ShowsListItem extends Component {
     const { selected } = this.state;
     return (
       <li
-        className={this.getClassList().join(' ')}
+        className={this.getClassList()}
       >
         <a
           className="show-link"

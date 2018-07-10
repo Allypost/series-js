@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import classNames from 'classnames/dedupe';
 import React, { Component } from 'react';
 
 export const LoadingButtonProp = {
@@ -35,24 +36,21 @@ export default class LoadingButton extends Component {
   getClasses() {
     const { isLoading } = this.props;
 
-    const classList = {
-      'btn-large': true,
-      'purple darken-3': true,
-      'waves waves-light': true,
-      'load-button': true,
+    const staticClasses = [
+      'btn-large', 'purple', 'darken-3', 'waves', 'waves-light', 'load-button',
+    ];
+    const dynamicClasses = {
       'is-loading': isLoading,
       pulse: isLoading,
     };
 
-    return Object.entries(classList)
-      .filter(([_k, v]) => v)
-      .map(([k, _v]) => k);
+    return classNames(staticClasses, dynamicClasses);
   }
 
   render() {
     return (
       <button
-        className={this.getClasses().join(' ')}
+        className={this.getClasses()}
         onClick={this.handleClick}
         type="button"
       >
