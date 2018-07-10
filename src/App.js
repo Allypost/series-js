@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ShowsList from './components/ShowsList.js';
-import LoadingButton from './components/LoadingButton.js';
+import ShowsList from './components/ShowsList';
+import LoadingButton from './components/LoadingButton';
 
 export default class App extends Component {
 
