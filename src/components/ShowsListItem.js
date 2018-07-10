@@ -67,7 +67,6 @@ export default class ShowsListItem extends Component {
     return (
       <li
         className={this.getClassList().join(' ')}
-        title={showData.description}
       >
         <a
           className="show-link"
