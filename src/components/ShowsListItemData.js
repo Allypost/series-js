@@ -14,28 +14,21 @@ export default class ShowsListItemDetails extends Component {
   }
 
   async componentDidMount() {
-    const details = await this.fetchDetails();
-
-    // I'm really sorry about this one too
-    // eslint-disable-next-line react/no-set-state,react/no-did-mount-set-state
-    this.setState({ showData: details });
+    this.fetchDetails()
+      .then((data) => this.setState({ showData: data }));
   }
 
   async fetchDetails() {
     const { showId } = this.props;
+    const url = `https://api.infinum.academy/api/shows/${showId}`;
 
-    const fetcher =
-      (url) => fetch(url)
-        .then((resp) => resp.json())
-        .then((resp) => resp.data)
-        .finally(() => this._toggleLoading(false));
+    this._toggleLoading(true);
 
-    try {
-      this._toggleLoading(true);
-      return await fetcher(`https://api.infinum.academy/api/shows/${showId}`);
-    } catch (e) {
-      return {};
-    }
+    return fetch(url)
+      .then((resp) => resp.json())
+      .then((resp) => resp.data || {})
+      .catch((err) => console.warn(err))
+      .finally(() => this._toggleLoading(false));
   }
 
   _toggleLoading(forceState = null) {
@@ -82,9 +75,7 @@ export default class ShowsListItemDetails extends Component {
         Description:
         <ul>
           <li>
-            {
-              this.renderDescriptionContent(showData.description)
-            }
+            {this.renderDescriptionContent(showData.description)}
           </li>
         </ul>
       </div>
