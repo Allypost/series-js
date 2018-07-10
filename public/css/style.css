@@ -11,10 +11,6 @@ body {
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.selected {
-  font-weight: bold;
-}
-
 .js-app {
   margin-top: 10vh;
   text-align: center;
@@ -38,6 +34,11 @@ body {
 
 .js-app .show-link-container .show-link:hover {
   text-decoration: none;
+}
+
+.js-app .show-link-container.selected .show-link {
+  font-size: 120%;
+  font-weight: bold;
 }
 
 .js-app .load-button {
