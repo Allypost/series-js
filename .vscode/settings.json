@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "*.js": "javascriptreact"
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+        "jsx": true,
+        "modules": true
+    }
+  },
+  "editor.tabSize": 2,
+}
