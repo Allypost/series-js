@@ -1,5 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.js';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 
-ReactDOM.render(<App />, document.querySelector('.js-app'));
+import ShowContainer from './ShowContainer';
+
+ReactDOM.render(
+  (
+    <Router>
+      <Route
+        component={ShowContainer}
+        exact
+        path='/'
+      />
+    </Router>
+  ),
+  document.querySelector('.js-app')
+);

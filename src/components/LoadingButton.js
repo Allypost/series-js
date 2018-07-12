@@ -3,6 +3,8 @@ import classNames from 'classnames/dedupe';
 import React, { Component } from 'react';
 
 export const LoadingButtonProp = {
+  dataName: PropTypes.string,
+  hasData: PropTypes.bool,
   isLoading: PropTypes.bool.isRequired,
   onClick: PropTypes.func,
 };
@@ -24,13 +26,17 @@ export default class LoadingButton extends Component {
   }
 
   displayText() {
-    const { isLoading } = this.props;
+    const { isLoading, hasData, dataName = 'data' } = this.props;
 
     if (isLoading) {
       return 'Loading...';
     }
 
-    return 'Load data';
+    if (hasData) {
+      return `Re-Load ${dataName}`;
+    }
+
+    return `Load ${dataName}`;
   }
 
   getClasses() {
@@ -63,5 +69,7 @@ export default class LoadingButton extends Component {
 
 LoadingButton.propTypes = LoadingButtonProp;
 LoadingButton.defaultProps = {
+  dataName: 'data',
+  hasData: true,
   onClick() { },
 };
