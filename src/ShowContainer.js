@@ -4,7 +4,7 @@ import Util from './helpers/Util';
 import { ShowData } from './components/ShowData';
 import { EpisodeList } from './components/EpisodeList';
 
-export class ShowsContainer extends Component {
+export class ShowContainer extends Component {
   constructor(...args) {
     super(...args);
 

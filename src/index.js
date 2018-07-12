@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
 import { IndexContainer } from './IndexContainer';
-import { ShowsContainer } from './ShowsContainer';
+import { ShowContainer } from './ShowContainer';
 import { NotFoundContainer } from './NotFoundContainer';
 import { NavBar } from './components/NavBar';
 
@@ -14,7 +14,7 @@ const routes = [
     exact: true,
   },
   {
-    component: ShowsContainer,
+    component: ShowContainer,
     path: '/show/:showId',
     exact: true,
   },
