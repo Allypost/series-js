@@ -5,6 +5,7 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import { IndexContainer } from './IndexContainer';
 import { ShowsContainer } from './ShowsContainer';
 import { NotFoundContainer } from './NotFoundContainer';
+import { NavBar } from './components/NavBar';
 
 const routes = [
   {
@@ -22,22 +23,31 @@ const routes = [
   },
 ];
 
+/* eslint-disable react/jsx-max-depth */
 ReactDOM.render(
   (
-    <Router>
-      <Switch>
-        {
-          routes
-            .map((routeData) =>
-              (
-                <Route
-                  key="path"
-                  {...routeData}
-                />
-              ))
-        }
-      </Switch>
-    </Router>
+    <div>
+      <Router>
+        <div>
+          <NavBar />
+          <div className="content-wrapper">
+            <Switch>
+              {
+                routes
+                  .map((routeData) =>
+                    (
+                      <Route
+                        key={routeData.path || '__'}
+                        {...routeData}
+                      />
+                    ))
+              }
+            </Switch>
+          </div>
+        </div>
+      </Router>
+    </div>
   ),
   document.querySelector('.js-app')
 );
+/* eslint-enable react/jsx-max-depth */
