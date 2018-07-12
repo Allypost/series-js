@@ -10,7 +10,7 @@ body {
   flex-direction: column;
 }
 
-.js-app {
+.js-app .content-wrapper {
   margin-top: 10vh;
   text-align: center;
 }
