@@ -4,11 +4,10 @@ html {
   background-color: #eceff1;
 }
 
-html,
 body {
-  margin: 0;
-  font-size: 16px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 .js-app {
