@@ -1,17 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
 import { IndexContainer } from './IndexContainer';
+import { NotFoundContainer } from './NotFoundContainer';
 
 ReactDOM.render(
   (
     <Router>
-      <Route
-        component={IndexContainer}
-        exact
-        path='/'
-      />
+      <Switch>
+        <Route
+          component={IndexContainer}
+          exact
+          path='/'
+        />
+        <Route
+          component={NotFoundContainer}
+        />
+      </Switch>
     </Router>
   ),
   document.querySelector('.js-app')
