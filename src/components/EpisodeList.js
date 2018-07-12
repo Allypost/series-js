@@ -55,11 +55,16 @@ export class EpisodeList extends Component {
     const { isLoading } = this.props;
 
     return (
-      <ul className="collection episode-list">
-        {
-          isLoading ? this._renderLoading() : this._renderEpisodes()
-        }
-      </ul>
+      <div className="col s12 l6">
+        <h4 className="episodes-list-header show-on-large">
+          Episodes
+        </h4>
+        <ul className="collection episode-list">
+          {
+            isLoading ? this._renderLoading() : this._renderEpisodes()
+          }
+        </ul>
+      </div>
     );
   }
 

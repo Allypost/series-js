@@ -113,7 +113,7 @@ export class ShowsContainer extends Component {
     const { loading, showData, episodes } = this.state;
 
     return (
-      <div>
+      <div className="row">
         <ShowData
           isLoading={loading.showData}
           showData={showData}

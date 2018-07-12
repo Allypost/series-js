@@ -30,7 +30,7 @@ ReactDOM.render(
       <Router>
         <div>
           <NavBar />
-          <div className="content-wrapper">
+          <div className="content-wrapper container">
             <Switch>
               {
                 routes

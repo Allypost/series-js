@@ -26,6 +26,10 @@ body {
   text-align: left;
 }
 
+.js-app .episodes-list-header {
+  margin-top: 2.69em;
+}
+
 .js-app .show-link-container ul,
 .js-app .show-link-container .description-container,
 .js-app .show-link-container .episodes-container {

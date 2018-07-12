@@ -7,28 +7,20 @@ export class ShowData extends Component {
 
   renderData() {
     const { showData } = this.props;
-
-    if (!showData.title) {
-      return (
-        <div className="showData">
-          <h1>
-            No show here...
-          </h1>
-          <h4>
-            The ID you provided matches no show in our records.
-          </h4>
-        </div>
-      );
-    }
+    const defaultData = {
+      title: 'No show here...',
+      description: 'The ID provided matches no show in our records.',
+    };
+    const show = Object.assign(defaultData, showData);
 
     return (
-      <div className="showData">
+      <div>
         <h1>
-          {showData.title}
+          {show.title}
         </h1>
-        <h4>
-          {showData.description}
-        </h4>
+        <h5>
+          {show.description || 'No description...'}
+        </h5>
       </div>
     );
   }
@@ -36,7 +28,7 @@ export class ShowData extends Component {
   // eslint-disable-next-line class-methods-use-this
   renderLoading() {
     return (
-      <div className="showData">
+      <div>
         <h1>
           Loading show...
         </h1>
@@ -48,11 +40,13 @@ export class ShowData extends Component {
   render() {
     const { isLoading } = this.props;
 
-    if (isLoading) {
-      return this.renderLoading();
-    }
-
-    return this.renderData();
+    return (
+      <div className="col s12 l6">
+        {
+          isLoading ? this.renderLoading() : this.renderData()
+        }
+      </div>
+    );
   }
 
 }
