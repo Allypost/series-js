@@ -73,9 +73,6 @@ export class IndexContainer extends Component {
     const { isLoading, shows } = this.state;
     return (
       <div>
-        <h1 className="title">
-          S3RI3S
-        </h1>
         <ul className="shows-container collection">
           {this._renderShows()}
         </ul>
