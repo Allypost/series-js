@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import LoadingButton from './components/LoadingButton';
 
-export default class ShowContainer extends Component {
+export class IndexContainer extends Component {
   constructor(...args) {
     super(...args);
 
