@@ -16,6 +16,7 @@ export class ShowContainer extends Component {
         showData: false,
         episodes: false,
       },
+      timer: null,
     };
 
     this.handleLoadingButtonClick = this.handleLoadingButtonClick.bind(this);
@@ -23,6 +24,14 @@ export class ShowContainer extends Component {
 
   componentDidMount() {
     this._fetchAllData();
+    const timer = setInterval(() => this._fetchAll(), 5000);
+    // eslint-disable-next-line
+    this.setState({ timeout: timer });
+  }
+
+  componentWillUnmount() {
+    const { timer } = this.state;
+    clearInterval(timer);
   }
 
   handleLoadingButtonClick() {
@@ -61,6 +70,7 @@ export class ShowContainer extends Component {
       Promise
         .all(fetchArray)
         .then((data) => arrToObj(data))
+        .catch((e) => console.warn(e))
     );
   }
 

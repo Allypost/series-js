@@ -19,11 +19,22 @@ export class EpisodeContainer extends Component {
         episodeData: false,
         comments: false,
       },
+      timeout: null,
     };
   }
 
   componentDidMount() {
     this._fetchAll();
+    const timer = setInterval(() => this._fetchAll(), 5000);
+    // eslint-disable-next-line
+    this.setState({ timeout: timer });
+  }
+
+  componentWillUnmount() {
+    const { timer } = this.state;
+    if (timer) {
+      clearInterval(timer);
+    }
   }
 
   _fetchAll() {
@@ -58,6 +69,7 @@ export class EpisodeContainer extends Component {
       Promise
         .all(fetchArray)
         .then((data) => arrToObj(data))
+        .catch((e) => console.warn(e))
     );
   }
 
