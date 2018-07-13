@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import Util from './helpers/Util';
 
 import { ShowData } from './components/ShowData';
@@ -121,18 +122,29 @@ export class ShowContainer extends Component {
     const showId = this._getShowId();
     const { loading, showData, episodes } = this.state;
 
+    /* eslint-disable react/jsx-max-depth */
     return (
-      <div className="row">
-        <ShowData
-          isLoading={loading.showData}
-          showData={showData}
-        />
-        <EpisodeList
-          episodes={episodes}
-          isLoading={loading.episodes}
-          showId={showId}
-        />
+      <div>
+        <div className="row">
+          <Link to="/">
+            <h1 className="col s12">
+              &larr; Back to series
+            </h1>
+          </Link>
+        </div>
+        <div className="row">
+          <ShowData
+            isLoading={loading.showData}
+            showData={showData}
+          />
+          <EpisodeList
+            episodes={episodes}
+            isLoading={loading.episodes}
+            showId={showId}
+          />
+        </div>
       </div>
     );
+    /* eslint-enable react/jsx-max-depth */
   }
 }
