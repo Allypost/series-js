@@ -37,24 +37,25 @@ export class ShowContainer extends Component {
 
     const stateKeys = Object.keys(this.state);
 
-    const finalKeysArray =
+    const fetchArray =
       flattenArray(keys)
         .map(camelCase)
-        .filter((key) => stateKeys.includes(key));
-
-    const fetchArray =
-      finalKeysArray
+        .filter((key) => stateKeys.includes(key))
         .map((key) => this._doFetch(key));
 
-    const resultMapper =
-      (results) =>
-        results.map((result, index) =>
-          ({ [finalKeysArray[index]]: result }));
+    const arrToObj = (arr) =>
+      arr.reduce((acc, el) => {
+        const [key, value] = Object.entries(el).pop();
+
+        acc[key] = value;
+
+        return acc;
+      }, {});
 
     return (
       Promise
         .all(fetchArray)
-        .then(resultMapper)
+        .then((data) => arrToObj(data))
     );
   }
 
@@ -71,7 +72,11 @@ export class ShowContainer extends Component {
       fetch(url)
         .then((resp) => resp.json())
         .then((resp) => resp.data)
-        .then((data) => this.setState({ [key]: data }))
+        .then((data) => {
+          const dataObj = { [key]: data };
+          this.setState(dataObj);
+          return dataObj;
+        })
         .catch((err) => console.warn('Couldn\'t fetch episodes', err))
         .finally(() => this._toggleLoading(key, false))
     );
