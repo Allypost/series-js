@@ -30,7 +30,7 @@ export class ShowData extends Component {
     return (
       <div>
         <h1>
-          Loading show...
+          Loading description...
         </h1>
         {Util.spinnerComponent()}
       </div>
