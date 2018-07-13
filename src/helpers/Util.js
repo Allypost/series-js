@@ -27,11 +27,11 @@ export default class Util {
     return flatten(array);
   }
 
-  static spinnerComponent() {
+  static spinnerComponent(size = 'big', colour = 'blue') {
     /* eslint-disable react/jsx-max-depth */
     return (
-      <div className="preloader-wrapper big active">
-        <div className="spinner-layer spinner-blue-only">
+      <div className={`preloader-wrapper ${size} active`}>
+        <div className={`spinner-layer spinner-${colour}-only`}>
           <div className="circle-clipper left">
             <div className="circle" />
           </div>
