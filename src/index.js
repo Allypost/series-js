@@ -4,6 +4,7 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
 import { IndexContainer } from './IndexContainer';
 import { ShowContainer } from './ShowContainer';
+import { EpisodeContainer } from './EpisodeContainer';
 import { NotFoundContainer } from './NotFoundContainer';
 import { NavBar } from './components/NavBar';
 
@@ -16,6 +17,11 @@ const routes = [
   {
     component: ShowContainer,
     path: '/show/:showId',
+    exact: true,
+  },
+  {
+    component: EpisodeContainer,
+    path: '/show/:showId/episode/:episodeId',
     exact: true,
   },
   {
