@@ -14,7 +14,7 @@ export class NavBar extends Component {
               className="brand-logo center"
               to="/"
             >
-              S3RI3S
+              S&#400;RI&#400;S
             </Link>
             <ul
               className="right hide-on-med-and-down"
