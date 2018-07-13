@@ -4,14 +4,13 @@ html {
   background-color: #eceff1;
 }
 
-html,
 body {
-  margin: 0;
-  font-size: 16px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
-.js-app {
+.js-app .content-wrapper {
   margin-top: 10vh;
   text-align: center;
 }
@@ -25,6 +24,10 @@ body {
   display: inline-block;
   max-width: 350px;
   text-align: left;
+}
+
+.js-app .episodes-list-header {
+  margin-top: 2.69em;
 }
 
 .js-app .show-link-container ul,

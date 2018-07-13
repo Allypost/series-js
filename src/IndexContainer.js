@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import ShowsList from './components/ShowsList';
+import { Link } from 'react-router-dom';
+
 import LoadingButton from './components/LoadingButton';
 
-export default class App extends Component {
-
+export class IndexContainer extends Component {
   constructor(...args) {
     super(...args);
 
@@ -15,7 +15,15 @@ export default class App extends Component {
     this.handleLoadingButtonClick = this.handleLoadingButtonClick.bind(this);
   }
 
+  componentDidMount() {
+    this._fetchShows();
+  }
+
   handleLoadingButtonClick() {
+    this._fetchShows();
+  }
+
+  _fetchShows() {
     const { isLoading } = this.state;
 
     if (isLoading) {
@@ -45,20 +53,38 @@ export default class App extends Component {
     return this.setState({ isLoading: !isLoading });
   }
 
+  _renderShows() {
+    const { shows } = this.state;
+    const mapper = (show) => (
+      <li
+        className="collection-item"
+        key={show._id}
+      >
+        <Link to={`/show/${show._id}`}>
+          <h6>
+            {show.title}
+          </h6>
+        </Link>
+      </li>
+    );
+
+    return shows.map(mapper);
+  }
+
   render() {
     const { isLoading, shows } = this.state;
     return (
       <div>
-        <h1 className="title">
-          S3RI3S
-        </h1>
-        <ShowsList shows={shows} />
+        <ul className="shows-container collection">
+          {this._renderShows()}
+        </ul>
         <LoadingButton
+          dataName="Series"
+          hasData={!!shows.length}
           isLoading={isLoading}
           onClick={this.handleLoadingButtonClick}
         />
       </div>
     );
   }
-
 }
