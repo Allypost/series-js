@@ -61,7 +61,9 @@ export class IndexContainer extends Component {
         key={show._id}
       >
         <Link to={`/show/${show._id}`}>
-          {show.title}
+          <h6>
+            {show.title}
+          </h6>
         </Link>
       </li>
     );
