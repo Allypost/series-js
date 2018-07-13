@@ -60,3 +60,8 @@ body {
   cursor: default;
   user-select: none;
 }
+
+.preloader-wrapper.small {
+  width: 1.5em;
+  height: 1.5em;
+}
