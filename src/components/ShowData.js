@@ -5,7 +5,7 @@ import Util from '../helpers/Util';
 
 export class ShowData extends Component {
 
-  renderData() {
+  _renderData() {
     const { showData } = this.props;
     const defaultData = {
       title: 'No show here...',
@@ -26,7 +26,7 @@ export class ShowData extends Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  renderLoading() {
+  _renderLoading() {
     return (
       <div>
         <h1>
@@ -37,14 +37,36 @@ export class ShowData extends Component {
     );
   }
 
-  render() {
-    const { isLoading } = this.props;
+  // eslint-disable-next-line class-methods-use-this
+  _renderErrors() {
+    return (
+      <div>
+        <h1>
+          Error loading description. Trying again...
+        </h1>
+        {Util.spinnerComponent()}
+      </div>
+    );
+  }
 
+  _render() {
+    const { hasErrors, isLoading } = this.props;
+
+    if (hasErrors) {
+      return this._renderErrors();
+    }
+
+    if (isLoading) {
+      return this._renderLoading();
+    }
+
+    return this._renderData();
+  }
+
+  render() {
     return (
       <div className="col s12 l6">
-        {
-          isLoading ? this.renderLoading() : this.renderData()
-        }
+        {this._render()}
       </div>
     );
   }
@@ -53,6 +75,7 @@ export class ShowData extends Component {
 
 
 ShowData.propTypes = {
+  hasErrors: PropTypes.bool,
   isLoading: PropTypes.bool.isRequired,
   showData: PropTypes.shape({
     _id: PropTypes.string,
@@ -63,5 +86,6 @@ ShowData.propTypes = {
 };
 
 ShowData.defaultProps = {
+  hasErrors: false,
   showData: {},
 };

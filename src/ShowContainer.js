@@ -16,6 +16,7 @@ export class ShowContainer extends Component {
         showData: false,
         episodes: false,
       },
+      errors: {},
       timer: null,
     };
   }
@@ -23,16 +24,12 @@ export class ShowContainer extends Component {
   componentDidMount() {
     this._fetchAllData();
     const timer = setInterval(() => {
-      const { showData, episodes } = this.state;
+      const { errors } = this.state;
 
-      if (!Object.keys(showData).length) {
-        this._fetch('show data');
-      }
-
-      if (!episodes.length) {
-        this._fetch('episodes');
-      }
-    }, 5000);
+      Object.entries(errors)
+        .filter(([_key, value]) => value)
+        .forEach(([key]) => this._fetch(key));
+    }, 3000);
 
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ timeout: timer });
@@ -77,7 +74,6 @@ export class ShowContainer extends Component {
       Promise
         .all(fetchArray)
         .then((data) => arrToObj(data))
-        .catch((e) => console.warn(e))
     );
   }
 
@@ -99,7 +95,12 @@ export class ShowContainer extends Component {
           this.setState(dataObj);
           return dataObj;
         })
-        .catch((err) => console.warn('Couldn\'t fetch episodes', err))
+        .catch((err) => {
+          const { errors } = this.state;
+          console.warn(`Couldn't fetch ${key}:`, '\t', err);
+          errors[key] = true;
+          this.setState({ errors });
+        })
         .finally(() => this._toggleLoading(key, false))
     );
   }
@@ -137,7 +138,9 @@ export class ShowContainer extends Component {
 
   render() {
     const showId = this._getShowId();
-    const { loading, showData, episodes } = this.state;
+    const {
+      loading, errors, showData, episodes,
+    } = this.state;
 
     /* eslint-disable react/jsx-max-depth */
     return (
@@ -151,11 +154,13 @@ export class ShowContainer extends Component {
         </div>
         <div className="row">
           <ShowData
+            hasErrors={errors.showData}
             isLoading={loading.showData}
             showData={showData}
           />
           <EpisodeList
             episodes={episodes}
+            hasErrors={errors.episodes}
             isLoading={loading.episodes}
             showId={showId}
           />
