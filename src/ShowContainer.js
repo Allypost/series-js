@@ -18,24 +18,31 @@ export class ShowContainer extends Component {
       },
       timer: null,
     };
-
-    this.handleLoadingButtonClick = this.handleLoadingButtonClick.bind(this);
   }
 
   componentDidMount() {
     this._fetchAllData();
-    const timer = setInterval(() => this._fetchAll(), 5000);
-    // eslint-disable-next-line
+    const timer = setInterval(() => {
+      const { showData, episodes } = this.state;
+
+      if (!Object.keys(showData).length) {
+        this._fetch('show data');
+      }
+
+      if (!episodes.length) {
+        this._fetch('episodes');
+      }
+    }, 5000);
+
+    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ timeout: timer });
   }
 
   componentWillUnmount() {
     const { timer } = this.state;
-    clearInterval(timer);
-  }
-
-  handleLoadingButtonClick() {
-    this._fetchAllData();
+    if (timer) {
+      clearInterval(timer);
+    }
   }
 
   _fetchAllData() {

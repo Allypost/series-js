@@ -25,7 +25,22 @@ export class EpisodeContainer extends Component {
 
   componentDidMount() {
     this._fetchAll();
-    const timer = setInterval(() => this._fetchAll(), 5000);
+    const timer = setInterval(() => {
+      const { showData, episodeData, comments } = this.state;
+
+      if (!Object.keys(showData).length) {
+        this._fetch('show data');
+      }
+
+      if (!Object.keys(episodeData).length) {
+        this._fetch('episode data');
+      }
+
+      if (!comments.length) {
+        this._fetch('comments');
+      }
+    }, 5000);
+
     // eslint-disable-next-line
     this.setState({ timeout: timer });
   }
