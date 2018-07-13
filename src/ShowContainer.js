@@ -45,6 +45,10 @@ export class ShowContainer extends Component {
 
     const arrToObj = (arr) =>
       arr.reduce((acc, el) => {
+        if (!el) {
+          return acc;
+        }
+
         const [key, value] = Object.entries(el).pop();
 
         acc[key] = value;
