@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Util from './helpers/Util';
 
-import { ShowData } from './components/ShowData';
+import { DetailsDisplay } from './components/DetailsDisplay';
 import { EpisodeList } from './components/EpisodeList';
 
 export class ShowContainer extends Component {
@@ -153,10 +153,10 @@ export class ShowContainer extends Component {
           </Link>
         </div>
         <div className="row">
-          <ShowData
+          <DetailsDisplay
+            data={showData}
             hasErrors={errors.showData}
             isLoading={loading.showData}
-            showData={showData}
           />
           <EpisodeList
             episodes={episodes}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Util from './helpers/Util';
 
-import { ShowData } from './components/ShowData';
+import { DetailsDisplay } from './components/DetailsDisplay';
 
 export class EpisodeContainer extends Component {
 
@@ -247,10 +247,10 @@ export class EpisodeContainer extends Component {
           {this._renderShowTitle()}
         </div>
         <div className="row">
-          <ShowData
+          <DetailsDisplay
+            data={episodeData}
             hasErrors={errors.episodeData}
             isLoading={loading.episodeData}
-            showData={episodeData}
           />
           {this._renderComments()}
         </div>

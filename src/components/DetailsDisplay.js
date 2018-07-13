@@ -3,15 +3,15 @@ import React, { Component } from 'react';
 
 import Util from '../helpers/Util';
 
-export class ShowData extends Component {
+export class DetailsDisplay extends Component {
 
   _renderData() {
-    const { showData } = this.props;
+    const { data } = this.props;
     const defaultData = {
       title: 'No show here...',
       description: 'The ID provided matches no show in our records.',
     };
-    const show = Object.assign(defaultData, showData);
+    const show = Object.assign(defaultData, data);
 
     return (
       <div>
@@ -74,18 +74,18 @@ export class ShowData extends Component {
 }
 
 
-ShowData.propTypes = {
-  hasErrors: PropTypes.bool,
-  isLoading: PropTypes.bool.isRequired,
-  showData: PropTypes.shape({
+DetailsDisplay.propTypes = {
+  data: PropTypes.shape({
     _id: PropTypes.string,
     type: PropTypes.string,
     title: PropTypes.string,
     description: PropTypes.string,
   }),
+  hasErrors: PropTypes.bool,
+  isLoading: PropTypes.bool.isRequired,
 };
 
-ShowData.defaultProps = {
+DetailsDisplay.defaultProps = {
+  data: {},
   hasErrors: false,
-  showData: {},
 };
