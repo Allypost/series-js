@@ -48,20 +48,18 @@ ReactDOM.render(
       <Router>
         <div className={wrapper}>
           <NavBar />
-          <div>
-            <Switch>
-              {
-                routes
-                  .map((routeData) =>
-                    (
-                      <Route
-                        key={routeData.path || '__'}
-                        {...routeData}
-                      />
-                    ))
-              }
-            </Switch>
-          </div>
+          <Switch>
+            {
+              routes
+                .map((routeData) =>
+                  (
+                    <Route
+                      key={routeData.path || '__'}
+                      {...routeData}
+                    />
+                  ))
+            }
+          </Switch>
         </div>
       </Router>
     </div>
