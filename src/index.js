@@ -1,4 +1,5 @@
 import React from 'react';
+import { css } from 'emotion';
 import ReactDOM from 'react-dom';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
@@ -35,14 +36,19 @@ const routes = [
   },
 ];
 
+const wrapper = css`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+`;
+
 /* eslint-disable react/jsx-max-depth */
 ReactDOM.render(
   (
     <div>
       <Router>
-        <div>
+        <div className={wrapper}>
           <NavBar />
-          <div className="content-wrapper container">
+          <div>
             <Switch>
               {
                 routes

@@ -1,36 +1,43 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { css } from 'emotion';
+
+const nav = css`
+  display: grid;
+  grid-column-start: 1;
+  grid-column-end: -1;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 3em;
+`;
+
+const logoContainer = css`
+  display: inline-block;
+  grid-column: 2;
+  padding: .6em;
+`;
+
+const logo = css`
+  height: 100%;
+`;
 
 export class NavBar extends Component {
 
   render() {
-    /* eslint-disable react/jsx-max-depth */
     return (
-      <div className="navbar-fixed">
-        <nav>
-          <div className="nav-wrapper purple darken-3">
-            <Link
-              // eslint-disable-next-line react/forbid-component-props
-              className="brand-logo center"
-              to="/"
-            >
-              S&#400;RI&#400;S
-            </Link>
-            <ul
-              className="right hide-on-med-and-down"
-              id="nav-mobile"
-            >
-              <li>
-                <a href="/">
-                  Series List
-                </a>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </div>
+      <nav className={nav}>
+        <Link
+          // eslint-disable-next-line react/forbid-component-props
+          className={logoContainer}
+          to="/"
+        >
+          <img
+            alt="Shows - Logo"
+            className={logo}
+            src="/img/img-logo-horizontal@3x.png"
+          />
+        </Link>
+      </nav>
     );
-    /* eslint-enable react/jsx-max-depth */
   }
 
 }
