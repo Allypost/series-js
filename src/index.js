@@ -7,6 +7,7 @@ import { ShowContainer } from './ShowContainer';
 import { EpisodeContainer } from './EpisodeContainer';
 import { NotFoundContainer } from './NotFoundContainer';
 import { NavBar } from './components/NavBar';
+import { LoginContainer } from './LoginContainer';
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
   {
     component: EpisodeContainer,
     path: '/show/:showId/episode/:episodeId',
+    exact: true,
+  },
+  {
+    component: LoginContainer,
+    path: '/login',
     exact: true,
   },
   {
