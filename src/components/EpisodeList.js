@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Util from '../helpers/Util';
 
 export class EpisodeList extends Component {
 
@@ -43,26 +44,49 @@ export class EpisodeList extends Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _renderLoading() {
+  _renderErrors() {
     return (
       <li className="collection-item">
-        Loading episodes...
+        <em>
+          Error feching episodes. Trying again...&nbsp;
+          {Util.spinnerComponent('small', 'red')}
+        </em>
       </li>
     );
   }
 
-  render() {
-    const { isLoading } = this.props;
+  // eslint-disable-next-line class-methods-use-this
+  _renderLoading() {
+    return (
+      <li className="collection-item">
+        Loading episodes...&nbsp;
+        {Util.spinnerComponent('small')}
+      </li>
+    );
+  }
 
+  _render() {
+    const { hasErrors, isLoading } = this.props;
+
+    if (hasErrors) {
+      return this._renderErrors();
+    }
+
+    if (isLoading) {
+      return this._renderLoading();
+    }
+
+    return this._renderEpisodes();
+  }
+
+  render() {
     return (
       <div className="col s12 l6">
         <h4 className="episodes-list-header show-on-large">
           Episodes
         </h4>
         <ul className="collection episode-list">
-          {
-            isLoading ? this._renderLoading() : this._renderEpisodes()
-          }
+          {this._render()}
         </ul>
       </div>
     );
@@ -76,11 +100,13 @@ EpisodeList.propTypes = {
     description: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
   })),
+  hasErrors: PropTypes.bool,
   isLoading: PropTypes.bool.isRequired,
   showId: PropTypes.string.isRequired,
 };
 
 EpisodeList.defaultProps = {
   episodes: [],
+  hasErrors: false,
 };
 

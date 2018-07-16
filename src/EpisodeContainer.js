@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Util from './helpers/Util';
 
-import { ShowData } from './components/ShowData';
+import { DetailsDisplay } from './components/DetailsDisplay';
 
 export class EpisodeContainer extends Component {
 
@@ -19,14 +19,22 @@ export class EpisodeContainer extends Component {
         episodeData: false,
         comments: false,
       },
+      errors: {},
       timeout: null,
     };
   }
 
   componentDidMount() {
-    this._fetchAll();
-    const timer = setInterval(() => this._fetchAll(), 5000);
-    // eslint-disable-next-line
+    this._fetchAllData();
+    const timer = setInterval(() => {
+      const { errors } = this.state;
+
+      Object.entries(errors)
+        .filter(([_key, value]) => value)
+        .forEach(([key]) => this._fetch(key));
+    }, 3000);
+
+    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ timeout: timer });
   }
 
@@ -37,7 +45,7 @@ export class EpisodeContainer extends Component {
     }
   }
 
-  _fetchAll() {
+  _fetchAllData() {
     return this._fetch('episode data', 'show data', 'comments');
   }
 
@@ -69,7 +77,6 @@ export class EpisodeContainer extends Component {
       Promise
         .all(fetchArray)
         .then((data) => arrToObj(data))
-        .catch((e) => console.warn(e))
     );
   }
 
@@ -91,7 +98,12 @@ export class EpisodeContainer extends Component {
           this.setState(dataObj);
           return dataObj;
         })
-        .catch((err) => console.warn('Couldn\'t fetch episodes', err))
+        .catch((err) => {
+          const { errors } = this.state;
+          console.warn(`Couldn't fetch ${key}:`, '\t', err);
+          errors[key] = true;
+          this.setState({ errors });
+        })
         .finally(() => this._toggleLoading(key, false))
     );
   }
@@ -178,8 +190,26 @@ export class EpisodeContainer extends Component {
   }
 
   _getCommentsList() {
-    const { loading, comments } = this.state;
+    const { loading, comments, errors } = this.state;
     const { comments: isLoading } = loading;
+    const { comments: hasErrors } = errors;
+
+    if (hasErrors) {
+      return [
+        {
+          _id: '_',
+          text: (
+            <span>
+              <em>
+                Error fetching comments. Trying again...
+              </em>
+              &nbsp;
+              {Util.spinnerComponent('small', 'red')}
+            </span>
+          ),
+        },
+      ];
+    }
 
     if (isLoading) {
       return [
@@ -209,7 +239,7 @@ export class EpisodeContainer extends Component {
   }
 
   render() {
-    const { loading, episodeData } = this.state;
+    const { loading, errors, episodeData } = this.state;
 
     return (
       <div>
@@ -217,9 +247,10 @@ export class EpisodeContainer extends Component {
           {this._renderShowTitle()}
         </div>
         <div className="row">
-          <ShowData
-            isLoading={loading.showData}
-            showData={episodeData}
+          <DetailsDisplay
+            data={episodeData}
+            hasErrors={errors.episodeData}
+            isLoading={loading.episodeData}
           />
           {this._renderComments()}
         </div>

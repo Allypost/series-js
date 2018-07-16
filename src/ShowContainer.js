@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Util from './helpers/Util';
 
-import { ShowData } from './components/ShowData';
+import { DetailsDisplay } from './components/DetailsDisplay';
 import { EpisodeList } from './components/EpisodeList';
 
 export class ShowContainer extends Component {
@@ -16,26 +16,30 @@ export class ShowContainer extends Component {
         showData: false,
         episodes: false,
       },
+      errors: {},
       timer: null,
     };
-
-    this.handleLoadingButtonClick = this.handleLoadingButtonClick.bind(this);
   }
 
   componentDidMount() {
     this._fetchAllData();
-    const timer = setInterval(() => this._fetchAll(), 5000);
-    // eslint-disable-next-line
+    const timer = setInterval(() => {
+      const { errors } = this.state;
+
+      Object.entries(errors)
+        .filter(([_key, value]) => value)
+        .forEach(([key]) => this._fetch(key));
+    }, 3000);
+
+    // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ timeout: timer });
   }
 
   componentWillUnmount() {
     const { timer } = this.state;
-    clearInterval(timer);
-  }
-
-  handleLoadingButtonClick() {
-    this._fetchAllData();
+    if (timer) {
+      clearInterval(timer);
+    }
   }
 
   _fetchAllData() {
@@ -70,7 +74,6 @@ export class ShowContainer extends Component {
       Promise
         .all(fetchArray)
         .then((data) => arrToObj(data))
-        .catch((e) => console.warn(e))
     );
   }
 
@@ -92,7 +95,12 @@ export class ShowContainer extends Component {
           this.setState(dataObj);
           return dataObj;
         })
-        .catch((err) => console.warn('Couldn\'t fetch episodes', err))
+        .catch((err) => {
+          const { errors } = this.state;
+          console.warn(`Couldn't fetch ${key}:`, '\t', err);
+          errors[key] = true;
+          this.setState({ errors });
+        })
         .finally(() => this._toggleLoading(key, false))
     );
   }
@@ -130,7 +138,9 @@ export class ShowContainer extends Component {
 
   render() {
     const showId = this._getShowId();
-    const { loading, showData, episodes } = this.state;
+    const {
+      loading, errors, showData, episodes,
+    } = this.state;
 
     /* eslint-disable react/jsx-max-depth */
     return (
@@ -143,12 +153,14 @@ export class ShowContainer extends Component {
           </Link>
         </div>
         <div className="row">
-          <ShowData
+          <DetailsDisplay
+            data={showData}
+            hasErrors={errors.showData}
             isLoading={loading.showData}
-            showData={showData}
           />
           <EpisodeList
             episodes={episodes}
+            hasErrors={errors.episodes}
             isLoading={loading.episodes}
             showId={showId}
           />
