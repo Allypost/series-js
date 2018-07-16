@@ -6,14 +6,16 @@ const nav = css`
   display: grid;
   grid-column-start: 1;
   grid-column-end: -1;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 3em;
+  grid-row: nav;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 3.5em;
+  background-color: #fff;
 `;
 
 const logoContainer = css`
   display: inline-block;
   grid-column: 2;
-  padding: .6em;
+  padding: 1em;
 `;
 
 const logo = css`

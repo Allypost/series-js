@@ -38,7 +38,9 @@ const routes = [
 
 const wrapper = css`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: [nav] 1fr [body] 8fr [footer] 1fr;
+  height: 100vh;
 `;
 
 /* eslint-disable react/jsx-max-depth */

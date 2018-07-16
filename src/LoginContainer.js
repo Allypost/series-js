@@ -1,10 +1,62 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 
-const customInput = css`
+const loginContainer = css`
+  display: grid;
+  grid-column: 5 / span 4;
+  grid-row: body;
+  font-size: 1.8em;
+  line-height: 2em;
+  color: #424242;
+`;
+
+const cssUsername = css`
+  display: block;
+  font-size 1em;
   border: none;
   outline: none;
-  border-bottom: 1px solid #ff758c;
+  color: #ff758c;
+  border-bottom: 2px solid #ff758c;
+  font-kerning: normal;
+`;
+
+const cssPassword = css`
+  ${cssUsername}
+  letter-spacing: .31415em;
+  font-weight: 800;
+`;
+
+const cssRemember = css`
+  font-size: .5em;
+  cursor: pointer;
+  display: inline-block;
+`;
+
+const cssSubmit = css`
+  display: block;
+  cursor: pointer;
+  background-color: #ff758c;
+  color: #fff;
+  font-size: .55em;
+  font-variant: all-small-caps;
+  padding: .69em 5em;
+  border: none;
+  border-radius: .35em;
+`;
+
+const loginFooter = css`
+  display: grid;
+  font-size: .5em;
+  grid-row: footer;
+  align-items: end;
+  color: #757575;
+`;
+
+const cssRegisterLink = css`
+  padding: 0 1em;
+  color: #ff758c;
+  text-decoration: none;
 `;
 
 export class LoginContainer extends Component {
@@ -34,10 +86,7 @@ export class LoginContainer extends Component {
   handleLogin(evt) {
     evt.preventDefault();
 
-    const { email, password } = this.state;
-
-
-    this.fetchToken({ email, password });
+    this.fetchToken(this.state);
 
     return false;
   }
@@ -55,8 +104,14 @@ export class LoginContainer extends Component {
 
     return fetch('https://api.infinum.academy/api/users/sessions', opts)
       .then((resp) => resp.json())
-      .then((resp) => resp.data)
-      .then(({ token }) => {
+      .then(({ data, errors }) => {
+        if (errors) {
+          console.warn(errors.join('\n'));
+          return '';
+        }
+
+        const { token } = data;
+
         localStorage.setItem('token', token);
 
         return token;
@@ -69,42 +124,65 @@ export class LoginContainer extends Component {
     const { email, password, isLoading } = this.state;
 
     return (
-      <form
-        method="POST"
-        onSubmit={this.handleLogin}
-      >
-        <div>
-          <label>
+      <div className={loginContainer}>
+        <form
+          method="POST"
+          onSubmit={this.handleLogin}
+        >
+          <label className={css`cursor: pointer;`}>
             <span>
-              Email
+              My username is
             </span>
             <input
-              className={customInput}
+              className={cssUsername}
               onChange={this.handleUsernameChange}
-              type="text"
+              required
+              type="email"
               value={email}
             />
           </label>
+          <label className={css`cursor: pointer;`}>
+            and my password is
+            &nbsp;
+            <input
+              className={cssPassword}
+              onChange={this.handlePasswordChange}
+              required
+              type="password"
+              value={password}
+            />
+          </label>
+          <div>
+            <label className={cssRemember}>
+              <input type="checkbox" />
+              Remember me
+            </label>
+            <button
+              className={cssSubmit}
+              onClick={this.handleLogin}
+              type="submit"
+            >
+              {
+                isLoading ? 'Logging in...' : 'Login'
+              }
+            </button>
+          </div>
+        </form>
+        <div className={loginFooter}>
+          <div>
+            <span>
+              Still don&apos;t have an account?
+            </span>
+            <Link
+              // eslint-disable-next-line
+              className={cssRegisterLink}
+              to="/register"
+            >
+              Register
+            </Link>
+          </div>
         </div>
-        <div>
-          Password
-          &nbsp;
-          <input
-            className={customInput}
-            onChange={this.handlePasswordChange}
-            type="password"
-            value={password}
-          />
-        </div>
-        <button
-          onClick={this.handleLogin}
-          type="submit"
-        >
-          {
-            isLoading ? 'Logging in...' : 'Login'
-          }
-        </button>
-      </form>
+      </div>
     );
   }
 
