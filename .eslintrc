@@ -9,6 +9,7 @@
     "react/no-set-state": [0, false],
     "import/prefer-default-export": [0, false],
     "react/jsx-max-depth": [0, false],
-    "jsx-a11y/label-has-for": [0, false]
+    "jsx-a11y/label-has-for": [0, false],
+    "react/jsx-child-element-spacing": [0, false]
   }
 }
