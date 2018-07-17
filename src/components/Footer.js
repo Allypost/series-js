@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 
 const container = css`
@@ -12,26 +11,25 @@ const container = css`
 `;
 
 const logoImage = css`
-    width: 100px;
-    height: auto;
+  width: 100px;
+  height: auto;
 `;
 
 const navigation = css`
-   justify-self: start;
+  justify-self: start;
 `;
 
 const listItem = css`
-    display: inline;
-    padding: 5px;
+  display: inline;
+  padding: .5em;
 `;
 
 const social = css`
-   justify-self: end;
+  justify-self: end;
 `;
 
 const socialImage = css`
-    width: 35px;
-    height: auto;
+  height: 2em;
 `;
 
 export class Footer extends Component {
