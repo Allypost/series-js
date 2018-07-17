@@ -8,7 +8,7 @@ const container = css`
   grid-column-start: 2;
   grid-column-end: -2;
   grid-row: 12;
-  padding: 2em 0;
+  padding-top: 1.69em;
 `;
 
 const logoImage = css`
