@@ -11,7 +11,7 @@ const nav = css`
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 3.5em;
   background-color: #fff;
-  font-size: .8em;
+  // font-size: .8em;
 `;
 
 const logoContainer = css`
@@ -29,7 +29,7 @@ const userContainer = css`
   grid-column: -3 / span 3;
   justify-self: left;
   align-items: center;
-  font-size: .8em;
+  // font-size: .8em;
 `;
 
 const decodeJWT = (token) => {
