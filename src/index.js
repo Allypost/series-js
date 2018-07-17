@@ -8,6 +8,7 @@ import { ShowContainer } from './ShowContainer';
 import { EpisodeContainer } from './EpisodeContainer';
 import { NotFoundContainer } from './NotFoundContainer';
 import { NavBar } from './components/NavBar';
+import { Footer } from './components/Footer';
 import { LoginContainer } from './LoginContainer';
 
 const routes = [
@@ -62,6 +63,7 @@ ReactDOM.render(
                   ))
             }
           </Switch>
+          <Footer />
         </div>
       </Router>
     </div>
