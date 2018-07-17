@@ -6,7 +6,7 @@ import { ShowCard } from './components/ShowCard';
 
 const showPageContainer = css`
   display: grid;
-  grid-row: content;
+  grid-row: body;
   grid-column: 1 / span 12;
   grid-template-columns: repeat(12, 1fr);
   padding: 2em 0;

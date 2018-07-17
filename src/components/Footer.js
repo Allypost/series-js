@@ -6,7 +6,7 @@ const container = css`
   list-style: none;
   grid-column-start: 2;
   grid-column-end: -2;
-  grid-row: 12;
+  grid-row: footer;
   padding-top: 1.69em;
 `;
 
