@@ -12,6 +12,7 @@ const nav = css`
   grid-template-rows: 3.5em;
   background-color: #fff;
   // font-size: .8em;
+  border-bottom: 1px solid rgba(0, 0, 0, .1);
 `;
 
 const logoContainer = css`
