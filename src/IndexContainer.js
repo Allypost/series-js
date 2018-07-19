@@ -20,6 +20,10 @@ const showsContainer = css`
   grid-gap: 1em 2em;
 `;
 
+const allShows = css`
+  grid-column: 2 / span 10;
+`;
+
 export class IndexContainer extends Component {
   constructor(...args) {
     super(...args);
@@ -128,7 +132,7 @@ export class IndexContainer extends Component {
     const { shows } = this.state;
     return (
       <div className={showPageContainer}>
-        <h2 className={css`grid-column: 2 / span 10;`}>
+        <h2 className={allShows}>
           All shows
         </h2>
         <div className={showsContainer}>
