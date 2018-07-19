@@ -9,6 +9,23 @@ const prettyLink = css`
 
 export class UserDisplay extends Component {
 
+  constructor(...args) {
+    super(...args);
+
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  handleLogout(evt) {
+    evt.preventDefault();
+
+    const confirm = window.confirm('Do you want to log out?');
+
+    if (confirm) {
+      window.location.href = '/logout';
+    }
+  }
+
   // eslint-disable-next-line class-methods-use-this
   renderLoginLink() {
     return (
@@ -28,7 +45,7 @@ export class UserDisplay extends Component {
       <Link
         className={prettyLink}
         onClick={this.handleLogout}
-        to="/"
+        to="/logout"
       >
         Hi,
         &nbsp;

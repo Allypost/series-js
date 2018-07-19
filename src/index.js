@@ -10,6 +10,7 @@ import { NotFoundContainer } from './NotFoundContainer';
 import { NavBar } from './components/NavBar';
 import { Footer } from './components/Footer';
 import { LoginContainer } from './LoginContainer';
+import { LogoutContainer } from './LogoutContainer';
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
   {
     component: LoginContainer,
     path: '/login',
+    exact: true,
+  },
+  {
+    component: LogoutContainer,
+    path: '/logout',
     exact: true,
   },
   {
