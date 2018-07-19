@@ -77,13 +77,14 @@ export class NavBar extends Component {
     }
 
     const token = window[store].getItem('token');
+    const storeUsername = window[store].getItem('username');
     const parsedToken = decodeJWT(token);
 
     if (!parsedToken) {
       return;
     }
 
-    const { _id, username } = parsedToken;
+    const { _id, username = storeUsername } = parsedToken;
 
     // eslint-disable-next-line react/no-did-mount-set-state
     this.setState({ token, user: { _id, username: username || _id } });
