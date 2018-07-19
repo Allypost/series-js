@@ -128,12 +128,12 @@ export class LoginContainer extends Component {
 
         const { token } = data;
         const { rememberMe } = this.state;
-        const { localStorage, sessionStorage } = window;
+        const { localStorage } = window;
 
-        const store = rememberMe ? localStorage : sessionStorage;
+        const store = rememberMe ? 'localStorage' : 'sessionStorage';
 
-        store.setItem('token', token);
-        localStorage.setItem('token_location', 'localStorage');
+        window[store].setItem('token', token);
+        localStorage.setItem('token_location', store);
 
         return token;
       })

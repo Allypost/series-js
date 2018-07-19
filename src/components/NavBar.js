@@ -70,7 +70,13 @@ export class NavBar extends Component {
   }
 
   updateState() {
-    const token = window.localStorage.getItem('token');
+    const store = window.localStorage.getItem('token_location');
+
+    if (!window[store]) {
+      return;
+    }
+
+    const token = window[store].getItem('token');
     const parsedToken = decodeJWT(token);
 
     if (!parsedToken) {
