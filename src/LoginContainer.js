@@ -86,7 +86,17 @@ export class LoginContainer extends Component {
   handleLogin(evt) {
     evt.preventDefault();
 
-    this.fetchToken(this.state);
+    this.fetchToken(this.state)
+      .then((token) => {
+        if (!token) {
+          alert('Invalid credentials');
+          return token;
+        }
+
+        window.location.href = '/';
+
+        return token;
+      });
 
     return false;
   }
@@ -111,8 +121,10 @@ export class LoginContainer extends Component {
         }
 
         const { token } = data;
+        const { localStorage } = window;
 
         localStorage.setItem('token', token);
+        localStorage.setItem('token_location', 'localStorage');
 
         return token;
       })
