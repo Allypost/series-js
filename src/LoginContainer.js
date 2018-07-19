@@ -67,11 +67,13 @@ export class LoginContainer extends Component {
     this.state = {
       email: '',
       password: '',
+      rememberMe: true,
       isLoading: false,
     };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleRememberChange = this.handleRememberChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
   }
 
@@ -81,6 +83,10 @@ export class LoginContainer extends Component {
 
   handlePasswordChange(event) {
     this.setState({ password: event.target.value });
+  }
+
+  handleRememberChange(event) {
+    this.setState({ rememberMe: event.target.checked });
   }
 
   handleLogin(evt) {
@@ -121,9 +127,12 @@ export class LoginContainer extends Component {
         }
 
         const { token } = data;
-        const { localStorage } = window;
+        const { rememberMe } = this.state;
+        const { localStorage, sessionStorage } = window;
 
-        localStorage.setItem('token', token);
+        const store = rememberMe ? localStorage : sessionStorage;
+
+        store.setItem('token', token);
         localStorage.setItem('token_location', 'localStorage');
 
         return token;
@@ -133,7 +142,12 @@ export class LoginContainer extends Component {
   }
 
   render() {
-    const { email, password, isLoading } = this.state;
+    const {
+      email,
+      password,
+      rememberMe,
+      isLoading,
+    } = this.state;
 
     return (
       <div className={loginContainer}>
@@ -166,7 +180,11 @@ export class LoginContainer extends Component {
           </label>
           <div>
             <label className={cssRemember}>
-              <input type="checkbox" />
+              <input
+                defaultChecked={rememberMe}
+                onChange={this.handleRememberChange}
+                type="checkbox"
+              />
               Remember me
             </label>
             <button
