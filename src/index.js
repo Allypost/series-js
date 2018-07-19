@@ -1,5 +1,5 @@
 import React from 'react';
-import { css } from 'emotion';
+import { css, injectGlobal } from 'emotion';
 import ReactDOM from 'react-dom';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
@@ -36,6 +36,25 @@ const routes = [
     component: NotFoundContainer,
   },
 ];
+
+// eslint-disable-next-line no-unused-expressions
+injectGlobal`
+  html,
+  body {
+    padding: 0;
+    margin: 0;
+    font-family: Avenir, Nunito, "Comic Sans MS", cursive, sans-serif;
+    font-size: 16px;
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100%;
+  }
+`;
 
 const wrapper = css`
   display: grid;
