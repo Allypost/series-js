@@ -52,21 +52,35 @@ export class NavBar extends Component {
 
     this.state = {
       user: {},
+      token: '',
     };
   }
 
   componentDidMount() {
-    const rawToken = window.localStorage.getItem('token');
-    const token = decodeJWT(rawToken);
+    this.updateState();
+  }
 
-    if (!token) {
+  componentDidUpdate(_oldProps, oldState) {
+    const { token } = this.state;
+    const { token: oldToken } = oldState;
+
+    if (token !== oldToken) {
+      this.updateState();
+    }
+  }
+
+  updateState() {
+    const token = window.localStorage.getItem('token');
+    const parsedToken = decodeJWT(token);
+
+    if (!parsedToken) {
       return;
     }
 
-    const { _id, username } = token;
+    const { _id, username } = parsedToken;
 
     // eslint-disable-next-line react/no-did-mount-set-state
-    this.setState({ user: { _id, username: username || _id } });
+    this.setState({ token, user: { _id, username: username || _id } });
   }
 
   render() {
