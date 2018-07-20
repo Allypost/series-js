@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
+import defaultPoster from '../img/placeholder.png';
 
 const cssImage = css`
   width: 100%;
@@ -13,12 +14,6 @@ const cssTitle = css`
 
 export class ShowCard extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.defaultPoster = '/img/placeholder.png';
-  }
-
   render() {
     const { show } = this.props;
 
@@ -27,7 +22,7 @@ export class ShowCard extends Component {
         <img
           alt={`${show.title} poster`}
           className={cssImage}
-          src={show.poster || this.defaultPoster}
+          src={show.poster || defaultPoster}
         />
         <span
           className={cssTitle}

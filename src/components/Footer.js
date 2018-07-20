@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
 
+import facebookImg from '../img/ic-facebook@3x.png';
+import twitterImg from '../img/ic-twitter@3x.png';
+import linkedInImg from '../img/ic-linkedin@3x.png';
+import logoImg from '../img/img-logo-horizontal@3x.png';
+
 const container = css`
   display: grid;
   list-style: none;
@@ -48,7 +53,7 @@ export class Footer extends Component {
         <img
           alt="logo"
           className={logoImage}
-          src="/img/img-logo-horizontal@3x.png"
+          src={logoImg}
         />
 
         <div className={navigation} >
@@ -72,21 +77,21 @@ export class Footer extends Component {
             <img
               alt="facebook"
               className={socialImage}
-              src="/img/ic-facebook@3x.png"
+              src={facebookImg}
             />
           </span>
           <span className={listItem}>
             <img
               alt="twitter"
               className={socialImage}
-              src="/img/ic-twitter@3x.png"
+              src={twitterImg}
             />
           </span>
           <span className={listItem}>
             <img
               alt="linkedin"
               className={socialImage}
-              src="/img/ic-linkedin@3x.png"
+              src={linkedInImg}
             />
           </span>
         </div>

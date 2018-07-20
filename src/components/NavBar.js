@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 import { UserDisplay } from './UserDisplay';
 
+import logoImg from '../img/img-logo-horizontal@3x.png';
+
 const nav = css`
   display: grid;
   grid-column-start: 1;
@@ -100,7 +102,7 @@ export class NavBar extends Component {
             <img
               alt="Shows - Logo"
               className={logo}
-              src="/img/img-logo-horizontal@3x.png"
+              src={logoImg}
             />
           </Link>
         </div>
