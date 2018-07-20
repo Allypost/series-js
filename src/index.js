@@ -3,14 +3,14 @@ import { css, injectGlobal } from 'emotion';
 import ReactDOM from 'react-dom';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
-import { IndexContainer } from './IndexContainer';
-import { ShowContainer } from './ShowContainer';
-import { EpisodeContainer } from './EpisodeContainer';
-import { NotFoundContainer } from './NotFoundContainer';
+import { IndexContainer } from './containers/IndexContainer';
+import { ShowContainer } from './containers/ShowContainer';
+import { EpisodeContainer } from './containers/EpisodeContainer';
+import { NotFoundContainer } from './containers/NotFoundContainer';
 import { NavBar } from './components/NavBar';
 import { Footer } from './components/Footer';
-import { LoginContainer } from './LoginContainer';
-import { LogoutContainer } from './LogoutContainer';
+import { LoginContainer } from './containers/LoginContainer';
+import { LogoutContainer } from './containers/LogoutContainer';
 
 const routes = [
   {

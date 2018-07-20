@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 
 import { observer } from 'mobx-react';
 
-import { getAll as getAllShows } from './services/show.js';
+import { getAll as getAllShows } from '../services/show.js';
 
 // eslint-disable-next-line import/no-named-as-default,import/no-named-as-default-member
-import state from './state';
-import { ShowCard } from './components/ShowCard';
+import state from '../state.js';
+import { ShowCard } from '../components/ShowCard.js';
 
 const showPageContainer = css`
   display: grid;
@@ -32,10 +31,6 @@ const allShows = css`
 
 @observer
 export class IndexContainer extends Component {
-  constructor(...args) {
-    super(...args);
-  }
-
   componentDidMount() {
     getAllShows(state);
   }

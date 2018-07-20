@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import Util from './helpers/Util';
+import Util from '../helpers/Util';
 
-import { DetailsDisplay } from './components/DetailsDisplay';
+import { DetailsDisplay } from '../components/DetailsDisplay';
 
 export class EpisodeContainer extends Component {
 
