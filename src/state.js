@@ -20,6 +20,7 @@ class State {
     shows: false,
     showData: false,
     episodes: false,
+    episodeData: observable.object(),
   };
 }
 

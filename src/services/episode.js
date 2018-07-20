@@ -8,7 +8,10 @@ export async function getAll(state, showId) {
 }
 
 export async function get(state, episodeId) {
+  state.loadingStates.episodeData[episodeId] = true;
   const episode = await _get(`episodes/${episodeId}`);
+  state.loadingStates.episodeData[episodeId] = false;
+
   const { episodes: oldEpisodes = [] } = state;
   const episodeKey = oldEpisodes.findIndex((ep) => ep._id === episode._id);
 
