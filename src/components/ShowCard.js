@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 import defaultPoster from '../img/placeholder.png';
 
@@ -27,7 +28,9 @@ export class ShowCard extends Component {
         <span
           className={cssTitle}
         >
-          {show.title}
+          <Link to={`/show/${show._id}`}>
+            {show.title}
+          </Link>
         </span>
       </div>
     );
