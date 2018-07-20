@@ -16,7 +16,6 @@ export async function get(state, episodeId) {
   const episodeKey = oldEpisodes.findIndex((ep) => ep._id === episode._id);
 
   if (episodeKey < 0) {
-    state.episodes.replace([...oldEpisodes, episode]);
     return;
   }
 
