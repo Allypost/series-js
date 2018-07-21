@@ -9,6 +9,8 @@ import { Episode } from '../components/Episode';
 import { BackButton } from '../components/BackButton';
 import { LikeButton } from '../components/LikeButton';
 import { DislikeButton } from '../components/DislikeButton';
+import { AddEpisodeButton } from '../components/AddEpisodeButton';
+import { FavouriteButton } from '../components/FavouriteButton';
 
 import { get as getShowData } from '../services/show';
 import { getAll as getShowEpisodes } from '../services/episode';
@@ -72,6 +74,16 @@ const spacer = css`
   margin: 0 .6em;
 `;
 
+const showActionsContainer = css`
+  display: inline-grid;
+  grid-auto-flow: column dense;
+  grid-column-gap: .8em;
+  grid-column: -3 / span 2;
+  grid-row: 1;
+  align-items: center;
+  justify-items: center;
+`;
+
 @observer
 export class ShowContainer extends Component {
 
@@ -128,6 +140,11 @@ export class ShowContainer extends Component {
                 />
               ))
             }
+          </div>
+
+          <div className={showActionsContainer}>
+            <AddEpisodeButton />
+            <FavouriteButton />
           </div>
         </div>
       </div>
