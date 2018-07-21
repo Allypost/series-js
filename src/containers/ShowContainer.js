@@ -15,6 +15,7 @@ import { FavouriteButton } from '../components/FavouriteButton';
 
 import { get as getShowData } from '../services/show';
 import { getAll as getShowEpisodes } from '../services/episode';
+import Util from '../helpers/Util';
 
 const pageContainer = css`
   display: inline-grid;
@@ -136,29 +137,126 @@ export class ShowContainer extends Component {
     );
   }
 
-  renderShowData() {
-    const showData = state.showData;
-    const episodeList = state.episodes;
+  isLoggedIn() {
+    const userToken = Util.getUserToken();
+
+    return !!userToken.length;
+  }
+
+  renderDescription() {
+    const { loadingStates = {} } = state;
+    const { showData: isLoading } = loadingStates;
+    const { showData } = state;
+
+    if (isLoading) {
+      return (
+        <em>
+          Loading...
+        </em>
+      );
+    }
+
+    if (!showData.description) {
+      return (
+        <em>
+          Show has no description...
+        </em>
+      );
+    }
+
+    return showData.description;
+  }
+
+  renderEpisodes() {
+    const { loadingStates = {} } = state;
+    const { episodes: isLoading, showData: showLoading } = loadingStates;
+    const { episodes } = state;
+
+    if (showLoading || isLoading) {
+      return (
+        <h2 className={noEpisodesHeader}>
+          <em>
+            Loading...
+          </em>
+        </h2>
+      );
+    }
+
+    if (!episodes.length) {
+      return (
+        <h2 className={noEpisodesHeader}>
+          <em>
+            Show has no episodes...
+          </em>
+        </h2>
+      );
+    }
+
+    return (
+      episodes.map((episode) => (
+        <Episode
+          episode={episode}
+          key={episode._id}
+        />
+      ))
+    );
+  }
+
+  renderShowTitle() {
+    const { loadingStates = {} } = state;
+    const { showData: isLoading = true } = loadingStates;
+    const { showData } = state;
+    const isLoggedIn = this.isLoggedIn();
+
+    if (isLoggedIn) {
+      return (
+        <div className={showTitleContainer}>
+          <h1 className={showTitle}>{isLoading ? 'Loading...' : showData.title}</h1>
+          <LikeButton likesCount={showData.likesCount} />
+          <div className={likeButtonSpacer} />
+          <DislikeButton likesCount={showData.likesCount} />
+        </div>
+      )
+    }
+
+    return (
+      <div className={showTitleContainer}>
+        <h1 className={showTitle}>{isLoading ? 'Loading...' : showData.title}</h1>
+      </div>
+    )
+  }
+
+  renderEpisodeActions() {
+    const isLoggedIn = this.isLoggedIn();
+
+    if (!isLoggedIn) {
+      return (
+        null
+      );
+    }
+
+    return (
+      <div className={showActionsContainer}>
+        <AddEpisodeButton />
+        <FavouriteButton />
+      </div>
+    );
+  }
+
+  render() {
+    const { showData } = state;
 
     return (
       <div className={pageContainer}>
         <BackButton />
         <div className={showContainer}>
-          <div className={showTitleContainer}>
-            <h1 className={showTitle}>{showData.title}</h1>
-            <LikeButton likesCount={showData.likesCount} />
-            <div className={likeButtonSpacer} />
-            <DislikeButton likesCount={showData.likesCount} />
-          </div>
+          {this.renderShowTitle()}
 
-          <div className={showActionsContainer}>
-            <AddEpisodeButton />
-            <FavouriteButton />
-          </div>
+          {this.renderEpisodeActions()}
 
           <div className={leftSide}>
             <div className={showDescription}>
-              {showData.description || (<em>Show has no description...</em>)}
+              {this.renderDescription()}
             </div>
 
             <h3 className={episodesHeader}>
@@ -168,24 +266,7 @@ export class ShowContainer extends Component {
             <div className={spacer} />
 
             <div className={episodesContainer}>
-              {
-                episodeList.length
-                  ? (
-                    episodeList.map((episode) => (
-                      <Episode
-                        episode={episode}
-                        key={episode._id}
-                      />
-                    ))
-                  )
-                  : (
-                    <h2 className={noEpisodesHeader}>
-                      <em>
-                        Show has no episodes...
-                      </em>
-                    </h2>
-                  )
-              }
+              {this.renderEpisodes()}
             </div>
           </div>
 
@@ -205,15 +286,6 @@ export class ShowContainer extends Component {
           </div>
         </div>
       </div>
-    );
-  }
-
-  render() {
-    const { loadingStates = {} } = state;
-    const { showData: isLoading = true } = loadingStates;
-
-    return (
-      isLoading ? this.renderLoading() : this.renderShowData()
     );
   }
 
