@@ -8,13 +8,6 @@ import { get as getEpisodeData } from '../services/episode';
 // eslint-disable-next-line
 import state from "../state";
 
-const episodeContainer = css`
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 12em auto;
-  grid-column-gap: 1em;
-`;
-
 const episodeImage = css`
   grid-column: 1;
   width: 100%;
@@ -34,6 +27,7 @@ const episodeTitleContainer = css`
 
 const episodeTitle = css`
   margin-left: 1em;
+  transition: color .2s ease-out;
 `;
 
 const episodeSeason = css`
@@ -42,6 +36,26 @@ const episodeSeason = css`
 
 const episodeDescription = css`
   align-self: baseline;
+`;
+
+const episodeContainer = css`
+  & {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 12em auto;
+    grid-column-gap: 1em;
+    padding: .5em;
+    background-color: #fff;
+    transition: background .2s ease-out;
+  }
+
+  &:hover {
+    background-color: #f5f5f5;
+
+    .${episodeTitle} {
+      color: #ff758c;
+    }
+  }
 `;
 
 @observer
