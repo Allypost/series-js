@@ -14,6 +14,7 @@ export const likeContainer = css`
     width: 6em;
     cursor: pointer;
     align-items: center;
+    justify-items: center;
     padding: .5em;
     border: 1px solid #e0e0e0;
     border-radius: 2em;
@@ -99,9 +100,14 @@ export class LikeButton extends Component {
         <span className={likeImage}>
           <LikeButtonImage alt="Like" />
         </span>
-        <span className={likeText}>
-          {likesCount || 0}
-        </span>
+        {
+          likesCount >= 0
+          && (
+            <span className={likeText}>
+              {likesCount || 0}
+            </span>
+          )
+        }
       </div>
     );
   }

@@ -5,13 +5,13 @@ import { css } from 'emotion';
 import { dislike as dislikeShow } from '../services/show';
 
 import { LikeButtonImage } from './LikeButtonImage';
-import { likeContainer, likeContainerActions, likeImage } from './LikeButton';
+import { likeContainer, likeContainerActions, likeImage, likeText } from './LikeButton';
 import state from '../state';
 
 const dislikeContainer = css`
   ${likeContainer}
   & {
-    width: 3em;
+    //width: 3em;
   }
 `;
 
@@ -34,6 +34,10 @@ const dislikeContainerActions = css`
 const dislikeImage = css`
   ${likeImage}
   transform: rotateZ(180deg) translateY(-.1em);
+`;
+
+const dislikeText = css`
+  ${likeText}
 `;
 
 
@@ -73,11 +77,21 @@ export class DislikeButton extends Component {
   }
 
   render() {
+    const { likesCount } = this.props;
+
     return (
       <div
         className={this.getContainerClass()}
         onClick={this.handleClick}
       >
+        {
+          likesCount < 0
+          && (
+            <span className={dislikeText}>
+              {-likesCount}
+            </span>
+          )
+        }
         <span className={dislikeImage}>
           <LikeButtonImage alt="Dislke" />
         </span>

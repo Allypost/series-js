@@ -120,7 +120,7 @@ export class ShowContainer extends Component {
             <h1 className={showTitle}>{showData.title}</h1>
             <LikeButton likesCount={showData.likesCount} />
             <div className={spacer}></div>
-            <DislikeButton />
+            <DislikeButton likesCount={showData.likesCount} />
           </div>
 
           <div className={showDescription}>
