@@ -4,7 +4,7 @@ import { css } from 'emotion';
 export const containerStyle = css`
   & {
     display: inline-block;
-    font-size: .85em;
+    font-size: 1em;
     height: 2em;
     line-height: 2.2em;
     cursor: pointer;
