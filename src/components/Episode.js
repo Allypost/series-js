@@ -89,7 +89,7 @@ export class Episode extends Component {
     const { episode } = this.props;
     const { description = '' } = episode;
 
-    const trimToLength = 250;
+    const trimToLength = 240;
 
     if (description.length < trimToLength) {
       return (
