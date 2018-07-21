@@ -1,12 +1,29 @@
 const defaultFn = (param) => param;
 
-function doFetch(type, model, { data = null, cbObj = {} }) {
-  const { success = defaultFn, error = defaultFn, always = defaultFn } = cbObj;
+const getToken = () => {
+  const { token_location: tokenLocation } = window.localStorage;
+  const store = window[tokenLocation];
+
+  if (!store) {
+    return '';
+  }
+
+  return store.getItem('token');
+};
+
+function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
+  const {
+    success = defaultFn,
+    error = defaultFn,
+    always = defaultFn,
+  } = cbObj;
 
   const opts = {
     method: type,
     headers: {
-      'Content-Type': 'application/json; charset=utf-8',
+      Accept: 'application/json',
+      Authorization: token || getToken(),
+      'Content-Type': 'application/json',
     },
   };
 
@@ -26,6 +43,6 @@ export function get(model, cbObj) {
   return doFetch('GET', model, { cbObj });
 }
 
-export function post(model, data, cbObj) {
-  return doFetch('POST', model, { data, cbObj });
+export function post(model, token, data, cbObj) {
+  return doFetch('POST', model, { data, token, cbObj });
 }
