@@ -107,6 +107,11 @@ const showLinks = css`
   margin: .5em 0;
 `;
 
+const noEpisodesHeader = css`
+  margin: 0;
+  font-weight: 100;
+`;
+
 @observer
 export class ShowContainer extends Component {
 
@@ -164,12 +169,22 @@ export class ShowContainer extends Component {
 
             <div className={episodesContainer}>
               {
-                episodeList.map((episode) => (
-                  <Episode
-                    episode={episode}
-                    key={episode._id}
-                  />
-                ))
+                episodeList.length
+                  ? (
+                    episodeList.map((episode) => (
+                      <Episode
+                        episode={episode}
+                        key={episode._id}
+                      />
+                    ))
+                  )
+                  : (
+                    <h2 className={noEpisodesHeader}>
+                      <em>
+                        Show has no episodes...
+                      </em>
+                    </h2>
+                  )
               }
             </div>
           </div>
