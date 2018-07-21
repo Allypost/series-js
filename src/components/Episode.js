@@ -40,6 +40,10 @@ const episodeSeason = css`
   color: #ff758c;
 `;
 
+const episodeDescription = css`
+  align-self: baseline;
+`;
+
 @observer
 export class Episode extends Component {
 
@@ -71,7 +75,7 @@ export class Episode extends Component {
     const { episode } = this.props;
     const { description = '' } = episode;
 
-    const trimToLength = 300;
+    const trimToLength = 250;
 
     if (description.length < trimToLength) {
       return (
@@ -109,7 +113,7 @@ export class Episode extends Component {
               {episode.title}
             </span>
           </div>
-          <div>
+          <div className={episodeDescription}>
             {this.getTrimmedDescription()}
           </div>
         </div>
