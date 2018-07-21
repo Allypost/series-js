@@ -46,4 +46,16 @@ export default class Util {
     );
     /* eslint-enable react/jsx-max-depth */
   }
+
+  static getUserToken() {
+    const tokenLocation = localStorage.getItem('token_location');
+    const store = window[tokenLocation];
+
+    if (!store) {
+      return '';
+    }
+
+    return store.getItem('token') || '';
+  }
+
 }
