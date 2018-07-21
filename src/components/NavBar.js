@@ -4,6 +4,7 @@ import { css } from 'emotion';
 import { UserDisplay } from './UserDisplay';
 
 import logoImg from '../img/img-logo-horizontal@3x.png';
+import Util from '../helpers/Util';
 
 const nav = css`
   display: grid;
@@ -72,14 +73,7 @@ export class NavBar extends Component {
   }
 
   updateState() {
-    const store = window.localStorage.getItem('token_location');
-
-    if (!window[store]) {
-      return;
-    }
-
-    const token = window[store].getItem('token');
-    const storeUsername = window[store].getItem('username');
+    const { token, username: storeUsername } = Util.getUserData();
     const parsedToken = decodeJWT(token);
 
     if (!parsedToken) {

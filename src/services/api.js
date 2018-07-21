@@ -1,15 +1,6 @@
+import Util from '../helpers/Util';
+
 const defaultFn = (param) => param;
-
-const getToken = () => {
-  const { token_location: tokenLocation } = window.localStorage;
-  const store = window[tokenLocation];
-
-  if (!store) {
-    return '';
-  }
-
-  return store.getItem('token');
-};
 
 function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
   const {
@@ -22,7 +13,7 @@ function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
     method: type,
     headers: {
       Accept: 'application/json',
-      Authorization: token || getToken(),
+      Authorization: token || Util.getUserToken(),
       'Content-Type': 'application/json',
     },
   };
