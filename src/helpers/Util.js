@@ -48,6 +48,12 @@ export default class Util {
   }
 
   static getUserToken() {
+    const { token = '' } = Util.getUserData();
+
+    return token;
+  }
+
+  static getUserData() {
     const tokenLocation = localStorage.getItem('token_location');
     const store = window[tokenLocation];
 
@@ -55,7 +61,13 @@ export default class Util {
       return '';
     }
 
-    return store.getItem('token') || '';
+    const token = store.getItem('token') || '';
+    const username = store.getItem('username') || '';
+
+    return {
+      token,
+      username,
+    };
   }
 
 }
