@@ -55,8 +55,6 @@ const loginFooter = css`
 
 const cssRegisterLink = css`
   padding: 0 1em;
-  color: #ff758c;
-  text-decoration: none;
 `;
 
 export class LoginContainer extends Component {

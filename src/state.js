@@ -19,6 +19,7 @@ class State {
   loadingStates = {
     shows: false,
     showData: false,
+    showLike: false,
     episodes: false,
     episodeData: observable.object(),
   };

@@ -54,6 +54,16 @@ injectGlobal`
   body {
     min-height: 100%;
   }
+
+  a, a:visited, a:active {
+    cursor: pointer;
+    color: #ff758c;
+    text-decoration: none;
+  },
+
+  a:hover {
+    text-decoration: underline;
+  }
 `;
 
 const wrapper = css`
