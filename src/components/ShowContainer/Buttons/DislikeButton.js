@@ -51,9 +51,11 @@ export class DislikeButton extends Component {
   handleClick(evt) {
     evt.preventDefault();
 
+    const { loadingStates } = state;
+    const { showLike: isLoading } = loadingStates;
     const { disabled: isDisabled } = this.props;
 
-    if (isDisabled) {
+    if (isDisabled || isLoading) {
       return;
     }
 
