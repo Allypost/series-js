@@ -6,8 +6,8 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import { IndexContainer } from './containers/IndexContainer';
 import { ShowContainer } from './containers/ShowContainer';
 import { NotFoundContainer } from './containers/NotFoundContainer';
-import { NavBar } from './components/NavBar';
-import { Footer } from './components/Footer';
+import { NavBar } from './components/_global/NavBar';
+import { Footer } from './components/_global/Footer';
 import { LoginContainer } from './containers/LoginContainer';
 import { LogoutContainer } from './containers/LogoutContainer';
 

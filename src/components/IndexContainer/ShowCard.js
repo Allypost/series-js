@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
-import defaultPoster from '../img/placeholder.png';
+import defaultPoster from '../../img/placeholder.png';
 
 const cssImage = css`
   width: 100%;

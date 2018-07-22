@@ -7,7 +7,7 @@ import { getAll as getAllShows } from '../services/show.js';
 
 // eslint-disable-next-line import/no-named-as-default,import/no-named-as-default-member
 import state from '../state.js';
-import { ShowCard } from '../components/ShowCard.js';
+import { ShowCard } from '../components/IndexContainer/ShowCard.js';
 
 const showPageContainer = css`
   display: grid;

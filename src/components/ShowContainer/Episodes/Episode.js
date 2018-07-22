@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { css } from 'emotion';
 import { observer } from 'mobx-react';
 
-import defaultPoster from '../img/placeholder.episode.png';
+import defaultPoster from '../../../img/placeholder.episode.png';
 
-import { get as getEpisodeData } from '../services/episode';
+import { get as getEpisodeData } from '../../../services/episode';
 // eslint-disable-next-line
-import state from "../state";
+import state from "../../../state";
 
 const episodeImage = css`
   grid-column: 1;

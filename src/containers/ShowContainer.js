@@ -6,12 +6,12 @@ import { css } from 'emotion';
 import state from '../state';
 import defaultPoster from '../img/placeholder.png';
 
-import { Episode } from '../components/Episode';
-import { BackButton } from '../components/BackButton';
-import { LikeButton } from '../components/LikeButton';
-import { DislikeButton } from '../components/DislikeButton';
-import { AddEpisodeButton } from '../components/AddEpisodeButton';
-import { FavouriteButton } from '../components/FavouriteButton';
+import { Episode } from '../components/ShowContainer/Episodes/Episode';
+import { BackButton } from '../components/ShowContainer/Buttons/BackButton';
+import { LikeButton } from '../components/ShowContainer/Buttons/LikeButton';
+import { DislikeButton } from '../components/ShowContainer/Buttons/DislikeButton';
+import { AddEpisodeButton } from '../components/ShowContainer/Buttons/AddEpisodeButton';
+import { FavouriteButton } from '../components/ShowContainer/Buttons/FavouriteButton';
 
 import { get as getShowData } from '../services/show';
 import { getAll as getShowEpisodes } from '../services/episode';

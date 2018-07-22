@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
-import { UserDisplay } from './UserDisplay';
+import { UserDisplay } from './NavBar/UserDisplay';
 
-import logoImg from '../img/img-logo-horizontal@3x.png';
-import Util from '../helpers/Util';
+import logoImg from '../../img/img-logo-horizontal@3x.png';
+import Util from '../../helpers/Util';
 
 const nav = css`
   display: grid;

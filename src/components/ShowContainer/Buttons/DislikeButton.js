@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { css } from 'emotion';
 
-import { dislike as dislikeShow } from '../services/show';
+import { dislike as dislikeShow } from '../../../services/show';
 
-import { LikeButtonImage } from './LikeButtonImage';
+import { LikeButtonImage } from './Bases/LikeButtonImage';
 import { likeContainer, likeContainerActions, likeImage, likeText } from './LikeButton';
-import state from '../state';
+import state from '../../../state';
 
 const dislikeContainer = css`
   ${likeContainer}

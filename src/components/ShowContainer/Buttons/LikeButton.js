@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { css } from 'emotion';
 
-import { like as likeShow } from '../services/show';
+import { like as likeShow } from '../../../services/show';
 
-import { LikeButtonImage } from './LikeButtonImage';
-import state from '../state';
+import { LikeButtonImage } from './Bases/LikeButtonImage';
+import state from '../../../state';
 
 export const likeContainer = css`
   & {

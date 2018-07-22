@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
 
-import facebookImg from '../img/ic-facebook@3x.png';
-import twitterImg from '../img/ic-twitter@3x.png';
-import linkedInImg from '../img/ic-linkedin@3x.png';
-import logoImg from '../img/img-logo-horizontal@3x.png';
+import facebookImg from '../../img/ic-facebook@3x.png';
+import twitterImg from '../../img/ic-twitter@3x.png';
+import linkedInImg from '../../img/ic-linkedin@3x.png';
+import logoImg from '../../img/img-logo-horizontal@3x.png';
 
 const container = css`
   display: grid;
