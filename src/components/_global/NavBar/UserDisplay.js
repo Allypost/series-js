@@ -62,8 +62,9 @@ export class UserDisplay extends Component {
 
   renderUser() {
     const { user } = state;
+    const userData = Object.assign({}, user);
 
-    if (!user.id) {
+    if (!userData.token) {
       return this.renderLoginLink();
     }
 
