@@ -63,7 +63,7 @@ export default class Util {
 
     const token = store.getItem('token') || '';
     const username = store.getItem('username') || '';
-    const { _id: id } = Util.parseJWT(token);
+    const { _id: id } = Util.parseJWT(token) || {};
 
     return {
       id,
