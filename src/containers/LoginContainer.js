@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
+import { login } from '../services/auth';
+import state from '../state';
+import { observer } from 'mobx-react';
 
 const loginContainer = css`
   display: grid;
@@ -57,6 +60,7 @@ const cssRegisterLink = css`
   padding: 0 1em;
 `;
 
+@observer
 export class LoginContainer extends Component {
 
   constructor(props) {
@@ -66,7 +70,6 @@ export class LoginContainer extends Component {
       email: '',
       password: '',
       rememberMe: true,
-      isLoading: false,
     };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -90,7 +93,7 @@ export class LoginContainer extends Component {
   handleLogin(evt) {
     evt.preventDefault();
 
-    this.fetchToken(this.state)
+    login(state, this.state)
       .then((token) => {
         if (!token) {
           alert('Invalid credentials');
@@ -105,48 +108,14 @@ export class LoginContainer extends Component {
     return false;
   }
 
-  fetchToken({ email, password }) {
-    const opts = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    };
-
-    this.setState({ isLoading: true });
-
-    return fetch('https://api.infinum.academy/api/users/sessions', opts)
-      .then((resp) => resp.json())
-      .then(({ data, errors }) => {
-        if (errors) {
-          console.warn(errors.join('\n'));
-          return '';
-        }
-
-        const { token } = data;
-        const { email, rememberMe } = this.state;
-        const { localStorage } = window;
-
-        const store = rememberMe ? 'localStorage' : 'sessionStorage';
-
-        window[store].setItem('token', token);
-        window[store].setItem('username', email);
-        localStorage.setItem('token_location', store);
-
-        return token;
-      })
-      .catch((error) => console.warn(error))
-      .finally(() => this.setState({ isLoading: false }));
-  }
-
   render() {
     const {
       email,
       password,
       rememberMe,
-      isLoading,
     } = this.state;
+
+    const { login: isLoading } = state.loadingStates;
 
     return (
       <div className={loginContainer}>
