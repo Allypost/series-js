@@ -13,6 +13,11 @@ export const containerStyle = css`
     border-radius: 50em;
     text-align: center;
     color: #424242;
+  }
+`;
+
+export const containerActions = css`
+  & {
     transition: border .25s ease-in, background .3s ease-in;
   }
 

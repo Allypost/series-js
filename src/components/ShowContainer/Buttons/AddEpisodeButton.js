@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
 
-import { containerStyle as defaultContainerStyle, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
+import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
 
+
+const containerStyle = css`
+  ${defaultContainerStyle}
+  ${defaultContainerActions}
+`;
 
 const iconStyle = css`
   ${defaultIconStyle}
@@ -15,7 +20,7 @@ export class AddEpisodeButton extends Component {
 
   render() {
     return (
-      <div className={defaultContainerStyle}>
+      <div className={containerStyle}>
         <span className={iconStyle}>
           ✚
         </span>
