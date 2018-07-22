@@ -15,7 +15,6 @@ import { FavouriteButton } from '../components/ShowContainer/Buttons/FavouriteBu
 
 import { get as getShowData } from '../services/show';
 import { getAll as getShowEpisodes } from '../services/episode';
-import Util from '../helpers/Util';
 
 const pageContainer = css`
   display: inline-grid;
@@ -164,9 +163,7 @@ export class ShowContainer extends Component {
   }
 
   isLoggedIn() {
-    const userToken = Util.getUserToken();
-
-    return !!userToken.length;
+    return !!state.user.token;
   }
 
   renderDescription() {
