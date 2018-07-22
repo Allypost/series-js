@@ -57,11 +57,11 @@ export class IndexContainer extends Component {
 
   render() {
     const { shows, favourites } = state;
-    const hasFavourites = favourites.length;
+    const showFavourites = favourites.length && shows.length;
     return (
       <div className={showPageContainer}>
-        {hasFavourites ? this.renderFavouritesHeader() : null}
-        {hasFavourites ? this.renderFavouritesBody() : null}
+        {showFavourites ? this.renderFavouritesHeader() : null}
+        {showFavourites ? this.renderFavouritesBody() : null}
         <h2 className={allShows}>
           All shows
         </h2>
