@@ -4,7 +4,7 @@ import { css } from 'emotion';
 
 import { like as likeShow } from '../../../services/show';
 
-import { containerStyle as defaultContainerStyle, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
+import { containerStyle as defaultContainerStyle, iconStyle as defaultIconStyle } from './Bases/SeriesActionButton';
 
 import { LikeButtonImage } from './Bases/LikeButtonImage';
 import state from '../../../state';
