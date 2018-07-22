@@ -36,18 +36,6 @@ const userContainer = css`
   // font-size: .8em;
 `;
 
-const decodeJWT = (token) => {
-  if (!token) {
-    return null;
-  }
-
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace('-', '+').replace('_', '/');
-
-  return JSON.parse(window.atob(base64));
-};
-
-
 export class NavBar extends Component {
 
   constructor(...args) {
@@ -74,7 +62,7 @@ export class NavBar extends Component {
 
   updateState() {
     const { token, username: storeUsername } = Util.getUserData();
-    const parsedToken = decodeJWT(token);
+    const parsedToken = Util.decodeJWT(token);
 
     if (!parsedToken) {
       return;
