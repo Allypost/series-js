@@ -208,12 +208,14 @@ export class ShowContainer extends Component {
     const { showData } = state;
     const isLoggedIn = this.isLoggedIn();
 
+    const { likesCount = 0 } = showData;
+
     return (
       <div className={showTitleContainer}>
         <h1 className={showTitle}>{isLoading ? 'Loading...' : showData.title}</h1>
-        <LikeButton likesCount={showData.likesCount} disabled={!isLoggedIn} />
+        <LikeButton likesCount={likesCount} disabled={!isLoggedIn} />
         <div className={likeButtonSpacer} />
-        <DislikeButton likesCount={showData.likesCount} disabled={!isLoggedIn} />
+        <DislikeButton likesCount={likesCount} disabled={!isLoggedIn} />
       </div>
     )
   }
