@@ -116,6 +116,12 @@ const noEpisodesHeader = css`
 @observer
 export class ShowContainer extends Component {
 
+  constructor(...args) {
+    super(...args);
+
+    this.timer = null;
+  }
+
   getShowId() {
     const { match = {} } = this.props;
     const { params = {} } = match;
@@ -129,7 +135,13 @@ export class ShowContainer extends Component {
 
     getShowData(state, showId);
     getShowEpisodes(state, showId);
-    setInterval(this.dataChecker.bind(this), 3000);
+    this.timer = setInterval(this.dataChecker.bind(this), 3000);
+  }
+
+  componentWillUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
   }
 
   dataChecker() {
