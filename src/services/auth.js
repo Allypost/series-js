@@ -1,3 +1,5 @@
+import { observable } from 'mobx';
+import Util from '../helpers/Util';
 import { post as _post } from './api';
 
 export async function login(state, { email, password, rememberMe }) {
@@ -5,7 +7,8 @@ export async function login(state, { email, password, rememberMe }) {
   try {
     const data = await _post('users/sessions', '', { email, password });
 
-    const { token } = data;
+    const { token = null } = data;
+    const { _id } = Util.parseJWT(token);
     const { localStorage } = window;
 
     const storeName = rememberMe ? 'localStorage' : 'sessionStorage';
@@ -14,6 +17,15 @@ export async function login(state, { email, password, rememberMe }) {
     store.setItem('token', token);
     store.setItem('username', email);
     localStorage.setItem('token_location', storeName);
+
+    Object.assign(
+      state.user,
+      observable({
+        token,
+        username: email,
+        id: _id,
+      })
+    );
 
     state.errorStates.login = false;
 

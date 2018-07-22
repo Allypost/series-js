@@ -1,4 +1,5 @@
 import { observable, observe, intercept } from 'mobx';
+import Util from './helpers/Util';
 
 const getFavourites = () => {
   const store = window.localStorage;
@@ -45,7 +46,7 @@ const interceptShowData = (diff, favourites = []) => {
   const newValue = updateShowData(oldValue, favourites);
 
   return Object.assign(diff, { newValue });
-}
+};
 
 class State {
 
@@ -77,11 +78,14 @@ class State {
   @observable
   errorStates = Object.assign({}, this.loadingStates);
 
+  @observable
+  user = Util.getUserData();
+
   constructor() {
     this.favourites.replace(getFavourites());
 
     observe(this.favourites, (...args) => {
-      const favourites = this.favourites;
+      const { favourites } = this;
       const store = window.localStorage;
 
       Object.assign(this.showData, updateShowData(this.showData, favourites));
