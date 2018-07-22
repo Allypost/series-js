@@ -31,14 +31,37 @@ const allShows = css`
 
 @observer
 export class IndexContainer extends Component {
+
   componentDidMount() {
     getAllShows(state);
   }
 
+  renderFavouritesHeader() {
+    return (
+      <h2 className={allShows}>
+        Favourite shows
+      </h2>
+    );
+  }
+
+  renderFavouritesBody() {
+    const { favourites, shows: allShows } = state;
+    const shows = allShows.filter(({ _id }) => favourites.includes(_id));
+
+    return (
+      <div className={showsContainer}>
+        {shows.map((show) => (<ShowCard key={show._id} show={show} />))}
+      </div>
+    );
+  }
+
   render() {
-    const { shows } = state;
+    const { shows, favourites } = state;
+    const hasFavourites = favourites.length;
     return (
       <div className={showPageContainer}>
+        {hasFavourites && this.renderFavouritesHeader()}
+        {hasFavourites && this.renderFavouritesBody()}
         <h2 className={allShows}>
           All shows
         </h2>
@@ -48,4 +71,5 @@ export class IndexContainer extends Component {
       </div>
     );
   }
+
 }
