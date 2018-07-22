@@ -75,7 +75,15 @@ export class IndexContainer extends Component {
 
     return (
       <div className={showsContainer}>
-        {shows.map((show) => (<ShowCard key={show._id} show={show} hideFavouriteBadge={true} />))}
+        {
+          shows.map((show) => (
+            <ShowCard
+              hideFavouriteBadge
+              key={show._id}
+              show={show}
+            />
+          ))
+        }
       </div>
     );
   }
@@ -99,13 +107,18 @@ export class IndexContainer extends Component {
       return (
         <h2 className={showsError}>
           <em>
-            Couln't get shows. Trying again soon...
+            Could not get shows. Trying again soon...
           </em>
         </h2>
       );
     }
 
-    return shows.map((show) => (<ShowCard key={show._id} show={show} />));
+    return shows.map((show) => (
+      <ShowCard
+        key={show._id}
+        show={show}
+      />
+    ));
   }
 
   render() {
