@@ -58,7 +58,7 @@ export default class Util {
     const store = window[tokenLocation];
 
     if (!store) {
-      return '';
+      return {};
     }
 
     const token = store.getItem('token') || '';
