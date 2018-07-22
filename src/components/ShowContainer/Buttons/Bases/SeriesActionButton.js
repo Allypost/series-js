@@ -13,6 +13,10 @@ export const containerStyle = css`
     border-radius: 50em;
     text-align: center;
     color: #424242;
+  
+    * {
+      user-select: none;
+    }
   }
 `;
 
