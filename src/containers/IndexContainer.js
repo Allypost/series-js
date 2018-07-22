@@ -29,11 +29,36 @@ const allShows = css`
   grid-column: 2 / span 10;
 `;
 
+const showsError = css`
+  grid-column: 1 / -1;
+`;
+
 @observer
 export class IndexContainer extends Component {
 
+  constructor(...args) {
+    super(...args);
+
+    this.timer = null;
+  }
+
   componentDidMount() {
     getAllShows(state);
+    this.timer = setInterval(this.dataChecker.bind(this), 3000);
+  }
+
+  componentWillUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  }
+
+  dataChecker() {
+    const { shows: hasErrors } = state.errorStates;
+
+    if (hasErrors) {
+      getAllShows(state);
+    }
   }
 
   renderFavouritesHeader() {
@@ -55,6 +80,23 @@ export class IndexContainer extends Component {
     );
   }
 
+  renderAllShows() {
+    const { shows } = state;
+    const { shows: hasErrors } = state.errorStates;
+
+    if (hasErrors) {
+      return (
+        <h2 className={showsError}>
+          <em>
+            Couln't get shows. Trying again soon...
+          </em>
+        </h2>
+      );
+    }
+
+    return shows.map((show) => (<ShowCard key={show._id} show={show} />));
+  }
+
   render() {
     const { shows, favourites } = state;
     const showFavourites = favourites.length && shows.length;
@@ -66,7 +108,7 @@ export class IndexContainer extends Component {
           All shows
         </h2>
         <div className={showsContainer}>
-          {shows.map((show) => (<ShowCard key={show._id} show={show} />))}
+          {this.renderAllShows()}
         </div>
       </div>
     );
