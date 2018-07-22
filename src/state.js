@@ -48,6 +48,21 @@ const interceptShowData = (diff, favourites = []) => {
   return Object.assign(diff, { newValue });
 };
 
+const updateStore = (name, newVal = null) => {
+  const location = localStorage.getItem('token_location');
+  const store = window[location];
+
+  if (!location || !store) {
+    return;
+  }
+
+  if (newVal === null) {
+    store.removeItem(name);
+  } else {
+    store.setItem(name, newVal);
+  }
+};
+
 class State {
 
   // eslint-disable-next-line
@@ -92,6 +107,21 @@ class State {
       this.shows.replace(updateShows(this.shows, favourites));
 
       store.setItem('favourites', JSON.stringify(favourites));
+    });
+
+    observe(this.user, ({ name, newValue, object }) => {
+      switch (name) {
+        case 'token':
+        case 'username':
+          updateStore(name, newValue);
+          break;
+        default:
+          break;
+      }
+
+      if (!Object.keys(object).length) {
+        localStorage.removeItem('token_location');
+      }
     });
 
     intercept(this.shows, (diff) => interceptShows(diff, this.favourites));
