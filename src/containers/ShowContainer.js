@@ -208,20 +208,12 @@ export class ShowContainer extends Component {
     const { showData } = state;
     const isLoggedIn = this.isLoggedIn();
 
-    if (isLoggedIn) {
-      return (
-        <div className={showTitleContainer}>
-          <h1 className={showTitle}>{isLoading ? 'Loading...' : showData.title}</h1>
-          <LikeButton likesCount={showData.likesCount} />
-          <div className={likeButtonSpacer} />
-          <DislikeButton likesCount={showData.likesCount} />
-        </div>
-      )
-    }
-
     return (
       <div className={showTitleContainer}>
         <h1 className={showTitle}>{isLoading ? 'Loading...' : showData.title}</h1>
+        <LikeButton likesCount={showData.likesCount} disabled={!isLoggedIn} />
+        <div className={likeButtonSpacer} />
+        <DislikeButton likesCount={showData.likesCount} disabled={!isLoggedIn} />
       </div>
     )
   }

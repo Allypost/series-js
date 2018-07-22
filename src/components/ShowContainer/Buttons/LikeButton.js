@@ -65,6 +65,12 @@ export class LikeButton extends Component {
   handleClick(evt) {
     evt.preventDefault();
 
+    const { disabled: isDisabled } = this.props;
+
+    if (isDisabled) {
+      return;
+    }
+
     const { showData = {} } = state;
 
     likeShow(state, showData._id);
@@ -73,12 +79,20 @@ export class LikeButton extends Component {
   getContainerClass() {
     const { loadingStates } = state;
     const { showLike: isLoading } = loadingStates;
+    const { disabled: isDisabled } = this.props;
 
     if (isLoading) {
       return css`
         ${containerStyle}
         cursor: wait !important;
         background: rgba(0, 0, 0, .1);
+      `;
+    }
+
+    if (isDisabled) {
+      return css`
+        ${containerStyle}
+        cursor: default !important;
       `;
     }
 
