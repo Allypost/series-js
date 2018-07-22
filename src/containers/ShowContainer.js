@@ -221,9 +221,11 @@ export class ShowContainer extends Component {
   }
 
   renderEpisodeActions() {
+    const { loadingStates = {} } = state;
+    const { showData: isLoading = true } = loadingStates;
     const isLoggedIn = this.isLoggedIn();
 
-    if (!isLoggedIn) {
+    if (!isLoggedIn || isLoading) {
       return (
         null
       );
