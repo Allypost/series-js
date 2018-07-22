@@ -5,14 +5,20 @@ export async function getAll(state) {
   state.loadingStates.shows = true;
   const shows = await _get('shows');
   state.loadingStates.shows = false;
-  state.shows.replace(shows);
+
+  if (Array.isArray(shows)) {
+    state.shows.replace(shows);
+  }
 }
 
 export async function get(state, showId) {
   state.loadingStates.showData = true;
   const show = await _get(`shows/${showId}`);
-  state.showData = observable(show);
   state.loadingStates.showData = false;
+
+  if (show && show._id) {
+    state.showData = observable(show);
+  }
 }
 
 export async function like(state, showId, token) {

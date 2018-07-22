@@ -11,7 +11,7 @@ const getFavourites = () => {
   }
 };
 
-const updateShows = (oldAdded, favourites) => {
+const updateShows = (oldAdded = [], favourites = []) => {
   const mapper =
     (episode) =>
       Object.assign(
@@ -20,6 +20,10 @@ const updateShows = (oldAdded, favourites) => {
           isFavourite: favourites.includes(episode._id),
         }
       );
+
+  if (!Array.isArray(oldAdded)) {
+    return [];
+  }
 
   return oldAdded.map(mapper);
 };

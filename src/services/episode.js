@@ -4,7 +4,10 @@ export async function getAll(state, showId) {
   state.loadingStates.episodes = true;
   const episodes = await _get(`shows/${showId}/episodes`);
   state.loadingStates.episodes = false;
-  state.episodes.replace(episodes);
+
+  if (Array.isArray(episodes)) {
+    state.episodes.replace(episodes);
+  }
 }
 
 export async function get(state, episodeId) {
