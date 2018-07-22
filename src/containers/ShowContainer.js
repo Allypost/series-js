@@ -129,6 +129,20 @@ export class ShowContainer extends Component {
 
     getShowData(state, showId);
     getShowEpisodes(state, showId);
+    setInterval(this.dataChecker.bind(this), 3000);
+  }
+
+  dataChecker() {
+    const showId = this.getShowId();
+    const { episodes: episodeErrors, showData: showErrors } = state.errorStates;
+
+    if (showErrors) {
+      getShowData(state, showId);
+    }
+
+    if (episodeErrors) {
+      getShowEpisodes(state, showId);
+    }
   }
 
   renderLoading() {
@@ -144,14 +158,22 @@ export class ShowContainer extends Component {
   }
 
   renderDescription() {
-    const { loadingStates = {} } = state;
-    const { showData: isLoading } = loadingStates;
+    const { showData: isLoading = true } = state.loadingStates;
+    const { showData: hasErrors = true } = state.errorStates;
     const { showData } = state;
 
     if (isLoading) {
       return (
         <em>
           Loading...
+        </em>
+      );
+    }
+
+    if (hasErrors) {
+      return (
+        <em>
+          Couln't get the show data. Trying again soon...
         </em>
       );
     }
@@ -168,9 +190,19 @@ export class ShowContainer extends Component {
   }
 
   renderEpisodes() {
-    const { loadingStates = {} } = state;
-    const { episodes: isLoading, showData: showLoading } = loadingStates;
+    const { episodes: isLoading, showData: showLoading } = state.loadingStates;
+    const { episodes: hasErrors } = state.errorStates;
     const { episodes } = state;
+
+    if (hasErrors) {
+      return (
+        <h2 className={noEpisodesHeader}>
+          <em>
+            Couldn't get the episode list. Trying again soon...
+          </em>
+        </h2>
+      );
+    }
 
     if (showLoading || isLoading) {
       return (
@@ -203,8 +235,8 @@ export class ShowContainer extends Component {
   }
 
   renderShowTitle() {
-    const { loadingStates = {} } = state;
-    const { showData: isLoading = true } = loadingStates;
+    const { showData: isLoading = true } = state.loadingStates;
+    const { showData: hasErrors = true } = state.errorStates;
     const { showData } = state;
     const isLoggedIn = this.isLoggedIn();
 
@@ -214,6 +246,18 @@ export class ShowContainer extends Component {
       return (
         <div className={showTitleContainer}>
           <h1 className={showTitle}>Loading...</h1>
+        </div>
+      );
+    }
+
+    if (hasErrors) {
+      return (
+        <div className={showTitleContainer}>
+          <h1 className={showTitle}>
+            <em>
+              Something went wrong...
+            </em>
+          </h1>
         </div>
       );
     }
@@ -229,11 +273,11 @@ export class ShowContainer extends Component {
   }
 
   renderEpisodeActions() {
-    const { loadingStates = {} } = state;
-    const { showData: isLoading = true } = loadingStates;
+    const { showData: isLoading = true } = state.loadingStates;
+    const { showData: hasErrors = true } = state.errorStates;
     const isLoggedIn = this.isLoggedIn();
 
-    if (!isLoggedIn || isLoading) {
+    if (!isLoggedIn || isLoading || hasErrors) {
       return (
         null
       );
