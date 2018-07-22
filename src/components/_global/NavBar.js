@@ -62,7 +62,7 @@ export class NavBar extends Component {
 
   updateState() {
     const { token, username: storeUsername } = Util.getUserData();
-    const parsedToken = Util.decodeJWT(token);
+    const parsedToken = Util.parseJWT(token);
 
     if (!parsedToken) {
       return;
