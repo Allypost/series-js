@@ -82,7 +82,18 @@ export class IndexContainer extends Component {
 
   renderAllShows() {
     const { shows } = state;
+    const { shows: isLoading } = state.loadingStates;
     const { shows: hasErrors } = state.errorStates;
+
+    if (isLoading) {
+      return (
+        <h2 className={showsError}>
+          <em>
+            Loading...
+          </em>
+        </h2>
+      );
+    }
 
     if (hasErrors) {
       return (
