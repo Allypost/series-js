@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import { css } from 'emotion';
+
 import { login } from '../services/auth';
 import state from '../state';
-import { observer } from 'mobx-react';
+
+import eyeImg from '../img/ic-akcije-show-password-red@3x.png';
 
 const loginContainer = css`
   display: grid;
@@ -60,6 +63,18 @@ const cssRegisterLink = css`
   padding: 0 1em;
 `;
 
+const passwordContainer = css`
+  position: relative;
+  display: inline-block;
+`;
+
+const eyeImage = css`
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 1.2em;
+`;
+
 @observer
 export class LoginContainer extends Component {
 
@@ -69,13 +84,17 @@ export class LoginContainer extends Component {
     this.state = {
       email: '',
       password: '',
+      passwordInputType: 'password',
       rememberMe: true,
     };
 
+    this.handlePasswordToggleClick = this.handlePasswordToggleClick.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleRememberChange = this.handleRememberChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
+
+    this.passwordRef = React.createRef();
   }
 
   handleUsernameChange(event) {
@@ -108,6 +127,19 @@ export class LoginContainer extends Component {
     return false;
   }
 
+  handlePasswordToggleClick(evt) {
+    const inputTypes = ['text', 'password'];
+
+    const passwordEl = this.passwordRef.current;
+    const currentType = passwordEl.type;
+    const currentTypeIndex = inputTypes.indexOf(currentType);
+    const nextTypeIndex = (currentTypeIndex + 1) % inputTypes.length;
+
+    passwordEl.type = inputTypes[nextTypeIndex];
+
+    evt.preventDefault();
+  }
+
   render() {
     const {
       email,
@@ -136,15 +168,29 @@ export class LoginContainer extends Component {
             />
           </label>
           <label className={css`cursor: pointer;`}>
-            and my password is
-            &nbsp;
-            <input
-              className={cssPassword}
-              onChange={this.handlePasswordChange}
-              required
-              type="password"
-              value={password}
-            />
+            <span>
+              and my password is
+            </span>
+            <div className={passwordContainer}>
+              <input
+                className={cssPassword}
+                onChange={this.handlePasswordChange}
+                ref={this.passwordRef}
+                required
+                type="password"
+                value={password}
+              />
+              <a
+                href="#reveal-password"
+                onClick={this.handlePasswordToggleClick}
+              >
+                <img
+                  alt="Reveal password"
+                  className={eyeImage}
+                  src={eyeImg}
+                />
+              </a>
+            </div>
           </label>
           <div>
             <label className={cssRemember}>
