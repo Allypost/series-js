@@ -74,6 +74,9 @@ class State {
     episodeData: observable.object(),
   };
 
+  @observable
+  errorStates = Object.assign({}, this.loadingStates);
+
   constructor() {
     this.favourites.replace(getFavourites());
 

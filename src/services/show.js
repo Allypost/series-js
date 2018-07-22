@@ -3,22 +3,26 @@ import { get as _get, post as _post } from './api';
 
 export async function getAll(state) {
   state.loadingStates.shows = true;
-  const shows = await _get('shows');
-  state.loadingStates.shows = false;
-
-  if (Array.isArray(shows)) {
+  try {
+    const shows = await _get('shows');
     state.shows.replace(shows);
+    state.errorStates.shows = false;
+  } catch (e) {
+    state.errorStates.shows = true;
   }
+  state.loadingStates.shows = false;
 }
 
 export async function get(state, showId) {
   state.loadingStates.showData = true;
-  const show = await _get(`shows/${showId}`);
-  state.loadingStates.showData = false;
-
-  if (show && show._id) {
+  try {
+    const show = await _get(`shows/${showId}`);
     state.showData = observable(show);
+    state.errorStates.showData = false;
+  } catch (e) {
+    state.errorStates.showData = true;
   }
+  state.loadingStates.showData = false;
 }
 
 export async function like(state, showId, token) {

@@ -2,10 +2,10 @@ import Util from '../helpers/Util';
 
 const defaultFn = (param) => param;
 
-function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
+async function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
   const {
     success = defaultFn,
-    error = defaultFn,
+    error = () => { },
     always = defaultFn,
   } = cbObj;
 
@@ -26,14 +26,19 @@ function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
     .then((res) => res.json())
     .then((res) => res.data)
     .then((data) => success(data))
-    .catch((err) => error(err))
+    .catch((err) => {
+      const resolved = error(err);
+      if (!resolved) {
+        throw new Error(err);
+      }
+    })
     .finally(() => always());
 }
 
-export function get(model, cbObj) {
+export async function get(model, cbObj) {
   return doFetch('GET', model, { cbObj });
 }
 
-export function post(model, token, data, cbObj) {
+export async function post(model, token, data, cbObj) {
   return doFetch('POST', model, { data, token, cbObj });
 }
