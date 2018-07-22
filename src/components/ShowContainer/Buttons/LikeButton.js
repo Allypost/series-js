@@ -42,6 +42,7 @@ export const textStyle = css`
   font-size: 1.2em;
   font-weight: 100;
   color: #2e7d32;
+  float: right;
 `;
 
 export const iconStyle = css`
