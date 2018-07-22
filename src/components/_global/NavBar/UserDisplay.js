@@ -25,7 +25,10 @@ export class UserDisplay extends Component {
     const confirm = window.confirm('Do you want to log out?');
 
     if (confirm) {
-      window.location.href = '/logout';
+      Object.keys(state.user)
+        .forEach((key) => {
+          delete state.user[key];
+        });
     }
   }
 
