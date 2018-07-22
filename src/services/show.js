@@ -28,7 +28,7 @@ export async function like(state, showId, token) {
   return new Promise((resolve) => {
     setTimeout(() => {
       state.loadingStates.showLike = false;
-      const diff = { likesCount: state.showData.likesCount + 1 };
+      const diff = observable({ likesCount: (state.showData.likesCount || 0) + 1 });
       const newData = Object.assign(state.showData, diff);
       resolve(Object.assign({}, newData));
     }, delay);
@@ -48,7 +48,7 @@ export async function dislike(state, showId, token) {
   return new Promise((resolve) => {
     setTimeout(() => {
       state.loadingStates.showLike = false;
-      const diff = { likesCount: state.showData.likesCount - 1 };
+      const diff = observable({ likesCount: (state.showData.likesCount || 0) - 1 });
       const newData = Object.assign(state.showData, diff);
       resolve(Object.assign({}, newData));
     }, delay);
