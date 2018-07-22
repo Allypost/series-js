@@ -4,7 +4,6 @@ import { css } from 'emotion';
 import { UserDisplay } from './NavBar/UserDisplay';
 
 import logoImg from '../../img/img-logo-horizontal@3x.png';
-import Util from '../../helpers/Util';
 
 const nav = css`
   display: grid;
@@ -38,45 +37,7 @@ const userContainer = css`
 
 export class NavBar extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.state = {
-      user: {},
-      token: '',
-    };
-  }
-
-  componentDidMount() {
-    this.updateState();
-  }
-
-  componentDidUpdate(_oldProps, oldState) {
-    const { token } = this.state;
-    const { token: oldToken } = oldState;
-
-    if (token !== oldToken) {
-      this.updateState();
-    }
-  }
-
-  updateState() {
-    const { token, username: storeUsername } = Util.getUserData();
-    const parsedToken = Util.parseJWT(token);
-
-    if (!parsedToken) {
-      return;
-    }
-
-    const { _id, username = storeUsername } = parsedToken;
-
-    // eslint-disable-next-line react/no-did-mount-set-state
-    this.setState({ token, user: { _id, username: username || _id } });
-  }
-
   render() {
-    const { user } = this.state;
-
     return (
       <nav className={nav}>
         <div className={logoContainer}>
@@ -89,7 +50,7 @@ export class NavBar extends Component {
           </Link>
         </div>
         <div className={userContainer}>
-          <UserDisplay user={user} />
+          <UserDisplay />
         </div>
       </nav>
     );

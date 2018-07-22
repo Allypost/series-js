@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
+import { observer } from 'mobx-react';
+import state from '../../../state';
 
 const prettyLink = css`
   color: #ff758c;
   text-decoration: none;
 `;
 
+@observer
 export class UserDisplay extends Component {
 
   constructor(...args) {
@@ -39,7 +42,7 @@ export class UserDisplay extends Component {
   }
 
   renderUserLink() {
-    const { user } = this.props;
+    const { user } = state;
 
     return (
       <Link
@@ -55,9 +58,9 @@ export class UserDisplay extends Component {
   }
 
   renderUser() {
-    const { user } = this.props;
+    const { user } = state;
 
-    if (!user._id) {
+    if (!user.id) {
       return this.renderLoginLink();
     }
 
