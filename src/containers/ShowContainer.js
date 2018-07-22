@@ -251,7 +251,7 @@ export class ShowContainer extends Component {
     const { showData } = state;
 
     return (
-      <div className={pageContainer}>
+      <div className={pageContainer} data-favourite={showData.isFavourite}>
         <BackButton />
         <div className={showContainer}>
           {this.renderShowTitle()}

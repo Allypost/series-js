@@ -50,7 +50,7 @@ export class IndexContainer extends Component {
 
     return (
       <div className={showsContainer}>
-        {shows.map((show) => (<ShowCard key={show._id} show={show} />))}
+        {shows.map((show) => (<ShowCard key={show._id} show={show} hideFavouriteBadge={true} />))}
       </div>
     );
   }
