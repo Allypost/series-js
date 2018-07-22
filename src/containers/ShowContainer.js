@@ -210,9 +210,17 @@ export class ShowContainer extends Component {
 
     const { likesCount = 0 } = showData;
 
+    if (isLoading) {
+      return (
+        <div className={showTitleContainer}>
+          <h1 className={showTitle}>Loading...</h1>
+        </div>
+      );
+    }
+
     return (
       <div className={showTitleContainer}>
-        <h1 className={showTitle}>{isLoading ? 'Loading...' : showData.title}</h1>
+        <h1 className={showTitle}>{showData.title}</h1>
         <LikeButton likesCount={likesCount} disabled={!isLoggedIn} />
         <div className={likeButtonSpacer} />
         <DislikeButton likesCount={likesCount} disabled={!isLoggedIn} />
