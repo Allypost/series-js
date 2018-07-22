@@ -4,28 +4,23 @@ import { css } from 'emotion';
 
 import { like as likeShow } from '../../../services/show';
 
+import { containerStyle as defaultContainerStyle, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
+
 import { LikeButtonImage } from './Bases/LikeButtonImage';
 import state from '../../../state';
 
-export const likeContainer = css`
+export const containerStyle = css`
   & {
-    display: inline-grid;
-    height: 3em;
-    width: 6em;
-    cursor: pointer;
-    align-items: center;
-    justify-items: center;
-    padding: .5em;
-    border: 1px solid #e0e0e0;
-    border-radius: 2em;
-    color: #616161;
-    fill: #616161;
-    user-select: none;
-    transition: border .15s ease-out, color .15s ease-out, fill .15s ease-out, background-color .5s cubic-bezier(.25, .45, .45, .95);
+    ${defaultContainerStyle}
+    padding: .5em 1em !important;
   }
 `;
 
-export const likeContainerActions = css`
+export const containerActions = css`
+  & {
+    transition: border .15s ease-out, color .15s ease-out, fill .15s ease-out, background-color .5s cubic-bezier(.25, .45, .45, .95);
+  }
+
   &:hover {
     border-color: #2e7d32;
     color: #2e7d32;
@@ -41,17 +36,21 @@ export const likeContainerActions = css`
   }
 `;
 
-export const likeImage = css`
-  width: 1.8em;
+export const textStyle = css`
   grid-row: 1;
-  padding: .2em .5em;
-`;
-
-export const likeText = css`
-  grid-row: 1;
-  padding: .62em .4em .3em;
+  margin-left: .6em;
   font-size: 1.2em;
   font-weight: 100;
+  color: #2e7d32;
+`;
+
+export const iconStyle = css`
+  ${defaultIconStyle}
+  display: inline-block;
+  height: 1.3em;
+  width: 1.2em;
+  background-color: transparent;
+  padding: 0 .1em;
 `;
 
 @observer
@@ -77,15 +76,15 @@ export class LikeButton extends Component {
 
     if (isLoading) {
       return css`
-        ${likeContainer}
+        ${containerStyle}
         cursor: wait !important;
         background: rgba(0, 0, 0, .1);
       `;
     }
 
     return css`
-      ${likeContainer}
-      ${likeContainerActions}
+      ${containerStyle}
+      ${containerActions}
     `;
   }
 
@@ -97,13 +96,13 @@ export class LikeButton extends Component {
         className={this.getContainerClass()}
         onClick={this.handleClick}
       >
-        <span className={likeImage}>
+        <span className={iconStyle}>
           <LikeButtonImage alt="Like" />
         </span>
         {
           likesCount >= 0
           && (
-            <span className={likeText}>
+            <span className={textStyle}>
               {likesCount || 0}
             </span>
           )

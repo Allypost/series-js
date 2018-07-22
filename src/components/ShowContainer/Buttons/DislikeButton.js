@@ -5,17 +5,11 @@ import { css } from 'emotion';
 import { dislike as dislikeShow } from '../../../services/show';
 
 import { LikeButtonImage } from './Bases/LikeButtonImage';
-import { likeContainer, likeContainerActions, likeImage, likeText } from './LikeButton';
+import { containerStyle, containerActions as likeContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './LikeButton';
+
 import state from '../../../state';
 
-const dislikeContainer = css`
-  ${likeContainer}
-  & {
-    //width: 3em;
-  }
-`;
-
-const dislikeContainerActions = css`
+const containerActions = css`
   ${likeContainerActions}
   &:hover {
     border-color: #f44336;
@@ -31,13 +25,17 @@ const dislikeContainerActions = css`
   }
 `;
 
-const dislikeImage = css`
-  ${likeImage}
-  transform: rotateZ(180deg) translateY(-.1em);
+const textStyle = css`
+  ${defaultTextStyle}
+  color: #b71c1c;
+  float: left;
+  margin-right: .6em;
+  margin-left: 0;
 `;
 
-const dislikeText = css`
-  ${likeText}
+const iconStyle = css`
+  ${defaultIconStyle}
+  transform: rotateZ(180deg);
 `;
 
 
@@ -64,15 +62,15 @@ export class DislikeButton extends Component {
 
     if (isLoading) {
       return css`
-        ${dislikeContainer}
+        ${containerStyle}
         cursor: wait !important;
         background: rgba(0, 0, 0, .1);
       `;
     }
 
     return css`
-      ${dislikeContainer}
-      ${dislikeContainerActions}
+      ${containerStyle}
+      ${containerActions}
     `;
   }
 
@@ -87,12 +85,12 @@ export class DislikeButton extends Component {
         {
           likesCount < 0
           && (
-            <span className={dislikeText}>
+            <span className={textStyle}>
               {-likesCount}
             </span>
           )
         }
-        <span className={dislikeImage}>
+        <span className={iconStyle}>
           <LikeButtonImage alt="Dislke" />
         </span>
       </div>
