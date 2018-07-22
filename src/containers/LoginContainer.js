@@ -119,7 +119,13 @@ export class LoginContainer extends Component {
           return token;
         }
 
-        window.location.href = '/';
+        const { history } = this.props;
+
+        if (history && history.push) {
+          history.push('/');
+        } else {
+          window.location.href = '/';
+        }
 
         return token;
       });
