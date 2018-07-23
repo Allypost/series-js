@@ -24,7 +24,7 @@ async function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
 
   return fetch(`https://api.infinum.academy/api/${model}`, opts)
     .then((res) => res.json())
-    .then((res) => res.data)
+    .then((res) => res.data || res.errors || res)
     .then((data) => success(data))
     .catch((err) => {
       const resolved = error(err);
