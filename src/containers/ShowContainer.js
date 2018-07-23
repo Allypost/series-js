@@ -26,7 +26,7 @@ const pageContainer = css`
 
 const showContainer = css`
   display: inline-grid;
-  grid-template-columns: 5fr 2fr;
+  grid-template-columns: 4fr 2fr;
   grid-column-gap: 1em;
   grid-row-gap: 1.5em;
   grid-row: 2;
