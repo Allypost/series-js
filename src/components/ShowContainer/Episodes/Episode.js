@@ -96,8 +96,8 @@ export class Episode extends Component {
     const { episode } = this.props;
     const { state } = this.props;
     const { loadingStates } = state;
-    const { episodeData = {} } = loadingStates;
-    const isLoadingSet = episodeData[episode._id];
+    const { episodesData = {} } = loadingStates;
+    const isLoadingSet = episodesData[episode._id];
     // eslint-disable-next-line no-undefined
     const isLoading = isLoadingSet === undefined || isLoadingSet;
 

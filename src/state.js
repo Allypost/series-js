@@ -87,7 +87,8 @@ class State {
     showData: false,
     showLike: false,
     episodes: false,
-    episodeData: observable.object(),
+    episodeData: false,
+    episodesData: observable.object(),
   };
 
   @observable
