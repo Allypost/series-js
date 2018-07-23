@@ -41,54 +41,33 @@ export async function get(state, showId) {
   });
 }
 
-export async function like(state, showId, token) {
+async function interract(type, state, showId, token) {
   runInAction(() => {
     state.loadingStates.showLike = true;
   });
 
-  /*
-  const resp = await _post(`shows/${showId}/like`, token);
-  Object.assign(state.showData, resp);
-  state.loadingStates.showLike = false;
-  */
+  try {
+    const resp = await _post(`shows/${showId}/${type}`, token);
+    runInAction(() => {
+      Object.assign(state.showData, resp);
+      state.errorStates.showLike = false;
+      state.loadingStates.showLike = false;
+    });
+  } catch (e) {
+    runInAction(() => {
+      state.errorStates.showLike = true;
+    });
+  } finally {
+    runInAction(() => {
+      state.loadingStates.showLike = false;
+    });
+  }
+}
 
-  const delay = 100 + (1000 * Math.random());
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      runInAction(() => {
-        state.loadingStates.showLike = false;
-      });
-      const diff = observable({ likesCount: (state.showData.likesCount || 0) + 1 });
-      runInAction(() => {
-        const newData = Object.assign(state.showData, diff);
-        resolve(Object.assign({}, newData));
-      });
-    }, delay);
-  });
+export async function like(state, showId, token) {
+  interract('like', state, showId, token);
 }
 
 export async function dislike(state, showId, token) {
-  runInAction(() => {
-    state.loadingStates.showLike = true;
-  });
-
-  /*
-  const resp = await _post(`shows/${showId}/dislike`, token);
-  Object.assign(state.showData, resp);
-  state.loadingStates.showLike = false;
-  */
-
-  const delay = 100 + (1000 * Math.random());
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      runInAction(() => {
-        state.loadingStates.showLike = false;
-      });
-      const diff = observable({ likesCount: (state.showData.likesCount || 0) - 1 });
-      runInAction(() => {
-        const newData = Object.assign(state.showData, diff);
-        resolve(Object.assign({}, newData));
-      });
-    }, delay);
-  });
+  interract('dislike', state, showId, token);
 }
