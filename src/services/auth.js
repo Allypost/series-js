@@ -13,12 +13,9 @@ export async function login(state, { email, password, rememberMe }) {
     const { _id } = Util.parseJWT(token);
     const { localStorage } = window;
 
-    const storeName = rememberMe ? 'localStorage' : 'sessionStorage';
-    const store = window[storeName];
-
-    store.setItem('token', token);
-    store.setItem('username', email);
-    localStorage.setItem('token_location', storeName);
+    if (rememberMe) {
+      localStorage.setItem('token_location', 'localStorage');
+    }
 
     runInAction(() => {
       Object.assign(
