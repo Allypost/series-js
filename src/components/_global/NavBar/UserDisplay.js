@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 import { observer } from 'mobx-react';
+import { runInAction } from 'mobx';
+
 import state from '../../../state';
 
 const prettyLink = css`
@@ -33,7 +35,9 @@ export class UserDisplay extends Component {
     if (confirm) {
       Object.keys(state.user)
         .forEach((key) => {
-          delete state.user[key];
+          runInAction(() => {
+            delete state.user[key];
+          });
         });
     }
   }
