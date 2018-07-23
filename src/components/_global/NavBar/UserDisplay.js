@@ -18,6 +18,12 @@ export class UserDisplay extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
+  isLoggedIn() {
+    const { user } = state;
+
+    return !!user.token;
+  }
+
   // eslint-disable-next-line class-methods-use-this
   handleLogout(evt) {
     evt.preventDefault();
@@ -33,7 +39,7 @@ export class UserDisplay extends Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  renderLoginLink() {
+  getLoginLink() {
     return (
       <Link
         className={prettyLink}
@@ -44,7 +50,7 @@ export class UserDisplay extends Component {
     );
   }
 
-  renderUserLink() {
+  getLogoutLink() {
     const { user } = state;
 
     return (
@@ -60,23 +66,14 @@ export class UserDisplay extends Component {
     );
   }
 
-  renderUser() {
-    const { user } = state;
-    const userData = Object.assign({}, user);
+  render() {
+    const isLoggedIn = this.isLoggedIn();
 
-    if (!userData.token) {
-      return this.renderLoginLink();
+    if (isLoggedIn) {
+      return this.getLogoutLink();
     }
 
-    return this.renderUserLink();
-  }
-
-  render() {
-    return (
-      <div>
-        {this.renderUser()}
-      </div>
-    );
+    return this.getLoginLink();
   }
 
 }

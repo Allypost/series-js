@@ -67,24 +67,6 @@ export class Episode extends Component {
     getEpisodeData(state, episode._id);
   }
 
-  renderEpisodeData() {
-    const { episode } = this.props;
-    const { loadingStates } = state;
-    const { episodeData = {} } = loadingStates;
-    const isLoadingSet = episodeData[episode._id];
-    const isLoading = isLoadingSet === undefined || isLoadingSet;
-
-    if (isLoading) {
-      return '...';
-    }
-
-    return (
-      <span className={episodeSeason}>
-        {`S${episode.season} Ep${episode.episodeNumber}`}
-      </span>
-    );
-  }
-
   getTrimmedDescription() {
     const { episode } = this.props;
     const { description = '' } = episode;
@@ -110,6 +92,21 @@ export class Episode extends Component {
     );
   }
 
+  getSeasonText() {
+    const { episode } = this.props;
+    const { loadingStates } = state;
+    const { episodeData = {} } = loadingStates;
+    const isLoadingSet = episodeData[episode._id];
+    // eslint-disable-next-line no-undefined
+    const isLoading = isLoadingSet === undefined || isLoadingSet;
+
+    if (isLoading) {
+      return '...';
+    }
+
+    return `S${episode.season} Ep${episode.episodeNumber}`;
+  }
+
   render() {
     const { episode } = this.props;
 
@@ -122,7 +119,9 @@ export class Episode extends Component {
         />
         <div className={episodeDetails}>
           <div className={episodeTitleContainer}>
-            {this.renderEpisodeData()}
+            <span className={episodeSeason}>
+              {this.getSeasonText()}
+            </span>
             <span className={episodeTitle}>
               {episode.title}
             </span>
