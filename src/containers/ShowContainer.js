@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
+import { action } from 'mobx';
 
 import defaultPoster from '../img/placeholder.png';
 
@@ -80,7 +81,7 @@ export class ShowContainer extends Component {
 
     getShowData(state, showId);
     getShowEpisodes(state, showId);
-    this.timer = setInterval(this.dataChecker.bind(this), 3000);
+    this.timer = setInterval(this.dataChecker, 3000);
   }
 
   componentWillUnmount() {
@@ -97,6 +98,7 @@ export class ShowContainer extends Component {
     return showId;
   }
 
+  @action.bound
   dataChecker() {
     const showId = this.getShowId();
     const { state } = this.props;

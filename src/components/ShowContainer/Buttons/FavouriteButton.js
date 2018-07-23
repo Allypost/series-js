@@ -19,12 +19,6 @@ const iconStyle = css`
 @observer
 export class FavouriteButton extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
   isFavourite() {
     const { state } = this.props;
     const { favourites, showData } = state;
@@ -43,7 +37,7 @@ export class FavouriteButton extends Component {
     return [showData._id, ...oldFavourites];
   }
 
-  @action
+  @action.bound
   handleClick(evt) {
     evt.preventDefault();
     const newFavourites = this.getNewFavouritesList();

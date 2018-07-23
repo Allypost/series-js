@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
+import { action } from 'mobx';
 
 import { like as likeShow } from '../../../services/show';
 
@@ -57,12 +58,7 @@ export const iconStyle = css`
 @observer
 export class LikeButton extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
+  @action.bound
   handleClick(evt) {
     evt.preventDefault();
 

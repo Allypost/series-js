@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
+import { action } from 'mobx';
 
 import { login } from '../services/auth';
 
@@ -107,26 +108,24 @@ export class LoginContainer extends Component {
       showPassword: false,
       rememberMe: true,
     };
-
-    this.handlePasswordToggleClick = this.handlePasswordToggleClick.bind(this);
-    this.handleUsernameChange = this.handleUsernameChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleRememberChange = this.handleRememberChange.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
   }
 
+  @action.bound
   handleUsernameChange(event) {
     this.setState({ email: event.target.value });
   }
 
+  @action.bound
   handlePasswordChange(event) {
     this.setState({ password: event.target.value });
   }
 
+  @action.bound
   handleRememberChange(event) {
     this.setState({ rememberMe: event.target.checked });
   }
 
+  @action.bound
   handleLogin(evt) {
     evt.preventDefault();
 
@@ -136,6 +135,7 @@ export class LoginContainer extends Component {
     return false;
   }
 
+  @action.bound
   handlePasswordToggleClick(evt) {
     const { showPassword } = this.state;
 

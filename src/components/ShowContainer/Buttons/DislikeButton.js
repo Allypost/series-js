@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
+import { action } from 'mobx';
 
 import { dislike as dislikeShow } from '../../../services/show';
 
@@ -40,12 +41,7 @@ const iconStyle = css`
 @observer
 export class DislikeButton extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
+  @action.bound
   handleClick(evt) {
     evt.preventDefault();
 

@@ -13,13 +13,7 @@ const prettyLink = css`
 @observer
 export class UserDisplay extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  @action
+  @action.bound
   // eslint-disable-next-line class-methods-use-this
   handleLogout(evt) {
     evt.preventDefault();
