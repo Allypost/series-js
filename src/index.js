@@ -1,8 +1,11 @@
 import React from 'react';
 import { configure } from 'mobx';
 import ReactDOM from 'react-dom';
+import { Provider } from 'mobx-react';
 import { css, injectGlobal } from 'emotion';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+
+import state from './state';
 
 import { IndexContainer } from './containers/IndexContainer';
 import { ShowContainer } from './containers/ShowContainer';
@@ -85,7 +88,7 @@ configure({ enforceActions: true });
 /* eslint-disable react/jsx-max-depth */
 ReactDOM.render(
   (
-    <div>
+    <Provider state={state}>
       <Router>
         <div className={wrapper}>
           <NavBar />
@@ -104,7 +107,7 @@ ReactDOM.render(
           <Footer />
         </div>
       </Router>
-    </div>
+    </Provider>
   ),
   document.querySelector('.js-app')
 );

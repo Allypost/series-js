@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { runInAction } from 'mobx';
-
-import state from '../../../state';
 
 const prettyLink = css`
   color: #ff758c;
   text-decoration: none;
 `;
 
+@inject('state')
 @observer
 export class UserDisplay extends Component {
 
@@ -21,6 +20,7 @@ export class UserDisplay extends Component {
   }
 
   isLoggedIn() {
+    const { state } = this.props;
     const { user } = state;
 
     return !!user.token;
@@ -33,6 +33,7 @@ export class UserDisplay extends Component {
     const confirm = window.confirm('Do you want to log out?');
 
     if (confirm) {
+      const { state } = this.props;
       Object.keys(state.user)
         .forEach((key) => {
           runInAction(() => {
@@ -55,6 +56,7 @@ export class UserDisplay extends Component {
   }
 
   getLogoutLink() {
+    const { state } = this.props;
     const { user } = state;
 
     return (

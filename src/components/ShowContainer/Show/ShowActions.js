@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
-import state from '../../../state';
 import { AddEpisodeButton } from '../Buttons/AddEpisodeButton';
 import { FavouriteButton } from '../Buttons/FavouriteButton';
 
@@ -16,16 +15,19 @@ const showActionsContainer = css`
   justify-items: center;
 `;
 
+@inject('state')
 @observer
 export class ShowActions extends Component {
 
   isLoggedIn() {
+    const { state } = this.props;
     const { user = {} } = state;
 
     return !!user.token;
   }
 
   getText() {
+    const { state } = this.props;
     const { showData: isLoading = true } = state.loadingStates;
     const { showData: hasErrors = true } = state.errorStates;
     const { showData } = state;
@@ -50,6 +52,7 @@ export class ShowActions extends Component {
   }
 
   render() {
+    const { state } = this.props;
     const { showData: isLoading = true } = state.loadingStates;
     const { showData: hasErrors = true } = state.errorStates;
     const isLoggedIn = this.isLoggedIn();

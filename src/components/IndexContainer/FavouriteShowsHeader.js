@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
-
-import state from '../../state';
+import { observer, inject } from 'mobx-react';
 
 import { header } from './ShowsHeader';
 
+@inject('state')
 @observer
 export class FavouriteShowsHeader extends Component {
 
   showFavourites() {
+    const { state } = this.props;
     const { shows, favourites } = state;
     const showFavourites = favourites.length && shows.length;
 

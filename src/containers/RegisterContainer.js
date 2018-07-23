@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
 import { register } from '../services/auth';
-import state from '../state';
 
 import eyeImg from '../img/ic-akcije-show-password-red@3x.png';
 import { doLogin } from './LoginContainer';
@@ -76,6 +75,7 @@ const eyeImage = css`
   height: 1.2em;
 `;
 
+@inject('state')
 @observer
 export class RegisterContainer extends Component {
 
@@ -111,6 +111,7 @@ export class RegisterContainer extends Component {
   handleLogin(evt) {
     evt.preventDefault();
 
+    const { state } = this.props;
     register(state, this.state)
       .then((data) => {
         if (!data._id) {
@@ -155,6 +156,7 @@ export class RegisterContainer extends Component {
       showPassword,
     } = this.state;
 
+    const { state } = this.props;
     const { register: isLoading } = state.loadingStates;
 
     return (

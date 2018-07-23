@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
-// eslint-disable-next-line
-import state from '../state';
 import defaultPoster from '../img/placeholder.png';
 
 import { BackButton } from '../components/ShowContainer/Buttons/BackButton';
@@ -66,6 +64,7 @@ const showImage = css`
   width: 100%;
 `;
 
+@inject('state')
 @observer
 export class ShowContainer extends Component {
 
@@ -77,6 +76,7 @@ export class ShowContainer extends Component {
 
   componentDidMount() {
     const showId = this.getShowId();
+    const { state } = this.props;
 
     getShowData(state, showId);
     getShowEpisodes(state, showId);
@@ -99,6 +99,7 @@ export class ShowContainer extends Component {
 
   dataChecker() {
     const showId = this.getShowId();
+    const { state } = this.props;
     const { episodes: episodeErrors, showData: showErrors } = state.errorStates;
 
     if (showErrors) {
@@ -111,10 +112,12 @@ export class ShowContainer extends Component {
   }
 
   isLoggedIn() {
+    const { state } = this.props;
     return !!state.user.token;
   }
 
   render() {
+    const { state } = this.props;
     const { showData } = state;
     const imageUrl = showData.imageUrl ? `https://api.infinum.academy${showData.imageUrl}` : defaultPoster;
 

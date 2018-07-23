@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
-
-import state from '../../../state';
 
 const showDescription = css`
   grid-row: 2;
@@ -12,10 +10,12 @@ const showDescription = css`
   color: #616161;
 `;
 
+@inject('state')
 @observer
 export class ShowDescription extends Component {
 
   getText() {
+    const { state } = this.props;
     const { showData: isLoading = true } = state.loadingStates;
     const { showData: hasErrors = true } = state.errorStates;
     const { showData } = state;

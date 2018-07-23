@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
 import { login } from '../services/auth';
-import state from '../state';
 
 import eyeImg from '../img/ic-akcije-show-password-red@3x.png';
 
@@ -95,6 +94,7 @@ export function doLogin(appState, data, props) {
     });
 }
 
+@inject('state')
 @observer
 export class LoginContainer extends Component {
 
@@ -130,6 +130,7 @@ export class LoginContainer extends Component {
   handleLogin(evt) {
     evt.preventDefault();
 
+    const { state } = this.props;
     doLogin(state, this.state, this.props);
 
     return false;
@@ -151,6 +152,7 @@ export class LoginContainer extends Component {
       showPassword,
     } = this.state;
 
+    const { state } = this.props;
     const { login: isLoading } = state.loadingStates;
 
     return (

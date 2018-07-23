@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 
 import defaultPoster from '../../../img/placeholder.episode.png';
 
 import { get as getEpisodeData } from '../../../services/episode';
-// eslint-disable-next-line
-import state from "../../../state";
 
 const episodeImage = css`
   grid-column: 1;
@@ -58,11 +56,13 @@ const episodeContainer = css`
   }
 `;
 
+@inject('state')
 @observer
 export class Episode extends Component {
 
   componentDidMount() {
     const { episode } = this.props;
+    const { state } = this.props;
 
     getEpisodeData(state, episode._id);
   }
@@ -94,6 +94,7 @@ export class Episode extends Component {
 
   getSeasonText() {
     const { episode } = this.props;
+    const { state } = this.props;
     const { loadingStates } = state;
     const { episodeData = {} } = loadingStates;
     const isLoadingSet = episodeData[episode._id];

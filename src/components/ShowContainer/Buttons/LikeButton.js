@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
 import { like as likeShow } from '../../../services/show';
@@ -7,7 +7,6 @@ import { like as likeShow } from '../../../services/show';
 import { containerStyle as defaultContainerStyle, iconStyle as defaultIconStyle } from './Bases/SeriesActionButton';
 
 import { LikeButtonImage } from './Bases/LikeButtonImage';
-import state from '../../../state';
 
 export const containerStyle = css`
   & {
@@ -54,6 +53,7 @@ export const iconStyle = css`
   padding: 0 .1em;
 `;
 
+@inject('state')
 @observer
 export class LikeButton extends Component {
 
@@ -66,6 +66,7 @@ export class LikeButton extends Component {
   handleClick(evt) {
     evt.preventDefault();
 
+    const { state } = this.props;
     const { loadingStates } = state;
     const { showLike: isLoading } = loadingStates;
     const { disabled: isDisabled } = this.props;
@@ -80,6 +81,7 @@ export class LikeButton extends Component {
   }
 
   getContainerClass() {
+    const { state } = this.props;
     const { loadingStates } = state;
     const { showLike: isLoading } = loadingStates;
     const { disabled: isDisabled } = this.props;

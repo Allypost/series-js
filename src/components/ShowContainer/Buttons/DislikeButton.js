@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
 import { dislike as dislikeShow } from '../../../services/show';
 
 import { LikeButtonImage } from './Bases/LikeButtonImage';
 import { containerStyle, containerActions as likeContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './LikeButton';
-
-import state from '../../../state';
 
 const containerActions = css`
   ${likeContainerActions}
@@ -38,7 +36,7 @@ const iconStyle = css`
   transform: rotateZ(180deg);
 `;
 
-
+@inject('state')
 @observer
 export class DislikeButton extends Component {
 
@@ -51,6 +49,7 @@ export class DislikeButton extends Component {
   handleClick(evt) {
     evt.preventDefault();
 
+    const { state } = this.props;
     const { loadingStates } = state;
     const { showLike: isLoading } = loadingStates;
     const { disabled: isDisabled } = this.props;
@@ -65,6 +64,7 @@ export class DislikeButton extends Component {
   }
 
   getContainerClass() {
+    const { state } = this.props;
     const { loadingStates } = state;
     const { showLike: isLoading } = loadingStates;
     const { disabled: isDisabled } = this.props;

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
-
-import state from '../../../state';
 
 import { LikeButton } from '../Buttons/LikeButton';
 import { DislikeButton } from '../Buttons/DislikeButton';
@@ -30,16 +28,19 @@ const showLikeContainer = css`
   margin-left: 2em;
 `;
 
+@inject('state')
 @observer
 export class ShowTitle extends Component {
 
   isLoggedIn() {
+    const { state } = this.props;
     const { user = {} } = state;
 
     return !!user.token;
   }
 
   getText() {
+    const { state } = this.props;
     const { showData: isLoading = true } = state.loadingStates;
     const { showData: hasErrors = true } = state.errorStates;
     const { showData } = state;
@@ -64,6 +65,7 @@ export class ShowTitle extends Component {
   }
 
   render() {
+    const { state } = this.props;
     const { showData } = state;
     const { likesCount = 0 } = showData;
     const isLoggedIn = this.isLoggedIn();
