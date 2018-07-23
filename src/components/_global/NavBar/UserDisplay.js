@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
 import { observer, inject } from 'mobx-react';
-import { runInAction } from 'mobx';
+import { action } from 'mobx';
 
 const prettyLink = css`
   color: #ff758c;
@@ -19,6 +19,7 @@ export class UserDisplay extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
+  @action
   // eslint-disable-next-line class-methods-use-this
   handleLogout(evt) {
     evt.preventDefault();
@@ -29,9 +30,7 @@ export class UserDisplay extends Component {
       const { state } = this.props;
       Object.keys(state.user)
         .forEach((key) => {
-          runInAction(() => {
-            delete state.user[key];
-          });
+          delete state.user[key];
         });
     }
   }

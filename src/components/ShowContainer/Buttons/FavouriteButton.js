@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { runInAction } from 'mobx';
+import { action } from 'mobx';
 import { css } from 'emotion';
 
 import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
@@ -43,14 +43,13 @@ export class FavouriteButton extends Component {
     return [showData._id, ...oldFavourites];
   }
 
+  @action
   handleClick(evt) {
     evt.preventDefault();
     const newFavourites = this.getNewFavouritesList();
 
-    runInAction(() => {
-      const { state } = this.props;
-      state.favourites.replace(newFavourites);
-    });
+    const { state } = this.props;
+    state.favourites.replace(newFavourites);
   }
 
   render() {
