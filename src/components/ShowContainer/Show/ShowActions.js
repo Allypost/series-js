@@ -19,31 +19,6 @@ const showActionsContainer = css`
 @observer
 export class ShowActions extends Component {
 
-  getText() {
-    const { state } = this.props;
-    const { showData: isLoading = true } = state.loadingStates;
-    const { showData: hasErrors = true } = state.errorStates;
-    const { showData } = state;
-
-    if (isLoading) {
-      return (
-        <em>
-          Loading...
-        </em>
-      );
-    }
-
-    if (hasErrors) {
-      return (
-        <em>
-          Something went wrong...
-        </em>
-      );
-    }
-
-    return showData.title;
-  }
-
   render() {
     const { state } = this.props;
     const { showData: isLoading = true } = state.loadingStates;
