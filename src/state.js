@@ -1,4 +1,4 @@
-import { observable, observe, intercept } from 'mobx';
+import { observable, observe, intercept, computed } from 'mobx';
 import Util from './helpers/Util';
 
 const getFavourites = () => {
@@ -95,6 +95,13 @@ class State {
 
   @observable
   user = Util.getUserData();
+
+  @computed
+  get isLoggedIn() {
+    const { token } = this.user;
+
+    return !!token;
+  }
 
   constructor() {
     this.favourites.replace(getFavourites());

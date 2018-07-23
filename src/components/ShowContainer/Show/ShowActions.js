@@ -19,13 +19,6 @@ const showActionsContainer = css`
 @observer
 export class ShowActions extends Component {
 
-  isLoggedIn() {
-    const { state } = this.props;
-    const { user = {} } = state;
-
-    return !!user.token;
-  }
-
   getText() {
     const { state } = this.props;
     const { showData: isLoading = true } = state.loadingStates;
@@ -55,7 +48,7 @@ export class ShowActions extends Component {
     const { state } = this.props;
     const { showData: isLoading = true } = state.loadingStates;
     const { showData: hasErrors = true } = state.errorStates;
-    const isLoggedIn = this.isLoggedIn();
+    const { isLoggedIn } = state;
 
     if (!isLoggedIn || isLoading || hasErrors) {
       return (

@@ -32,13 +32,6 @@ const showLikeContainer = css`
 @observer
 export class ShowTitle extends Component {
 
-  isLoggedIn() {
-    const { state } = this.props;
-    const { user = {} } = state;
-
-    return !!user.token;
-  }
-
   getText() {
     const { state } = this.props;
     const { showData: isLoading = true } = state.loadingStates;
@@ -68,7 +61,7 @@ export class ShowTitle extends Component {
     const { state } = this.props;
     const { showData } = state;
     const { likesCount = 0 } = showData;
-    const isLoggedIn = this.isLoggedIn();
+    const { isLoggedIn } = state;
 
     return (
       <div className={showTitleContainer}>

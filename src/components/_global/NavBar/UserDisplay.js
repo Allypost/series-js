@@ -19,13 +19,6 @@ export class UserDisplay extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  isLoggedIn() {
-    const { state } = this.props;
-    const { user } = state;
-
-    return !!user.token;
-  }
-
   // eslint-disable-next-line class-methods-use-this
   handleLogout(evt) {
     evt.preventDefault();
@@ -73,7 +66,8 @@ export class UserDisplay extends Component {
   }
 
   render() {
-    const isLoggedIn = this.isLoggedIn();
+    const { state } = this.props;
+    const { isLoggedIn } = state;
 
     if (isLoggedIn) {
       return this.getLogoutLink();

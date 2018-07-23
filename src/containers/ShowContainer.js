@@ -111,11 +111,6 @@ export class ShowContainer extends Component {
     }
   }
 
-  isLoggedIn() {
-    const { state } = this.props;
-    return !!state.user.token;
-  }
-
   render() {
     const { state } = this.props;
     const { showData } = state;
