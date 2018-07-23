@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { observer } from 'mobx-react';
+import { runInAction } from 'mobx';
 import { css } from 'emotion';
 
 import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
 import state from '../../../state';
-import { observer } from 'mobx-react';
 
 
 const containerStyle = css`
@@ -45,7 +46,9 @@ export class FavouriteButton extends Component {
     evt.preventDefault();
     const newFavourites = this.getNewFavouritesList();
 
-    state.favourites.replace(newFavourites);
+    runInAction(() => {
+      state.favourites.replace(newFavourites);
+    });
   }
 
   render() {
@@ -59,11 +62,7 @@ export class FavouriteButton extends Component {
           ♥
         </span>
         <span className={defaultTextStyle}>
-          {
-            this.isFavourite()
-              ? 'Un-Favourite'
-              : 'Favourite'
-          }
+          {this.isFavourite() ? 'Un-Favourite' : 'Favourite'}
         </span>
       </div>
     );

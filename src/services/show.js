@@ -42,7 +42,9 @@ export async function get(state, showId) {
 }
 
 export async function like(state, showId, token) {
-  state.loadingStates.showLike = true;
+  runInAction(() => {
+    state.loadingStates.showLike = true;
+  });
 
   /*
   const resp = await _post(`shows/${showId}/like`, token);
@@ -53,16 +55,22 @@ export async function like(state, showId, token) {
   const delay = 100 + (1000 * Math.random());
   return new Promise((resolve) => {
     setTimeout(() => {
-      state.loadingStates.showLike = false;
+      runInAction(() => {
+        state.loadingStates.showLike = false;
+      });
       const diff = observable({ likesCount: (state.showData.likesCount || 0) + 1 });
-      const newData = Object.assign(state.showData, diff);
-      resolve(Object.assign({}, newData));
+      runInAction(() => {
+        const newData = Object.assign(state.showData, diff);
+        resolve(Object.assign({}, newData));
+      });
     }, delay);
   });
 }
 
 export async function dislike(state, showId, token) {
-  state.loadingStates.showLike = true;
+  runInAction(() => {
+    state.loadingStates.showLike = true;
+  });
 
   /*
   const resp = await _post(`shows/${showId}/dislike`, token);
@@ -73,10 +81,14 @@ export async function dislike(state, showId, token) {
   const delay = 100 + (1000 * Math.random());
   return new Promise((resolve) => {
     setTimeout(() => {
-      state.loadingStates.showLike = false;
+      runInAction(() => {
+        state.loadingStates.showLike = false;
+      });
       const diff = observable({ likesCount: (state.showData.likesCount || 0) - 1 });
-      const newData = Object.assign(state.showData, diff);
-      resolve(Object.assign({}, newData));
+      runInAction(() => {
+        const newData = Object.assign(state.showData, diff);
+        resolve(Object.assign({}, newData));
+      });
     }, delay);
   });
 }
