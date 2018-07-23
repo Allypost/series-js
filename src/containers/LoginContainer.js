@@ -104,7 +104,7 @@ export class LoginContainer extends Component {
     this.state = {
       email: '',
       password: '',
-      passwordInputType: 'password',
+      showPassword: false,
       rememberMe: true,
     };
 
@@ -113,8 +113,6 @@ export class LoginContainer extends Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleRememberChange = this.handleRememberChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
-
-    this.passwordRef = React.createRef();
   }
 
   handleUsernameChange(event) {
@@ -138,14 +136,9 @@ export class LoginContainer extends Component {
   }
 
   handlePasswordToggleClick(evt) {
-    const inputTypes = ['text', 'password'];
+    const { showPassword } = this.state;
 
-    const passwordEl = this.passwordRef.current;
-    const currentType = passwordEl.type;
-    const currentTypeIndex = inputTypes.indexOf(currentType);
-    const nextTypeIndex = (currentTypeIndex + 1) % inputTypes.length;
-
-    passwordEl.type = inputTypes[nextTypeIndex];
+    this.setState({ showPassword: !showPassword });
 
     evt.preventDefault();
   }
@@ -155,6 +148,7 @@ export class LoginContainer extends Component {
       email,
       password,
       rememberMe,
+      showPassword,
     } = this.state;
 
     const { login: isLoading } = state.loadingStates;
@@ -185,9 +179,8 @@ export class LoginContainer extends Component {
               <input
                 className={cssPassword}
                 onChange={this.handlePasswordChange}
-                ref={this.passwordRef}
                 required
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
               />
               <a

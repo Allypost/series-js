@@ -85,7 +85,7 @@ export class RegisterContainer extends Component {
     this.state = {
       email: '',
       password: '',
-      passwordInputType: 'password',
+      showPassword: false,
       logMeIn: true,
     };
 
@@ -94,8 +94,6 @@ export class RegisterContainer extends Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleRememberChange = this.handleRememberChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
-
-    this.passwordRef = React.createRef();
   }
 
   handleUsernameChange(event) {
@@ -142,14 +140,9 @@ export class RegisterContainer extends Component {
   }
 
   handlePasswordToggleClick(evt) {
-    const inputTypes = ['text', 'password'];
+    const { showPassword } = this.state;
 
-    const passwordEl = this.passwordRef.current;
-    const currentType = passwordEl.type;
-    const currentTypeIndex = inputTypes.indexOf(currentType);
-    const nextTypeIndex = (currentTypeIndex + 1) % inputTypes.length;
-
-    passwordEl.type = inputTypes[nextTypeIndex];
+    this.setState({ showPassword: !showPassword });
 
     evt.preventDefault();
   }
@@ -159,6 +152,7 @@ export class RegisterContainer extends Component {
       email,
       password,
       logMeIn,
+      showPassword,
     } = this.state;
 
     const { register: isLoading } = state.loadingStates;
@@ -189,9 +183,8 @@ export class RegisterContainer extends Component {
               <input
                 className={cssPassword}
                 onChange={this.handlePasswordChange}
-                ref={this.passwordRef}
                 required
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={password}
               />
               <a
