@@ -14,6 +14,7 @@ export const container = css`
   grid-column: 2 / span 10;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 1em 2em;
+  align-items: baseline;
 `;
 
 @observer

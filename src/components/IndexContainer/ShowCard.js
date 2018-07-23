@@ -46,13 +46,14 @@ export class ShowCard extends Component {
 
   render() {
     const { show } = this.props;
+    const imageUrl = show.imageUrl ? `https://api.infinum.academy${show.imageUrl}` : defaultPoster;
 
     return (
       <div className={this.containerClass()}>
         <img
           alt={`${show.title} poster`}
           className={cssImage}
-          src={show.poster || defaultPoster}
+          src={imageUrl}
         />
         <span
           className={cssTitle}

@@ -26,11 +26,12 @@ const pageContainer = css`
 
 const showContainer = css`
   display: inline-grid;
-  grid-template-columns: 6fr 2fr;
+  grid-template-columns: 5fr 2fr;
   grid-column-gap: 1em;
   grid-row-gap: 1.5em;
   grid-row: 2;
   grid-column: 2 / -2;
+  align-items: stretch;
 `;
 
 const episodesHeader = css`
@@ -59,6 +60,10 @@ const rightSide = css`
 const showLinks = css`
   display: block;
   margin: .5em 0;
+`;
+
+const showImage = css`
+  width: 100%;
 `;
 
 @observer
@@ -111,6 +116,7 @@ export class ShowContainer extends Component {
 
   render() {
     const { showData } = state;
+    const imageUrl = showData.imageUrl ? `https://api.infinum.academy${showData.imageUrl}` : defaultPoster;
 
     return (
       <div
@@ -137,7 +143,8 @@ export class ShowContainer extends Component {
           <div className={rightSide}>
             <img
               alt={`${showData.title} poster`}
-              src={showData.poster || defaultPoster}
+              className={showImage}
+              src={imageUrl}
             />
 
             <div className={spacer} />
