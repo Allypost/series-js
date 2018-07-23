@@ -36,10 +36,11 @@ export async function get(state, episodeId) {
       return;
     }
 
-    oldEpisodes[episodeKey] = episode;
+    const newEpisodes = oldEpisodes.slice();
+    newEpisodes[episodeKey] = episode;
 
     runInAction(() => {
-      state.episodes.replace(oldEpisodes);
+      state.episodes.replace(newEpisodes);
       state.errorStates.episodeData[episodeId] = false;
     });
   } catch (e) {
