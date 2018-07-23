@@ -94,13 +94,14 @@ export class DislikeButton extends Component {
     const { likesCount } = this.props;
 
     return (
+      // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
       <div
         className={this.getContainerClass()}
         onClick={this.handleClick}
       >
         {
-          likesCount < 0
-          && (
+          likesCount < 0 &&
+          (
             <span className={textStyle}>
               {-likesCount}
             </span>
