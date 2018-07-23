@@ -1,6 +1,7 @@
 import React from 'react';
-import { css, injectGlobal } from 'emotion';
+import { configure } from 'mobx';
 import ReactDOM from 'react-dom';
+import { css, injectGlobal } from 'emotion';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
 import { IndexContainer } from './containers/IndexContainer';
@@ -78,6 +79,8 @@ const wrapper = css`
   grid-template-rows: [nav] 1fr [body] 8fr [footer] 1fr;
   height: 100vh;
 `;
+
+configure({ enforceActions: true });
 
 /* eslint-disable react/jsx-max-depth */
 ReactDOM.render(

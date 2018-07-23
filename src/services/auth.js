@@ -1,9 +1,11 @@
-import { observable } from 'mobx';
+import { observable, runInAction } from 'mobx';
 import Util from '../helpers/Util';
 import { post as _post } from './api';
 
 export async function login(state, { email, password, rememberMe }) {
-  state.loadingStates.login = true;
+  runInAction(() => {
+    state.loadingStates.login = true;
+  });
   try {
     const data = await _post('users/sessions', '', { email, password });
 
@@ -18,40 +20,54 @@ export async function login(state, { email, password, rememberMe }) {
     store.setItem('username', email);
     localStorage.setItem('token_location', storeName);
 
-    Object.assign(
-      state.user,
-      observable({
-        token,
-        username: email,
-        id: _id,
-      })
-    );
+    runInAction(() => {
+      Object.assign(
+        state.user,
+        observable({
+          token,
+          username: email,
+          id: _id,
+        })
+      );
 
-    state.errorStates.login = false;
+      state.errorStates.login = false;
+    });
 
     return token;
   } catch (e) {
-    state.errorStates.login = true;
+    runInAction(() => {
+      state.errorStates.login = true;
+    });
   } finally {
-    state.loadingStates.login = false;
+    runInAction(() => {
+      state.loadingStates.login = false;
+    });
   }
 
   return '';
 }
 
 export async function register(state, { email, password }) {
-  state.loadingStates.register = true;
+  runInAction(() => {
+    state.loadingStates.register = true;
+  });
 
   try {
     const data = await _post('users', '', { email, password });
     const success = !!data._id;
-    state.errorStates.register = success;
-    
+    runInAction(() => {
+      state.errorStates.register = success;
+    });
+
     return data;
   } catch (e) {
-    state.errorStates.register = true;
+    runInAction(() => {
+      state.errorStates.register = true;
+    });
     return {};
   } finally {
-    state.loadingStates.register = false;
+    runInAction(() => {
+      state.loadingStates.register = false;
+    });
   }
 }

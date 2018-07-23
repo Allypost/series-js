@@ -1,20 +1,30 @@
+import { runInAction } from 'mobx';
 import { get as _get } from './api';
 
 export async function getAll(state, showId) {
-  state.loadingStates.episodes = true;
+  runInAction(() => {
+    state.loadingStates.episodes = true;
+  });
   try {
     const episodes = await _get(`shows/${showId}/episodes`);
-    state.episodes.replace(episodes);
-
-    state.errorStates.episodes = false;
+    runInAction(() => {
+      state.episodes.replace(episodes);
+      state.errorStates.episodes = false;
+    });
   } catch (e) {
-    state.errorStates.episodes = true;
+    runInAction(() => {
+      state.errorStates.episodes = true;
+    });
   }
-  state.loadingStates.episodes = false;
+  runInAction(() => {
+    state.loadingStates.episodes = false;
+  });
 }
 
 export async function get(state, episodeId) {
-  state.loadingStates.episodeData[episodeId] = true;
+  runInAction(() => {
+    state.loadingStates.episodeData[episodeId] = true;
+  });
 
   try {
     const episode = await _get(`episodes/${episodeId}`);
@@ -28,11 +38,16 @@ export async function get(state, episodeId) {
 
     oldEpisodes[episodeKey] = episode;
 
-    state.episodes.replace(oldEpisodes);
-    state.errorStates.episodeData[episodeId] = false;
+    runInAction(() => {
+      state.episodes.replace(oldEpisodes);
+      state.errorStates.episodeData[episodeId] = false;
+    });
   } catch (e) {
-    state.errorStates.episodeData[episodeId] = true;
+    runInAction(() => {
+      state.errorStates.episodeData[episodeId] = true;
+    });
   }
-
-  state.loadingStates.episodeData[episodeId] = false;
+  runInAction(() => {
+    state.loadingStates.episodeData[episodeId] = false;
+  });
 }

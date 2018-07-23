@@ -1,28 +1,44 @@
-import { observable } from 'mobx';
+import { observable, runInAction } from 'mobx';
 import { get as _get, post as _post } from './api';
 
 export async function getAll(state) {
-  state.loadingStates.shows = true;
+  runInAction(() => {
+    state.loadingStates.shows = true;
+  });
   try {
     const shows = await _get('shows');
-    state.shows.replace(shows);
-    state.errorStates.shows = false;
+    runInAction(() => {
+      state.shows.replace(shows);
+      state.errorStates.shows = false;
+    });
   } catch (e) {
-    state.errorStates.shows = true;
+    runInAction(() => {
+      state.errorStates.shows = true;
+    });
   }
-  state.loadingStates.shows = false;
+  runInAction(() => {
+    state.loadingStates.shows = false;
+  });
 }
 
 export async function get(state, showId) {
-  state.loadingStates.showData = true;
+  runInAction(() => {
+    state.loadingStates.showData = true;
+  });
   try {
     const show = await _get(`shows/${showId}`);
-    state.showData = observable(show);
-    state.errorStates.showData = false;
+    runInAction(() => {
+      state.showData = observable(show);
+      state.errorStates.showData = false;
+    });
   } catch (e) {
-    state.errorStates.showData = true;
+    runInAction(() => {
+      state.errorStates.showData = true;
+    });
   }
-  state.loadingStates.showData = false;
+  runInAction(() => {
+    state.loadingStates.showData = false;
+  });
 }
 
 export async function like(state, showId, token) {
