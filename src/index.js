@@ -10,6 +10,7 @@ import { NavBar } from './components/_global/NavBar';
 import { Footer } from './components/_global/Footer';
 import { LoginContainer } from './containers/LoginContainer';
 import { LogoutContainer } from './containers/LogoutContainer';
+import { RegisterContainer } from './containers/RegisterContainer';
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
   {
     component: LoginContainer,
     path: '/login',
+    exact: true,
+  },
+  {
+    component: RegisterContainer,
+    path: '/register',
     exact: true,
   },
   {

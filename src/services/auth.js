@@ -38,3 +38,20 @@ export async function login(state, { email, password, rememberMe }) {
 
   return '';
 }
+
+export async function register(state, { email, password }) {
+  state.loadingStates.register = true;
+
+  try {
+    const data = await _post('users', '', { email, password });
+    const success = !!data._id;
+    state.errorStates.register = success;
+    
+    return data;
+  } catch (e) {
+    state.errorStates.register = true;
+    return {};
+  } finally {
+    state.loadingStates.register = false;
+  }
+}

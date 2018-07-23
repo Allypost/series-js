@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { css } from 'emotion';
 
-import { login } from '../services/auth';
+import { register } from '../services/auth';
 import state from '../state';
 
 import eyeImg from '../img/ic-akcije-show-password-red@3x.png';
+import { doLogin } from './LoginContainer';
 
 const loginContainer = css`
   display: grid;
@@ -75,28 +76,8 @@ const eyeImage = css`
   height: 1.2em;
 `;
 
-export function doLogin(appState, data, props) {
-  return login(appState, data)
-    .then((token) => {
-      if (!token) {
-        alert('Invalid credentials');
-        return token;
-      }
-
-      const { history } = props;
-
-      if (history && history.push) {
-        history.push('/');
-      } else {
-        window.location.href = '/';
-      }
-
-      return token;
-    });
-}
-
 @observer
-export class LoginContainer extends Component {
+export class RegisterContainer extends Component {
 
   constructor(props) {
     super(props);
@@ -105,7 +86,7 @@ export class LoginContainer extends Component {
       email: '',
       password: '',
       passwordInputType: 'password',
-      rememberMe: true,
+      logMeIn: true,
     };
 
     this.handlePasswordToggleClick = this.handlePasswordToggleClick.bind(this);
@@ -126,13 +107,36 @@ export class LoginContainer extends Component {
   }
 
   handleRememberChange(event) {
-    this.setState({ rememberMe: event.target.checked });
+    this.setState({ logMeIn: event.target.checked });
   }
 
   handleLogin(evt) {
     evt.preventDefault();
 
-    doLogin(state, this.state, this.props);
+    register(state, this.state)
+      .then((data) => {
+        if (!data._id) {
+          alert('Something went wrong. Please try again');
+          return data;
+        }
+
+        const { logMeIn } = this.state;
+
+        if (!logMeIn) {
+          const { history } = this.props;
+
+          if (history && history.push) {
+            history.push('/');
+          } else {
+            window.location.href = '/';
+          }
+
+          return data;
+        }
+
+        doLogin(state, this.state, this.props);
+        return data;
+      });
 
     return false;
   }
@@ -154,10 +158,10 @@ export class LoginContainer extends Component {
     const {
       email,
       password,
-      rememberMe,
+      logMeIn,
     } = this.state;
 
-    const { login: isLoading } = state.loadingStates;
+    const { register: isLoading } = state.loadingStates;
 
     return (
       <div className={loginContainer}>
@@ -167,7 +171,7 @@ export class LoginContainer extends Component {
         >
           <label className={css`cursor: pointer;`}>
             <span>
-              My username is
+              My username will be
             </span>
             <input
               className={cssUsername}
@@ -179,7 +183,7 @@ export class LoginContainer extends Component {
           </label>
           <label className={css`cursor: pointer;`}>
             <span>
-              and my password is
+              and my password will be
             </span>
             <div className={passwordContainer}>
               <input
@@ -205,11 +209,11 @@ export class LoginContainer extends Component {
           <div>
             <label className={cssRemember}>
               <input
-                defaultChecked={rememberMe}
+                defaultChecked={logMeIn}
                 onChange={this.handleRememberChange}
                 type="checkbox"
               />
-              Remember me
+              Log me in
             </label>
             <button
               className={cssSubmit}
@@ -217,7 +221,7 @@ export class LoginContainer extends Component {
               type="submit"
             >
               {
-                isLoading ? 'Logging in...' : 'Login'
+                isLoading ? 'Registering...' : 'Register'
               }
             </button>
           </div>
@@ -225,14 +229,14 @@ export class LoginContainer extends Component {
         <div className={loginFooter}>
           <div>
             <span>
-              Still don&apos;t have an account?
+              Already have an account?
             </span>
             <Link
               // eslint-disable-next-line
               className={cssRegisterLink}
-              to="/register"
+              to="/login"
             >
-              Register
+              Login
             </Link>
           </div>
         </div>
