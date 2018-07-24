@@ -59,8 +59,6 @@ export class DislikeButton extends Component {
   }
 
   render() {
-    const { likesCount } = this.props;
-    const dislikesCount = likesCount < 0 ? -likesCount : -1;
     const classes = {
       container: containerStyle,
       containerActions,
@@ -73,6 +71,7 @@ export class DislikeButton extends Component {
     const { showLike: isLoading } = loadingStates;
     const { disabled: isDisabled } = this.props;
 
+    const { dislikesCount } = this.props;
     const showText = dislikesCount > 0;
 
     return (

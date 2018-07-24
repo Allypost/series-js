@@ -79,7 +79,7 @@ export class ShowTitle extends Component {
               <div className={likeButtonSpacer} />
               <DislikeButton
                 disabled={!isLoggedIn}
-                likesCount={likesCount}
+                dislikesCount={-likesCount}
               />
             </div>
           )
