@@ -16,35 +16,28 @@ import { CommentInput } from '../components/EpisodeContainer/CommentInput';
 const episodeContainer = css`
   display: grid;
   grid-column: 2 / -2;
-  grid-template-rows: [header] 2fr [body] 3fr;
+  grid-template-rows: [header] auto [body] auto;
 `;
 
 const headerContainer = css`
   display: grid;
-  min-height: 50vh;
+  height: 50vh;
   grid-template-columns: repeat(6,1fr);
-  background-color: #000000;
+  background-color: #ffd1e2;
 `;
 
 const episodeData = css`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 4em auto auto;
 `;
 
 const episodeTitle = css`
-  grid-column: 2 / -3;
-  grid-row: 1;
 `;
 
 const episodeDescription = css`
-  grid-column: 2 / -3;
-  grid-row: 2;
 `;
 
 const commentsInputContainer = css`
-  grid-column: 2 / -3;
-  grid-row: 3;
 `;
 
 const commentsHeader = css`
@@ -63,8 +56,6 @@ const commentsHeaderNum = css`
 
 const commentsListContainer = css`
   display: grid;
-  grid-column: 2 / -3;
-  grid-row: 4;
 `;
 
 const backButtonContainer = css`
@@ -87,6 +78,10 @@ const likeButtonContainer = css`
 const spacer = css`
   display: inline-block;
   padding: .6em;
+`;
+
+const episodeDataContainer = css`
+  grid-column: 2 / -3;
 `;
 
 @inject('state')
@@ -168,34 +163,36 @@ export class EpisodeContainer extends Component {
           </div>
         </div>
         <div className={episodeData}>
-          <h2 className={episodeTitle}>
-            {episode.title}
-          </h2>
-          <div className={episodeDescription}>
-            {episode.description}
-          </div>
-          <div className={commentsInputContainer}>
-            <h4 className={commentsHeader}>
-              <span className={commentsHeaderText}>
-                Comments
-              </span>
-              <span className={commentsHeaderNum}>
-                (
-                {comments.length}
-                )
-              </span>
-            </h4>
-            <CommentInput episodeId={this.episodeId} />
-          </div>
-          <div className={commentsListContainer}>
-            {
-              comments.map((comment) => (
-                <Comment
-                  comment={comment}
-                  key={comment._id}
-                />
-              ))
-            }
+          <div className={episodeDataContainer}>
+            <h2 className={episodeTitle}>
+              {episode.title}
+            </h2>
+            <div className={episodeDescription}>
+              {episode.description}
+            </div>
+            <div className={commentsInputContainer}>
+              <h4 className={commentsHeader}>
+                <span className={commentsHeaderText}>
+                  Comments
+                </span>
+                <span className={commentsHeaderNum}>
+                  (
+                  {comments.length}
+                  )
+                </span>
+              </h4>
+              <CommentInput episodeId={this.episodeId} />
+            </div>
+            <div className={commentsListContainer}>
+              {
+                comments.map((comment) => (
+                  <Comment
+                    comment={comment}
+                    key={comment._id}
+                  />
+                ))
+              }
+            </div>
           </div>
         </div>
       </div>
