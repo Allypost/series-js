@@ -3,7 +3,8 @@ import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 import { action } from 'mobx';
 
-import { get as getEpisodeData, comments as getEpisodeComments } from '../services/episode';
+import { get as getEpisodeData } from '../services/episode';
+import { getAll as getEpisodeComments } from '../services/comment';
 
 import { Comment } from '../components/EpisodeContainer/Comment';
 import { LikeButton } from '../components/EpisodeContainer/Buttons/LikeButton';
