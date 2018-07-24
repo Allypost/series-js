@@ -1,16 +1,17 @@
 import React from 'react';
-import { css, injectGlobal } from 'emotion';
+import { configure } from 'mobx';
 import ReactDOM from 'react-dom';
+import { css, injectGlobal } from 'emotion';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
-import { IndexContainer } from './IndexContainer';
-import { ShowContainer } from './ShowContainer';
-import { EpisodeContainer } from './EpisodeContainer';
-import { NotFoundContainer } from './NotFoundContainer';
-import { NavBar } from './components/NavBar';
-import { Footer } from './components/Footer';
-import { LoginContainer } from './LoginContainer';
-import { LogoutContainer } from './LogoutContainer';
+import { IndexContainer } from './containers/IndexContainer';
+import { ShowContainer } from './containers/ShowContainer';
+import { NotFoundContainer } from './containers/NotFoundContainer';
+import { NavBar } from './components/_global/NavBar';
+import { Footer } from './components/_global/Footer';
+import { LoginContainer } from './containers/LoginContainer';
+import { LogoutContainer } from './containers/LogoutContainer';
+import { RegisterContainer } from './containers/RegisterContainer';
 
 const routes = [
   {
@@ -24,13 +25,13 @@ const routes = [
     exact: true,
   },
   {
-    component: EpisodeContainer,
-    path: '/show/:showId/episode/:episodeId',
+    component: LoginContainer,
+    path: '/login',
     exact: true,
   },
   {
-    component: LoginContainer,
-    path: '/login',
+    component: RegisterContainer,
+    path: '/register',
     exact: true,
   },
   {
@@ -60,6 +61,16 @@ injectGlobal`
   body {
     min-height: 100%;
   }
+
+  a, a:visited, a:active {
+    cursor: pointer;
+    color: #ff758c;
+    text-decoration: none;
+  },
+
+  a:hover {
+    text-decoration: underline;
+  }
 `;
 
 const wrapper = css`
@@ -68,6 +79,8 @@ const wrapper = css`
   grid-template-rows: [nav] 1fr [body] 8fr [footer] 1fr;
   height: 100vh;
 `;
+
+configure({ enforceActions: true });
 
 /* eslint-disable react/jsx-max-depth */
 ReactDOM.render(

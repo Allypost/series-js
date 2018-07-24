@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import { css } from 'emotion';
+
+import { register } from '../services/auth';
+import state from '../state';
+
+import eyeImg from '../img/ic-akcije-show-password-red@3x.png';
+import { doLogin } from './LoginContainer';
 
 const loginContainer = css`
   display: grid;
@@ -55,11 +62,22 @@ const loginFooter = css`
 
 const cssRegisterLink = css`
   padding: 0 1em;
-  color: #ff758c;
-  text-decoration: none;
 `;
 
-export class LoginContainer extends Component {
+const passwordContainer = css`
+  position: relative;
+  display: inline-block;
+`;
+
+const eyeImage = css`
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 1.2em;
+`;
+
+@observer
+export class RegisterContainer extends Component {
 
   constructor(props) {
     super(props);
@@ -67,10 +85,11 @@ export class LoginContainer extends Component {
     this.state = {
       email: '',
       password: '',
-      rememberMe: true,
-      isLoading: false,
+      showPassword: false,
+      logMeIn: true,
     };
 
+    this.handlePasswordToggleClick = this.handlePasswordToggleClick.bind(this);
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleRememberChange = this.handleRememberChange.bind(this);
@@ -86,69 +105,57 @@ export class LoginContainer extends Component {
   }
 
   handleRememberChange(event) {
-    this.setState({ rememberMe: event.target.checked });
+    this.setState({ logMeIn: event.target.checked });
   }
 
   handleLogin(evt) {
     evt.preventDefault();
 
-    this.fetchToken(this.state)
-      .then((token) => {
-        if (!token) {
-          alert('Invalid credentials');
-          return token;
+    register(state, this.state)
+      .then((data) => {
+        if (!data._id) {
+          alert('Something went wrong. Please try again');
+          return data;
         }
 
-        window.location.href = '/';
+        const { logMeIn } = this.state;
 
-        return token;
+        if (!logMeIn) {
+          const { history } = this.props;
+
+          if (history && history.push) {
+            history.push('/');
+          } else {
+            window.location.href = '/';
+          }
+
+          return data;
+        }
+
+        doLogin(state, this.state, this.props);
+        return data;
       });
 
     return false;
   }
 
-  fetchToken({ email, password }) {
-    const opts = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    };
+  handlePasswordToggleClick(evt) {
+    const { showPassword } = this.state;
 
-    this.setState({ isLoading: true });
+    this.setState({ showPassword: !showPassword });
 
-    return fetch('https://api.infinum.academy/api/users/sessions', opts)
-      .then((resp) => resp.json())
-      .then(({ data, errors }) => {
-        if (errors) {
-          console.warn(errors.join('\n'));
-          return '';
-        }
-
-        const { token } = data;
-        const { email, rememberMe } = this.state;
-        const { localStorage } = window;
-
-        const store = rememberMe ? 'localStorage' : 'sessionStorage';
-
-        window[store].setItem('token', token);
-        window[store].setItem('username', email);
-        localStorage.setItem('token_location', store);
-
-        return token;
-      })
-      .catch((error) => console.warn(error))
-      .finally(() => this.setState({ isLoading: false }));
+    evt.preventDefault();
   }
 
   render() {
     const {
       email,
       password,
-      rememberMe,
-      isLoading,
+      logMeIn,
+      showPassword,
     } = this.state;
+
+    const { register: isLoading } = state.loadingStates;
 
     return (
       <div className={loginContainer}>
@@ -158,7 +165,7 @@ export class LoginContainer extends Component {
         >
           <label className={css`cursor: pointer;`}>
             <span>
-              My username is
+              My username will be
             </span>
             <input
               className={cssUsername}
@@ -169,24 +176,37 @@ export class LoginContainer extends Component {
             />
           </label>
           <label className={css`cursor: pointer;`}>
-            and my password is
-            &nbsp;
-            <input
-              className={cssPassword}
-              onChange={this.handlePasswordChange}
-              required
-              type="password"
-              value={password}
-            />
+            <span>
+              and my password will be
+            </span>
+            <div className={passwordContainer}>
+              <input
+                className={cssPassword}
+                onChange={this.handlePasswordChange}
+                required
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+              />
+              <a
+                href="#reveal-password"
+                onClick={this.handlePasswordToggleClick}
+              >
+                <img
+                  alt="Reveal password"
+                  className={eyeImage}
+                  src={eyeImg}
+                />
+              </a>
+            </div>
           </label>
           <div>
             <label className={cssRemember}>
               <input
-                defaultChecked={rememberMe}
+                defaultChecked={logMeIn}
                 onChange={this.handleRememberChange}
                 type="checkbox"
               />
-              Remember me
+              Log me in
             </label>
             <button
               className={cssSubmit}
@@ -194,7 +214,7 @@ export class LoginContainer extends Component {
               type="submit"
             >
               {
-                isLoading ? 'Logging in...' : 'Login'
+                isLoading ? 'Registering...' : 'Register'
               }
             </button>
           </div>
@@ -202,14 +222,14 @@ export class LoginContainer extends Component {
         <div className={loginFooter}>
           <div>
             <span>
-              Still don&apos;t have an account?
+              Already have an account?
             </span>
             <Link
               // eslint-disable-next-line
               className={cssRegisterLink}
-              to="/register"
+              to="/login"
             >
-              Register
+              Login
             </Link>
           </div>
         </div>

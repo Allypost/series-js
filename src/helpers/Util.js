@@ -46,4 +46,41 @@ export default class Util {
     );
     /* eslint-enable react/jsx-max-depth */
   }
+
+  static getUserToken() {
+    const { token = '' } = Util.getUserData();
+
+    return token;
+  }
+
+  static getUserData() {
+    const tokenLocation = localStorage.getItem('token_location');
+    const store = window[tokenLocation];
+
+    if (!store) {
+      return {};
+    }
+
+    const token = store.getItem('token') || '';
+    const username = store.getItem('username') || '';
+    const { _id: id } = Util.parseJWT(token) || {};
+
+    return {
+      id,
+      token,
+      username,
+    };
+  }
+
+  static parseJWT(token) {
+    if (!token) {
+      return null;
+    }
+
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace('-', '+').replace('_', '/');
+
+    return JSON.parse(window.atob(base64));
+  }
+
 }
