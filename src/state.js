@@ -75,6 +75,21 @@ class State {
   @observable
   episodes = [];
 
+  @computed
+  get sortedEpisodes() {
+    const { episodes = [] } = this;
+
+    const sortedEpisodes = episodes.slice().sort((a, b) => {
+      if (a.season === b.season) {
+        return Number(a.episodeNumber) - Number(b.episodeNumber);
+      }
+
+      return Number(a.season) - Number(b.season);
+    });
+
+    return sortedEpisodes;
+  }
+
   @observable
   users = [];
 

@@ -46,7 +46,7 @@ export class EpisodeList extends Component {
   render() {
     const hideEpisodes = this.hideEpisodes();
     const { state } = this.props;
-    const { episodes } = state;
+    const { sortedEpisodes: episodes } = state;
 
     if (hideEpisodes) {
       return (
