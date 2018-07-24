@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { action } from 'mobx';
 import { css } from 'emotion';
 
-import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
+import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle } from '../../_global/Buttons/ActionButtonStyles';
+import { ActionButton } from '../../_global/Buttons/ActionButton';
 
 
 const containerStyle = css`
@@ -18,16 +20,25 @@ const iconStyle = css`
 
 export class AddEpisodeButton extends Component {
 
+  @action.bound
+  handleClick(evt) {
+    evt.preventDefault();
+  }
+
   render() {
+    const classes = {
+      container: containerStyle,
+      icon: iconStyle,
+      text: textStyle,
+    };
+
     return (
-      <div className={containerStyle}>
-        <span className={iconStyle}>
-          ✚
-        </span>
-        <span className={defaultTextStyle}>
-          Add Episode
-        </span>
-      </div>
+      <ActionButton
+        classes={classes}
+        icon="✚"
+        likesCount="Add Episode"
+        onClick={this.handleClick}
+      />
     );
   }
 

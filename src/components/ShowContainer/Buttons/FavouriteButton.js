@@ -3,7 +3,8 @@ import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
 import { css } from 'emotion';
 
-import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
+import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle } from '../../_global/Buttons/ActionButtonStyles';
+import { ActionButton } from '../../_global/Buttons/ActionButton';
 
 const containerStyle = css`
   ${defaultContainerStyle}
@@ -21,9 +22,9 @@ export class FavouriteButton extends Component {
 
   isFavourite() {
     const { state } = this.props;
-    const { favourites, showData } = state;
+    const { showData } = state;
 
-    return favourites.includes(showData._id);
+    return showData.isFavourite;
   }
 
   getNewFavouritesList() {
@@ -47,19 +48,21 @@ export class FavouriteButton extends Component {
   }
 
   render() {
+    const classes = {
+      container: containerStyle,
+      icon: iconStyle,
+      text: textStyle,
+    };
+
+    const favouriteText = this.isFavourite() ? 'Un-Favourite' : 'Favourite';
+
     return (
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-      <div
-        className={containerStyle}
+      <ActionButton
+        classes={classes}
+        icon="♥"
+        likesCount={favouriteText}
         onClick={this.handleClick}
-      >
-        <span className={iconStyle}>
-          ♥
-        </span>
-        <span className={defaultTextStyle}>
-          {this.isFavourite() ? 'Un-Favourite' : 'Favourite'}
-        </span>
-      </div>
+      />
     );
   }
 
