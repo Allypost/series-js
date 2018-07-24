@@ -91,6 +91,12 @@ class State {
   }
 
   @observable
+  episodeData = {};
+
+  @observable
+  comments = [];
+
+  @observable
   users = [];
 
   @observable
@@ -102,6 +108,7 @@ class State {
     showData: false,
     showLike: false,
     episodes: false,
+    comments: false,
     episodeData: false,
     episodesData: observable.object(),
   };

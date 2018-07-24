@@ -15,6 +15,7 @@ import { Footer } from './components/_global/Footer';
 import { LoginContainer } from './containers/LoginContainer';
 import { LogoutContainer } from './containers/LogoutContainer';
 import { RegisterContainer } from './containers/RegisterContainer';
+import { EpisodeContainer } from './containers/EpisodeContainer';
 
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
   {
     component: ShowContainer,
     path: '/show/:showId',
+    exact: true,
+  },
+  {
+    component: EpisodeContainer,
+    path: '/episode/:episodeId',
     exact: true,
   },
   {

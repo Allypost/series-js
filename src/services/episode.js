@@ -21,6 +21,26 @@ export async function getAll(state, showId) {
   });
 }
 
+export async function comments(state, episodeId) {
+  runInAction(() => {
+    state.loadingStates.comments = true;
+  });
+  try {
+    const comments = await _get(`episodes/${episodeId}/comments`);
+    runInAction(() => {
+      state.comments.replace(comments);
+      state.errorStates.comments = false;
+    });
+  } catch (e) {
+    runInAction(() => {
+      state.errorStates.comments = true;
+    });
+  }
+  runInAction(() => {
+    state.loadingStates.comments = false;
+  });
+}
+
 async function getForList(state, episodeId) {
   runInAction(() => {
     state.loadingStates.episodesData[episodeId] = true;
