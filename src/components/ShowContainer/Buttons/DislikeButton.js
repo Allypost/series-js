@@ -5,11 +5,10 @@ import { action } from 'mobx';
 
 import { dislike as dislikeShow } from '../../../services/show';
 
-import { LikeButtonImage } from './Bases/LikeButtonImage';
-import { containerStyle, containerActions as likeContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './LikeButton';
+import { containerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle, ActionButton } from '../../_global/Buttons/ActionButton';
 
 const containerActions = css`
-  ${likeContainerActions}
+  ${defaultContainerActions}
   &:hover {
     border-color: #f44336;
     color: #f44336;
@@ -59,54 +58,29 @@ export class DislikeButton extends Component {
     dislikeShow(state, showData._id);
   }
 
-  getContainerClass() {
+  render() {
+    const { likesCount } = this.props;
+    const dislikeCount = likesCount < 0 ? -likesCount : -1;
+    const classes = {
+      container: containerStyle,
+      containerActions,
+      text: textStyle,
+      icon: iconStyle,
+    };
+
     const { state } = this.props;
     const { loadingStates } = state;
     const { showLike: isLoading } = loadingStates;
     const { disabled: isDisabled } = this.props;
 
-    if (isLoading) {
-      return css`
-        ${containerStyle}
-        cursor: wait !important;
-        background: rgba(0, 0, 0, .1);
-      `;
-    }
-
-    if (isDisabled) {
-      return css`
-        ${containerStyle}
-        cursor: default !important;
-      `;
-    }
-
-    return css`
-      ${containerStyle}
-      ${containerActions}
-    `;
-  }
-
-  render() {
-    const { likesCount } = this.props;
-
     return (
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-      <div
-        className={this.getContainerClass()}
+      <ActionButton
+        classes={classes}
+        disabled={isDisabled}
+        likesCount={dislikeCount}
+        loading={isLoading}
         onClick={this.handleClick}
-      >
-        {
-          likesCount < 0 &&
-          (
-            <span className={textStyle}>
-              {-likesCount}
-            </span>
-          )
-        }
-        <span className={iconStyle}>
-          <LikeButtonImage alt="Dislke" />
-        </span>
-      </div>
+      />
     );
   }
 

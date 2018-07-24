@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
+import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 
 import defaultPoster from '../../../img/placeholder.episode.png';
@@ -125,7 +126,9 @@ export class Episode extends Component {
               {this.getSeasonText()}
             </span>
             <span className={episodeTitle}>
-              {episode.title}
+              <Link to={`/episode/${episode._id}`}>
+                {episode.title}
+              </Link>
             </span>
           </div>
           <div className={episodeDescription}>
