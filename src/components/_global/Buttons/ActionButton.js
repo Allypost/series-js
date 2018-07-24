@@ -86,6 +86,7 @@ export class ActionButton extends Component {
     const { likesCount } = this.props;
     const { onClick } = this.props;
     const { classes } = this.props;
+    const { showText } = this.props;
 
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
@@ -97,7 +98,7 @@ export class ActionButton extends Component {
           <LikeButtonImage alt="Like" />
         </span>
         {
-          likesCount >= 0 &&
+          showText &&
           (
             <span className={classes.text}>
               {likesCount || 0}
@@ -121,6 +122,7 @@ ActionButton.propTypes = {
   likesCount: PropTypes.number.isRequired,
   loading: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
+  showText: PropTypes.bool,
 };
 
 ActionButton.defaultProps = {
@@ -132,4 +134,5 @@ ActionButton.defaultProps = {
   },
   disabled: false,
   loading: false,
+  showText: true,
 };

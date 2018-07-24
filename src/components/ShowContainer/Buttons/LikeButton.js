@@ -35,12 +35,15 @@ export class LikeButton extends Component {
     const { showLike: isLoading } = loadingStates;
     const { disabled: isDisabled } = this.props;
 
+    const showText = likesCount >= 0;
+
     return (
       <ActionButton
         disabled={isDisabled}
         likesCount={likesCount}
         loading={isLoading}
         onClick={this.handleClick}
+        showText={showText}
       />
     );
   }
