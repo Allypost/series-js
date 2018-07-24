@@ -109,6 +109,7 @@ class State {
     showLike: false,
     episodes: false,
     comments: false,
+    commenting: false,
     episodeData: false,
     episodesData: observable.object(),
   };
