@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
-import { action, observe } from 'mobx';
+import { action } from 'mobx';
 
 import { post as postComment } from '../../services/comment';
 
@@ -120,6 +120,12 @@ export class CommentInput extends Component {
     const { comment } = this.state;
     const { episodeId } = this.props;
     const { state } = this.props;
+    const { isLoggedIn } = state;
+
+    if (!isLoggedIn) {
+      alert('You must log in to comment!');
+      return;
+    }
 
     postComment(state, episodeId, comment)
       .then((success) => {
@@ -131,26 +137,40 @@ export class CommentInput extends Component {
       });
   }
 
+  get placeholderText() {
+    const { state } = this.props;
+    const { isLoggedIn } = state;
+
+    if (isLoggedIn) {
+      return 'Post a comment...';
+    }
+
+    return 'Log in to comment.';
+  }
+
   render() {
     const { comment } = this.state;
 
     const { state } = this.props;
+    const { isLoggedIn } = state;
     const { loadingStates } = state;
     const { commenting: isLoading } = loadingStates;
+
+    const disabled = isLoading || !isLoggedIn;
 
     return (
       <div className={commentsFormContainer}>
         <textarea
           className={input}
-          disabled={isLoading}
+          disabled={disabled}
           onChange={this.handleCommentInputChange}
           onKeyPress={this.handleCommentInputType}
-          placeholder="Post a comment..."
+          placeholder={this.placeholderText}
           value={comment}
         />
         <button
           className={submit}
-          disabled={isLoading}
+          disabled={disabled}
           onClick={this.handleButtonPress}
           type="button"
         >
