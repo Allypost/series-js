@@ -87,6 +87,7 @@ export class ActionButton extends Component {
     const { onClick } = this.props;
     const { classes } = this.props;
     const { showText } = this.props;
+    const { icon } = this.props;
 
     return (
       // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
@@ -95,7 +96,7 @@ export class ActionButton extends Component {
         onClick={onClick}
       >
         <span className={classes.icon}>
-          <LikeButtonImage alt="Like" />
+          {icon}
         </span>
         {
           showText &&
@@ -119,6 +120,7 @@ ActionButton.propTypes = {
     containerActions: PropTypes.string,
   }),
   disabled: PropTypes.bool,
+  icon: PropTypes.oneOf([PropTypes.element, PropTypes.string]),
   likesCount: PropTypes.number.isRequired,
   loading: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
@@ -133,6 +135,7 @@ ActionButton.defaultProps = {
     containerActions,
   },
   disabled: false,
+  icon: (<LikeButtonImage alt="Like" />),
   loading: false,
   showText: true,
 };
