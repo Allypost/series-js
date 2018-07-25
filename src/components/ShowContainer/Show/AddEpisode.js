@@ -4,6 +4,13 @@ import { css } from 'emotion';
 import { action } from 'mobx';
 import { add as addEpisode } from '../../../services/episode';
 
+const modalHeader = css`
+  font-size: 2.4em;
+  text-align: center;
+  margin-top: 0;
+  color: #ff758c;
+`;
+
 const container = css`
   position: fixed;
   z-index: 9999;
@@ -14,7 +21,7 @@ const container = css`
   padding: 2em;
   border: 1px solid #e0e0e0;
   border-radius: .5em;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
   box-shadow: 0 24px 38px 3px rgba(0, 0, 0, .14), 0 9px 46px 8px rgba(0, 0, 0, .12), 0 11px 15px -7px rgba(0, 0, 0, .2);
 `;
 
@@ -185,6 +192,9 @@ export class AddEpisode extends Component {
           action="#"
           method="POST"
         >
+          <h1 className={modalHeader}>
+            Add episode
+          </h1>
           <h1 className={inputHeader}>
             Title
           </h1>
