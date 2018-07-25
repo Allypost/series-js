@@ -1,5 +1,5 @@
 import { runInAction } from 'mobx';
-import { get as _get } from './api';
+import { get as _get, post as _post } from './api';
 
 export async function getAll(state, showId) {
   runInAction(() => {
@@ -18,6 +18,26 @@ export async function getAll(state, showId) {
   }
   runInAction(() => {
     state.loadingStates.episodes = false;
+  });
+}
+
+export async function add(state, token, data) {
+  runInAction(() => {
+    state.loadingStates.addEpisode = true;
+  });
+  try {
+    const episode = await _post('episodes', token, data);
+    runInAction(() => {
+      state.episodes.push(episode);
+      state.errorStates.addEpisode = false;
+    });
+  } catch (e) {
+    runInAction(() => {
+      state.errorStates.addEpisode = true;
+    });
+  }
+  runInAction(() => {
+    state.loadingStates.addEpisode = false;
   });
 }
 

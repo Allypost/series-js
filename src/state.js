@@ -115,6 +115,11 @@ class State {
   };
 
   @observable
+  modalStates = {
+    addEpisode: true,
+  }
+
+  @observable
   errorStates = Object.assign({}, this.loadingStates);
 
   @observable

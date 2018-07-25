@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { action } from 'mobx';
 import { css } from 'emotion';
 
@@ -17,12 +18,18 @@ const iconStyle = css`
   vertical-align: baseline;
 `;
 
-
+@inject('state')
+@observer
 export class AddEpisodeButton extends Component {
 
   @action.bound
   handleClick(evt) {
     evt.preventDefault();
+
+    const { state } = this.props;
+    const { modalStates } = state;
+
+    modalStates.addEpisode = !modalStates.addEpisode;
   }
 
   render() {
@@ -32,12 +39,14 @@ export class AddEpisodeButton extends Component {
       text: textStyle,
     };
 
+    const { onClick = this.handleClick } = this.props;
+
     return (
       <ActionButton
         classes={classes}
         icon="✚"
         likesCount="Add Episode"
-        onClick={this.handleClick}
+        onClick={onClick}
       />
     );
   }

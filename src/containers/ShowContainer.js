@@ -65,6 +65,16 @@ const showImage = css`
   width: 100%;
 `;
 
+const backgroundFader = css`
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .45);
+`;
+
 @inject('state')
 @observer
 export class ShowContainer extends Component {
@@ -111,6 +121,21 @@ export class ShowContainer extends Component {
     if (episodeErrors) {
       getShowEpisodes(state, showId);
     }
+  }
+
+  get backgroundFaderClass() {
+    const { state } = this.props;
+    const { modalStates } = state;
+    const { addEpisode: show } = modalStates;
+
+    if (!show) {
+      return css`
+        ${backgroundFader}
+        display: none;
+      `;
+    }
+
+    return backgroundFader;
   }
 
   render() {
@@ -171,6 +196,7 @@ export class ShowContainer extends Component {
             </div>
           </div>
         </div>
+        <div className={this.backgroundFaderClass} />
       </div>
     );
   }

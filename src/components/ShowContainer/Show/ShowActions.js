@@ -4,6 +4,7 @@ import { css } from 'emotion';
 
 import { AddEpisodeButton } from '../Buttons/AddEpisodeButton';
 import { FavouriteButton } from '../Buttons/FavouriteButton';
+import { AddEpisode } from './AddEpisode';
 
 const showActionsContainer = css`
   display: inline-grid;
@@ -35,6 +36,7 @@ export class ShowActions extends Component {
       <div className={showActionsContainer}>
         <AddEpisodeButton />
         <FavouriteButton />
+        <AddEpisode />
       </div>
     );
   }
