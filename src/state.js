@@ -116,7 +116,7 @@ class State {
 
   @observable
   modalStates = {
-    addEpisode: true,
+    addEpisode: false,
   }
 
   @observable
