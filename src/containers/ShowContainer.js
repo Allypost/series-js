@@ -253,7 +253,7 @@ export class ShowContainer extends Component {
   render() {
     const { state } = this.props;
     const { showData } = state;
-    const { episodes } = state;
+    const { sortedEpisodes: episodes } = state;
     const imageUrl = showData.imageUrl ? `https://api.infinum.academy${showData.imageUrl}` : defaultPoster;
 
     const { isLoggedIn } = state;
