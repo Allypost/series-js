@@ -8,12 +8,13 @@ import defaultPoster from '../img/placeholder.png';
 import { BackButton } from '../components/ShowContainer/Buttons/BackButton';
 
 import { get as getShowData, like as likeShow, dislike as dislikeShow } from '../services/show';
-import { getAll as getShowEpisodes, add as addEpisode } from '../services/episode';
+import { getAll as getShowEpisodes, add as addEpisode, get as getEpisodeData } from '../services/episode';
 import { ShowTitle } from '../components/ShowContainer/Show/ShowTitle';
 import { ShowActions } from '../components/ShowContainer/Show/ShowActions';
 import { ShowDescription } from '../components/ShowContainer/Show/ShowDescription';
 import { EpisodeList } from '../components/ShowContainer/Show/EpisodeList';
 import { AddEpisode } from '../components/ShowContainer/Show/AddEpisode';
+import { Episode } from '../components/ShowContainer/Episodes/Episode';
 
 
 const pageContainer = css`
@@ -242,6 +243,13 @@ export class ShowContainer extends Component {
     }
   }
 
+  @action.bound
+  getEpisodeData(episodeId) {
+    const { state } = this.props;
+
+    getEpisodeData(state, episodeId);
+  }
+
   render() {
     const { state } = this.props;
     const { showData } = state;
@@ -304,11 +312,24 @@ export class ShowContainer extends Component {
             <div className={spacer} />
 
             <EpisodeList
-              episodeLoading={loadingStates.episodesData}
-              episodes={episodes}
               hasErrors={episodesErrors}
               isLoading={isLoading || episodesLoading}
-            />
+            >
+              {
+                episodes.map((episode) => {
+                  const { [episode._id]: isLoading = true } = loadingStates.episodesData;
+
+                  return (
+                    <Episode
+                      episode={episode}
+                      getEpisodeData={this.getEpisodeData}
+                      isLoading={isLoading}
+                      key={episode._id}
+                    />
+                  );
+                })
+              }
+            </EpisodeList>
           </div>
 
           <div className={rightSide}>

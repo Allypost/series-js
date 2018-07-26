@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
-import { inject } from 'mobx-react';
 
 import defaultPoster from '../../../img/placeholder.episode.png';
-
-import { get as getEpisodeData } from '../../../services/episode';
 
 const episodeImage = css`
   grid-column: 1;
@@ -57,14 +54,13 @@ const episodeContainer = css`
   }
 `;
 
-@inject('state')
 export class Episode extends Component {
 
   componentDidMount() {
     const { episode } = this.props;
-    const { state } = this.props;
+    const { getEpisodeData } = this.props;
 
-    getEpisodeData(state, episode._id);
+    getEpisodeData(episode._id);
   }
 
   getTrimmedDescription() {
