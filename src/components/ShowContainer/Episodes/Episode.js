@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
-import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 
 import defaultPoster from '../../../img/placeholder.episode.png';
-
-import { get as getEpisodeData } from '../../../services/episode';
-// eslint-disable-next-line
-import state from "../../../state";
 
 const episodeImage = css`
   grid-column: 1;
@@ -58,13 +54,13 @@ const episodeContainer = css`
   }
 `;
 
-@observer
 export class Episode extends Component {
 
   componentDidMount() {
     const { episode } = this.props;
+    const { getEpisodeData } = this.props;
 
-    getEpisodeData(state, episode._id);
+    getEpisodeData(episode._id);
   }
 
   getTrimmedDescription() {
@@ -94,11 +90,7 @@ export class Episode extends Component {
 
   getSeasonText() {
     const { episode } = this.props;
-    const { loadingStates } = state;
-    const { episodeData = {} } = loadingStates;
-    const isLoadingSet = episodeData[episode._id];
-    // eslint-disable-next-line no-undefined
-    const isLoading = isLoadingSet === undefined || isLoadingSet;
+    const { isLoading } = this.props;
 
     if (isLoading) {
       return '...';
@@ -124,7 +116,9 @@ export class Episode extends Component {
               {this.getSeasonText()}
             </span>
             <span className={episodeTitle}>
-              {episode.title}
+              <Link to={`/episode/${episode._id}`}>
+                {episode.title}
+              </Link>
             </span>
           </div>
           <div className={episodeDescription}>

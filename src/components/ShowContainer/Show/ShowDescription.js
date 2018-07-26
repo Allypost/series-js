@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 import { css } from 'emotion';
-
-import state from '../../../state';
 
 const showDescription = css`
   grid-row: 2;
@@ -12,13 +9,11 @@ const showDescription = css`
   color: #616161;
 `;
 
-@observer
 export class ShowDescription extends Component {
 
-  getText() {
-    const { showData: isLoading = true } = state.loadingStates;
-    const { showData: hasErrors = true } = state.errorStates;
-    const { showData } = state;
+  get text() {
+    const { isLoading, hasErrors } = this.props;
+    const { description } = this.props;
 
     if (isLoading) {
       return (
@@ -36,7 +31,7 @@ export class ShowDescription extends Component {
       );
     }
 
-    if (!showData.description) {
+    if (!description) {
       return (
         <em>
           Show has no description...
@@ -44,13 +39,13 @@ export class ShowDescription extends Component {
       );
     }
 
-    return showData.description;
+    return description;
   }
 
   render() {
     return (
       <div className={showDescription}>
-        {this.getText()}
+        {this.text}
       </div>
     );
   }

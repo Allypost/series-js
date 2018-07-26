@@ -1,4 +1,4 @@
-import { observable, observe, intercept } from 'mobx';
+import { observable, observe, intercept, computed } from 'mobx';
 import Util from './helpers/Util';
 
 const getFavourites = () => {
@@ -75,6 +75,27 @@ class State {
   @observable
   episodes = [];
 
+  @computed
+  get sortedEpisodes() {
+    const { episodes = [] } = this;
+
+    const sortedEpisodes = episodes.slice().sort((a, b) => {
+      if (a.season === b.season) {
+        return Number(a.episodeNumber) - Number(b.episodeNumber);
+      }
+
+      return Number(a.season) - Number(b.season);
+    });
+
+    return sortedEpisodes;
+  }
+
+  @observable
+  episodeData = {};
+
+  @observable
+  comments = [];
+
   @observable
   users = [];
 
@@ -87,14 +108,29 @@ class State {
     showData: false,
     showLike: false,
     episodes: false,
-    episodeData: observable.object(),
+    comments: false,
+    commenting: false,
+    episodeData: false,
+    episodesData: observable.object(),
   };
+
+  @observable
+  modalStates = {
+    addEpisode: false,
+  }
 
   @observable
   errorStates = Object.assign({}, this.loadingStates);
 
   @observable
   user = Util.getUserData();
+
+  @computed
+  get isLoggedIn() {
+    const { token } = this.user;
+
+    return !!token;
+  }
 
   constructor() {
     this.favourites.replace(getFavourites());

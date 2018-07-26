@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 import { css } from 'emotion';
+import { action } from 'mobx';
 
-import { dislike as dislikeShow } from '../../../services/show';
-
-import { LikeButtonImage } from './Bases/LikeButtonImage';
-import { containerStyle, containerActions as likeContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './LikeButton';
-
-import state from '../../../state';
+import { containerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle, ActionButton } from '../../_global/Buttons/ActionButton';
 
 const containerActions = css`
-  ${likeContainerActions}
+  ${defaultContainerActions}
   &:hover {
     border-color: #f44336;
     color: #f44336;
@@ -38,79 +33,45 @@ const iconStyle = css`
   transform: rotateZ(180deg);
 `;
 
-
-@observer
 export class DislikeButton extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
+  @action.bound
   handleClick(evt) {
     evt.preventDefault();
 
-    const { loadingStates } = state;
-    const { showLike: isLoading } = loadingStates;
-    const { disabled: isDisabled } = this.props;
+    const { isLoading, isDisabled } = this.props;
 
     if (isDisabled || isLoading) {
-      return;
+      return null;
     }
 
-    const { showData = {} } = state;
+    const { onClick } = this.props;
 
-    dislikeShow(state, showData._id);
-  }
-
-  getContainerClass() {
-    const { loadingStates } = state;
-    const { showLike: isLoading } = loadingStates;
-    const { disabled: isDisabled } = this.props;
-
-    if (isLoading) {
-      return css`
-        ${containerStyle}
-        cursor: wait !important;
-        background: rgba(0, 0, 0, .1);
-      `;
-    }
-
-    if (isDisabled) {
-      return css`
-        ${containerStyle}
-        cursor: default !important;
-      `;
-    }
-
-    return css`
-      ${containerStyle}
-      ${containerActions}
-    `;
+    return onClick('dislike');
   }
 
   render() {
-    const { likesCount } = this.props;
+    const classes = {
+      container: containerStyle,
+      containerActions,
+      text: textStyle,
+      icon: iconStyle,
+    };
+
+    const { isDisabled, isLoading } = this.props;
+
+    const { dislikesCount } = this.props;
+    const showText = dislikesCount > 0;
 
     return (
-      // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-      <div
-        className={this.getContainerClass()}
+      <ActionButton
+        classes={classes}
+        disabled={isDisabled}
+        likesCount={dislikesCount}
+        loading={isLoading}
         onClick={this.handleClick}
-      >
-        {
-          likesCount < 0 &&
-          (
-            <span className={textStyle}>
-              {-likesCount}
-            </span>
-          )
-        }
-        <span className={iconStyle}>
-          <LikeButtonImage alt="Dislke" />
-        </span>
-      </div>
+        showText={showText}
+      />
     );
   }
 

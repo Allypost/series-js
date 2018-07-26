@@ -1,17 +1,21 @@
 import React from 'react';
 import { configure } from 'mobx';
 import ReactDOM from 'react-dom';
+import { Provider } from 'mobx-react';
 import { css, injectGlobal } from 'emotion';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+
+import state from './state';
 
 import { IndexContainer } from './containers/IndexContainer';
 import { ShowContainer } from './containers/ShowContainer';
 import { NotFoundContainer } from './containers/NotFoundContainer';
-import { NavBar } from './components/_global/NavBar';
-import { Footer } from './components/_global/Footer';
+import { NavBar } from './containers/NavBar';
+import { Footer } from './containers/Footer';
 import { LoginContainer } from './containers/LoginContainer';
 import { LogoutContainer } from './containers/LogoutContainer';
 import { RegisterContainer } from './containers/RegisterContainer';
+import { EpisodeContainer } from './containers/EpisodeContainer';
 
 const routes = [
   {
@@ -22,6 +26,11 @@ const routes = [
   {
     component: ShowContainer,
     path: '/show/:showId',
+    exact: true,
+  },
+  {
+    component: EpisodeContainer,
+    path: '/episode/:episodeId',
     exact: true,
   },
   {
@@ -85,7 +94,7 @@ configure({ enforceActions: true });
 /* eslint-disable react/jsx-max-depth */
 ReactDOM.render(
   (
-    <div>
+    <Provider state={state}>
       <Router>
         <div className={wrapper}>
           <NavBar />
@@ -104,7 +113,7 @@ ReactDOM.render(
           <Footer />
         </div>
       </Router>
-    </div>
+    </Provider>
   ),
   document.querySelector('.js-app')
 );

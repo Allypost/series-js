@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 import { css } from 'emotion';
-
-import state from '../../../state';
 
 import { LikeButton } from '../Buttons/LikeButton';
 import { DislikeButton } from '../Buttons/DislikeButton';
@@ -30,21 +27,13 @@ const showLikeContainer = css`
   margin-left: 2em;
 `;
 
-@observer
 export class ShowTitle extends Component {
 
-  isLoggedIn() {
-    const { user = {} } = state;
+  get text() {
+    const { loading, hasErrors } = this.props;
+    const { children } = this.props;
 
-    return !!user.token;
-  }
-
-  getText() {
-    const { showData: isLoading = true } = state.loadingStates;
-    const { showData: hasErrors = true } = state.errorStates;
-    const { showData } = state;
-
-    if (isLoading) {
+    if (loading) {
       return (
         <em>
           Loading...
@@ -60,31 +49,36 @@ export class ShowTitle extends Component {
       );
     }
 
-    return showData.title;
+    return children;
   }
 
   render() {
-    const { showData } = state;
-    const { likesCount = 0 } = showData;
-    const isLoggedIn = this.isLoggedIn();
+    const { likesCount = 0 } = this.props;
+    const { isLoggedIn } = this.props;
+    const { isLiking } = this.props;
+    const { onAction } = this.props;
 
     return (
       <div className={showTitleContainer}>
         <h1 className={showTitle}>
-          {this.getText()}
+          {this.text}
         </h1>
         {
           isLoggedIn &&
           (
             <div className={showLikeContainer}>
               <LikeButton
-                disabled={!isLoggedIn}
+                isDisabled={!isLoggedIn}
+                isLoading={isLiking}
                 likesCount={likesCount}
+                onClick={onAction}
               />
               <div className={likeButtonSpacer} />
               <DislikeButton
-                disabled={!isLoggedIn}
-                likesCount={likesCount}
+                dislikesCount={-likesCount}
+                isDisabled={!isLoggedIn}
+                isLoading={isLiking}
+                onClick={onAction}
               />
             </div>
           )

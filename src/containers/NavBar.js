@@ -1,9 +1,10 @@
+import { observer, inject } from 'mobx-react';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
-import { UserDisplay } from './NavBar/UserDisplay';
+import { UserDisplay } from '../components/_global/NavBar/UserDisplay';
 
-import logoImg from '../../img/img-logo-horizontal@3x.png';
+import logoImg from '../img/img-logo-horizontal@3x.png';
 
 const nav = css`
   display: grid;
@@ -35,9 +36,14 @@ const userContainer = css`
   // font-size: .8em;
 `;
 
+@inject('state')
+@observer
 export class NavBar extends Component {
 
   render() {
+    const { state } = this.props;
+    const { user, isLoggedIn } = state;
+
     return (
       <nav className={nav}>
         <div className={logoContainer}>
@@ -50,7 +56,10 @@ export class NavBar extends Component {
           </Link>
         </div>
         <div className={userContainer}>
-          <UserDisplay />
+          <UserDisplay
+            isLoggedIn={isLoggedIn}
+            user={user}
+          />
         </div>
       </nav>
     );

@@ -1,22 +1,12 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 
-import state from '../../state';
 import { ShowCard } from './ShowCard';
 import { container } from './ShowsList';
 
-@observer
 export class FavouriteShowsList extends Component {
 
-  showFavourites() {
-    const { shows, favourites } = state;
-    const showFavourites = favourites.length && shows.length;
-
-    return showFavourites;
-  }
-
   render() {
-    const { favourites, shows: allShows } = state;
+    const { favourites, shows: allShows } = this.props;
     const shows = allShows.filter(({ _id }) => favourites.includes(_id));
 
     return (

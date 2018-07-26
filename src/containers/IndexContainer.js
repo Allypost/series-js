@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
 import { getAll as getAllShows } from '../services/show';
 
-import state from '../state';
 import { FavouriteShowsHeader } from '../components/IndexContainer/FavouriteShowsHeader';
 import { FavouriteShowsList } from '../components/IndexContainer/FavouriteShowsList';
 import { ShowsList } from '../components/IndexContainer/ShowsList';
@@ -19,6 +18,7 @@ const showPageContainer = css`
   background-color: #eeeeee;
 `;
 
+@inject('state')
 @observer
 export class IndexContainer extends Component {
 
@@ -29,6 +29,7 @@ export class IndexContainer extends Component {
   }
 
   componentDidMount() {
+    const { state } = this.props;
     getAllShows(state);
     this.timer = setInterval(this.dataChecker.bind(this), 3000);
   }
@@ -40,6 +41,7 @@ export class IndexContainer extends Component {
   }
 
   dataChecker() {
+    const { state } = this.props;
     const { shows: hasErrors } = state.errorStates;
 
     if (hasErrors) {
@@ -48,12 +50,27 @@ export class IndexContainer extends Component {
   }
 
   render() {
+    const { state } = this.props;
+    const { shows, favourites } = state;
+    const showFavourites = favourites.length && shows.length;
+
+    const { loadingStates, errorStates } = state;
+    const { shows: isLoading } = loadingStates;
+    const { shows: hasErrors } = errorStates;
+
     return (
       <div className={showPageContainer}>
-        <FavouriteShowsHeader />
-        <FavouriteShowsList />
+        <FavouriteShowsHeader show={showFavourites} />
+        <FavouriteShowsList
+          favourites={favourites}
+          shows={shows}
+        />
         <ShowsHeader />
-        <ShowsList />
+        <ShowsList
+          hasErrors={hasErrors}
+          isLoading={isLoading}
+          shows={shows}
+        />
       </div>
     );
   }

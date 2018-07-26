@@ -1,31 +1,17 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
-import { observer } from 'mobx-react';
-import { runInAction } from 'mobx';
-
-import state from '../../../state';
+import { action } from 'mobx';
+import { PropTypes } from 'prop-types';
 
 const prettyLink = css`
   color: #ff758c;
   text-decoration: none;
 `;
 
-@observer
 export class UserDisplay extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  isLoggedIn() {
-    const { user } = state;
-
-    return !!user.token;
-  }
-
+  @action.bound
   // eslint-disable-next-line class-methods-use-this
   handleLogout(evt) {
     evt.preventDefault();
@@ -33,11 +19,10 @@ export class UserDisplay extends Component {
     const confirm = window.confirm('Do you want to log out?');
 
     if (confirm) {
-      Object.keys(state.user)
+      const { user } = this.props;
+      Object.keys(user)
         .forEach((key) => {
-          runInAction(() => {
-            delete state.user[key];
-          });
+          delete user[key];
         });
     }
   }
@@ -55,7 +40,7 @@ export class UserDisplay extends Component {
   }
 
   getLogoutLink() {
-    const { user } = state;
+    const { user } = this.props;
 
     return (
       <Link
@@ -71,7 +56,7 @@ export class UserDisplay extends Component {
   }
 
   render() {
-    const isLoggedIn = this.isLoggedIn();
+    const { isLoggedIn } = this.props;
 
     if (isLoggedIn) {
       return this.getLogoutLink();
@@ -81,3 +66,12 @@ export class UserDisplay extends Component {
   }
 
 }
+
+UserDisplay.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  user: PropTypes.shape({
+    token: PropTypes.string,
+    username: PropTypes.string,
+    id: PropTypes.string,
+  }).isRequired,
+};

@@ -1,5 +1,5 @@
 import { runInAction } from 'mobx';
-import { get as _get } from './api';
+import { get as _get, post as _post } from './api';
 
 export async function getAll(state, showId) {
   runInAction(() => {
@@ -21,9 +21,29 @@ export async function getAll(state, showId) {
   });
 }
 
-export async function get(state, episodeId) {
+export async function add(state, token, data) {
   runInAction(() => {
-    state.loadingStates.episodeData[episodeId] = true;
+    state.loadingStates.addEpisode = true;
+  });
+  try {
+    const episode = await _post('episodes', token, data);
+    runInAction(() => {
+      state.episodes.push(episode);
+      state.errorStates.addEpisode = false;
+    });
+  } catch (e) {
+    runInAction(() => {
+      state.errorStates.addEpisode = true;
+    });
+  }
+  runInAction(() => {
+    state.loadingStates.addEpisode = false;
+  });
+}
+
+async function getForList(state, episodeId) {
+  runInAction(() => {
+    state.loadingStates.episodesData[episodeId] = true;
   });
 
   try {
@@ -41,14 +61,44 @@ export async function get(state, episodeId) {
 
     runInAction(() => {
       state.episodes.replace(newEpisodes);
-      state.errorStates.episodeData[episodeId] = false;
+      state.errorStates.episodesData[episodeId] = false;
     });
   } catch (e) {
     runInAction(() => {
-      state.errorStates.episodeData[episodeId] = true;
+      state.errorStates.episodesData[episodeId] = true;
     });
   }
   runInAction(() => {
-    state.loadingStates.episodeData[episodeId] = false;
+    state.loadingStates.episodesData[episodeId] = false;
   });
+}
+
+async function getLocal(state, episodeId) {
+  runInAction(() => {
+    state.loadingStates.episodeData = true;
+  });
+
+  try {
+    const episode = await _get(`episodes/${episodeId}`);
+    runInAction(() => {
+      Object.assign(state.episodeData, episode);
+      state.errorStates.episodeData = false;
+    });
+  } catch (e) {
+    runInAction(() => {
+      state.errorStates.episodeData = true;
+    });
+  }
+  runInAction(() => {
+    state.loadingStates.episodeData = false;
+  });
+}
+
+
+export async function get(state, episodeId, forList = true) {
+  if (forList) {
+    return getForList(state, episodeId);
+  }
+
+  return getLocal(state, episodeId);
 }

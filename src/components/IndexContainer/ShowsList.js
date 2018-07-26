@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 import { css } from 'emotion';
 
-import state from '../../state';
 import { ShowCard } from './ShowCard';
 
 const errorHeader = css`
@@ -17,19 +15,16 @@ export const container = css`
   align-items: baseline;
 `;
 
-@observer
 export class ShowsList extends Component {
 
-  hideShows() {
-    const { shows: isLoading } = state.loadingStates;
-    const { shows: hasErrors } = state.errorStates;
+  get hideShows() {
+    const { isLoading, hasErrors } = this.props;
 
     return isLoading || hasErrors;
   }
 
-  errorText() {
-    const { shows: isLoading } = state.loadingStates;
-    const { shows: hasErrors } = state.errorStates;
+  get errorText() {
+    const { isLoading, hasErrors } = this.props;
 
     if (isLoading) {
       return 'Loading...';
@@ -43,14 +38,13 @@ export class ShowsList extends Component {
   }
 
   render() {
-    const { shows } = state;
-    const hideShows = this.hideShows();
+    const { shows } = this.props;
 
-    if (hideShows) {
+    if (this.hideShows) {
       return (
         <h2 className={errorHeader}>
           <em>
-            {this.errorText()}
+            {this.errorText}
           </em>
         </h2>
       );

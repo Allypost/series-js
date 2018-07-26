@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
+import { action } from 'mobx';
 
-// eslint-disable-next-line
-import state from '../state';
 import defaultPoster from '../img/placeholder.png';
 
 import { BackButton } from '../components/ShowContainer/Buttons/BackButton';
 
-import { get as getShowData } from '../services/show';
-import { getAll as getShowEpisodes } from '../services/episode';
+import { get as getShowData, like as likeShow, dislike as dislikeShow } from '../services/show';
+import { getAll as getShowEpisodes, add as addEpisode, get as getEpisodeData } from '../services/episode';
 import { ShowTitle } from '../components/ShowContainer/Show/ShowTitle';
 import { ShowActions } from '../components/ShowContainer/Show/ShowActions';
 import { ShowDescription } from '../components/ShowContainer/Show/ShowDescription';
 import { EpisodeList } from '../components/ShowContainer/Show/EpisodeList';
+import { AddEpisode } from '../components/ShowContainer/Show/AddEpisode';
+import { Episode } from '../components/ShowContainer/Episodes/Episode';
+
 
 const pageContainer = css`
   display: inline-grid;
@@ -66,6 +68,17 @@ const showImage = css`
   width: 100%;
 `;
 
+const backgroundFader = css`
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .45);
+`;
+
+@inject('state')
 @observer
 export class ShowContainer extends Component {
 
@@ -77,10 +90,11 @@ export class ShowContainer extends Component {
 
   componentDidMount() {
     const showId = this.getShowId();
+    const { state } = this.props;
 
     getShowData(state, showId);
     getShowEpisodes(state, showId);
-    this.timer = setInterval(this.dataChecker.bind(this), 3000);
+    this.timer = setInterval(this.dataChecker, 3000);
   }
 
   componentWillUnmount() {
@@ -97,8 +111,10 @@ export class ShowContainer extends Component {
     return showId;
   }
 
+  @action.bound
   dataChecker() {
     const showId = this.getShowId();
+    const { state } = this.props;
     const { episodes: episodeErrors, showData: showErrors } = state.errorStates;
 
     if (showErrors) {
@@ -110,13 +126,148 @@ export class ShowContainer extends Component {
     }
   }
 
-  isLoggedIn() {
-    return !!state.user.token;
+  get backgroundFaderClass() {
+    const { state } = this.props;
+    const { modalStates } = state;
+    const { addEpisode: show } = modalStates;
+
+    if (!show) {
+      return css`
+        ${backgroundFader}
+        display: none;
+      `;
+    }
+
+    return backgroundFader;
+  }
+
+  @action.bound
+  handleCloseAddEpisodeModal(evt) {
+    evt.preventDefault();
+
+    this.closeAddEpisodeModal();
+  }
+
+  @action
+  closeAddEpisodeModal() {
+    const { state } = this.props;
+    const { modalStates } = state;
+
+    modalStates.addEpisode = !modalStates.addEpisode;
+  }
+
+  @action.bound
+  handleAddEpisode(evt, formData) {
+    evt.preventDefault();
+    const { state } = this.props;
+    const { isLoggedIn } = state;
+
+    if (!isLoggedIn) {
+      alert('You have to be logged in to do that!');
+      return;
+    }
+
+    const { showData } = state;
+    const { _id: showId } = showData;
+    const {
+      title, description, episode, season,
+    } = formData;
+    const data = {
+      showId, title, description, episodeNumber: String(episode), season: String(season),
+    };
+
+    const { user } = state;
+    const { token } = user;
+
+    addEpisode(state, token, data)
+      .then(() => this.closeAddEpisodeModal());
+  }
+
+  get showAddEpisodeModal() {
+    const { state } = this.props;
+    const { modalStates } = state;
+    const { addEpisode: showModal } = modalStates;
+
+    return showModal;
+  }
+
+  @action.bound
+  handleAddEpisodeClick(evt) {
+    evt.preventDefault();
+
+    const { state } = this.props;
+    const { modalStates } = state;
+
+    modalStates.addEpisode = !modalStates.addEpisode;
+  }
+
+  get isFavourite() {
+    const { state } = this.props;
+    const { showData } = state;
+
+    return showData.isFavourite;
+  }
+
+  getNewFavouritesList() {
+    const { state } = this.props;
+    const { showData, favourites: oldFavourites } = state;
+
+    if (this.isFavourite) {
+      return oldFavourites.slice().filter((id) => id !== showData._id);
+    }
+
+    return [showData._id, ...oldFavourites];
+  }
+
+  @action.bound
+  handleFavouritesClick(evt) {
+    evt.preventDefault();
+    const newFavourites = this.getNewFavouritesList();
+
+    const { state } = this.props;
+    state.favourites.replace(newFavourites);
+  }
+
+  @action.bound
+  handleShowAction(type) {
+    const { state } = this.props;
+    const { showData } = state;
+
+    switch (type) {
+      case 'like':
+        return likeShow(state, showData._id);
+      case 'dislike':
+        return dislikeShow(state, showData._id);
+      default:
+        return null;
+    }
+  }
+
+  @action.bound
+  getEpisodeData(episodeId) {
+    const { state } = this.props;
+
+    getEpisodeData(state, episodeId);
   }
 
   render() {
+    const { state } = this.props;
     const { showData } = state;
+    const { sortedEpisodes: episodes } = state;
     const imageUrl = showData.imageUrl ? `https://api.infinum.academy${showData.imageUrl}` : defaultPoster;
+
+    const { isLoggedIn } = state;
+    const { loadingStates, errorStates } = state;
+
+    const { showData: isLoading } = loadingStates;
+    const { showData: hasErrors } = errorStates;
+
+    const { episodes: episodesLoading } = loadingStates;
+    const { episodes: episodesErrors } = errorStates;
+
+    const { showLike } = loadingStates;
+
+    const showActions = isLoggedIn && !isLoading && !hasErrors;
 
     return (
       <div
@@ -125,11 +276,34 @@ export class ShowContainer extends Component {
       >
         <BackButton />
         <div className={showContainer}>
-          <ShowTitle />
-          <ShowActions />
+          <ShowTitle
+            hasErrors={hasErrors}
+            isLiking={showLike}
+            isLoading={isLoading}
+            isLoggedIn={isLoggedIn}
+            likesCount={showData.likesCount}
+            onAction={this.handleShowAction}
+          >
+            {showData.title}
+          </ShowTitle>
+          <ShowActions
+            isFavourite={showData.isFavourite}
+            onAddEpisode={this.handleAddEpisodeClick}
+            onFavourite={this.handleFavouritesClick}
+            show={showActions}
+          />
+          <AddEpisode
+            onAdd={this.handleAddEpisode}
+            onClose={this.handleCloseAddEpisodeModal}
+            show={this.showAddEpisodeModal}
+          />
 
           <div className={leftSide}>
-            <ShowDescription />
+            <ShowDescription
+              description={showData.description}
+              hasErrors={hasErrors}
+              isLoading={isLoading}
+            />
 
             <h3 className={episodesHeader}>
               Seasons & episodes
@@ -137,7 +311,25 @@ export class ShowContainer extends Component {
 
             <div className={spacer} />
 
-            <EpisodeList />
+            <EpisodeList
+              hasErrors={episodesErrors}
+              isLoading={isLoading || episodesLoading}
+            >
+              {
+                episodes.map((episode) => {
+                  const { [episode._id]: isLoading = true } = loadingStates.episodesData;
+
+                  return (
+                    <Episode
+                      episode={episode}
+                      getEpisodeData={this.getEpisodeData}
+                      isLoading={isLoading}
+                      key={episode._id}
+                    />
+                  );
+                })
+              }
+            </EpisodeList>
           </div>
 
           <div className={rightSide}>
@@ -171,6 +363,7 @@ export class ShowContainer extends Component {
             </div>
           </div>
         </div>
+        <div className={this.backgroundFaderClass} />
       </div>
     );
   }

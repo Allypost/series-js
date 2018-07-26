@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 import { css } from 'emotion';
 
-import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle } from './Bases/SeriesActionButton';
+import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle } from '../../_global/Buttons/ActionButtonStyles';
+import { ActionButton } from '../../_global/Buttons/ActionButton';
 
 
 const containerStyle = css`
@@ -15,20 +17,33 @@ const iconStyle = css`
   vertical-align: baseline;
 `;
 
-
 export class AddEpisodeButton extends Component {
 
   render() {
+    const classes = {
+      container: containerStyle,
+      icon: iconStyle,
+      text: textStyle,
+    };
+
+    const { onClick } = this.props;
+
     return (
-      <div className={containerStyle}>
-        <span className={iconStyle}>
-          ✚
-        </span>
-        <span className={defaultTextStyle}>
-          Add Episode
-        </span>
-      </div>
+      <ActionButton
+        classes={classes}
+        icon="✚"
+        likesCount="Add Episode"
+        onClick={onClick}
+      />
     );
   }
 
 }
+
+AddEpisodeButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+AddEpisodeButton.defaultProps = {
+  onClick: () => { },
+};
