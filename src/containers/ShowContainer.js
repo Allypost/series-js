@@ -365,7 +365,11 @@ export class ShowContainer extends Component {
             </div>
           </div>
         </div>
-        <div className={this.backgroundFaderClass} />
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions*/}
+        <div
+          className={this.backgroundFaderClass}
+          onClick={this.handleCloseAddEpisodeModal}
+        />
       </div>
     );
   }
