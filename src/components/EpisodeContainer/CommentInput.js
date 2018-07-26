@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { css } from 'emotion';
 import { action, observable, runInAction } from 'mobx';
+import { observer } from 'mobx-react';
 
 const commentsFormContainer = css`
   text-align: right;
@@ -130,6 +131,7 @@ export class CommentInput extends Component {
     return 'Log in to comment.';
   }
 
+  @observer
   render() {
     const { comment } = this.componentState;
 
