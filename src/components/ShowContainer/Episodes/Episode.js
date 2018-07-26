@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { css } from 'emotion';
 import { Link } from 'react-router-dom';
-import { observer, inject } from 'mobx-react';
+import { inject } from 'mobx-react';
 
 import defaultPoster from '../../../img/placeholder.episode.png';
 
@@ -58,7 +58,6 @@ const episodeContainer = css`
 `;
 
 @inject('state')
-@observer
 export class Episode extends Component {
 
   componentDidMount() {
