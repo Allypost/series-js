@@ -13,7 +13,6 @@ import { ShowTitle } from '../components/ShowContainer/Show/ShowTitle';
 import { ShowActions } from '../components/ShowContainer/Show/ShowActions';
 import { ShowDescription } from '../components/ShowContainer/Show/ShowDescription';
 import { EpisodeList } from '../components/ShowContainer/Show/EpisodeList';
-import { AddEpisode } from '../components/ShowContainer/Show/AddEpisode';
 import { Episode } from '../components/ShowContainer/Episodes/Episode';
 
 
@@ -195,10 +194,9 @@ export class ShowContainer extends Component {
   handleAddEpisodeClick(evt) {
     evt.preventDefault();
 
-    const { state } = this.props;
-    const { modalStates } = state;
-
-    modalStates.addEpisode = !modalStates.addEpisode;
+    const { history } = this.props;
+    
+    history.push('./add-episode');
   }
 
   get isFavourite() {
@@ -294,11 +292,6 @@ export class ShowContainer extends Component {
             onFavourite={this.handleFavouritesClick}
             show={showActions}
           />
-          <AddEpisode
-            onAdd={this.handleAddEpisode}
-            onClose={this.handleCloseAddEpisodeModal}
-            show={this.showAddEpisodeModal}
-          />
 
           <div className={leftSide}>
             <ShowDescription
@@ -365,11 +358,6 @@ export class ShowContainer extends Component {
             </div>
           </div>
         </div>
-        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions*/}
-        <div
-          className={this.backgroundFaderClass}
-          onClick={this.handleCloseAddEpisodeModal}
-        />
       </div>
     );
   }
