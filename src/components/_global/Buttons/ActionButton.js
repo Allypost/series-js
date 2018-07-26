@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 import PropTypes from 'prop-types';
 
@@ -52,8 +51,6 @@ export const iconStyle = css`
   padding: 0 .1em;
 `;
 
-@inject('state')
-@observer
 export class ActionButton extends Component {
 
   get containerClass() {

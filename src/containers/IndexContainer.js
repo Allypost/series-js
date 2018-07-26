@@ -50,12 +50,27 @@ export class IndexContainer extends Component {
   }
 
   render() {
+    const { state } = this.props;
+    const { shows, favourites } = state;
+    const showFavourites = favourites.length && shows.length;
+
+    const { loadingStates, errorStates } = state;
+    const { shows: isLoading } = loadingStates;
+    const { shows: hasErrors } = errorStates;
+
     return (
       <div className={showPageContainer}>
-        <FavouriteShowsHeader />
-        <FavouriteShowsList />
+        <FavouriteShowsHeader show={showFavourites} />
+        <FavouriteShowsList
+          favourites={favourites}
+          shows={shows}
+        />
         <ShowsHeader />
-        <ShowsList />
+        <ShowsList
+          hasErrors={hasErrors}
+          isLoading={isLoading}
+          shows={shows}
+        />
       </div>
     );
   }

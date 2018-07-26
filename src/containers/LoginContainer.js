@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
-import { action } from 'mobx';
+import { action, observable } from 'mobx';
 
 import { login } from '../services/auth';
 
@@ -99,30 +99,27 @@ export function doLogin(appState, data, props) {
 @observer
 export class LoginContainer extends Component {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      email: '',
-      password: '',
-      showPassword: false,
-      rememberMe: true,
-    };
-  }
+  @observable
+  componentState = {
+    email: '',
+    password: '',
+    showPassword: false,
+    rememberMe: true,
+  };
 
   @action.bound
   handleUsernameChange(event) {
-    this.setState({ email: event.target.value });
+    this.componentState.email = event.target.value;
   }
 
   @action.bound
   handlePasswordChange(event) {
-    this.setState({ password: event.target.value });
+    this.componentState.password = event.target.value;
   }
 
   @action.bound
   handleRememberChange(event) {
-    this.setState({ rememberMe: event.target.checked });
+    this.componentState.rememberMe = event.target.checked;
   }
 
   @action.bound
@@ -130,18 +127,18 @@ export class LoginContainer extends Component {
     evt.preventDefault();
 
     const { state } = this.props;
-    doLogin(state, this.state, this.props);
+    doLogin(state, this.componentState, this.props);
 
     return false;
   }
 
   @action.bound
   handlePasswordToggleClick(evt) {
-    const { showPassword } = this.state;
-
-    this.setState({ showPassword: !showPassword });
-
     evt.preventDefault();
+
+    const { componentState } = this;
+
+    componentState.showPassword = !componentState.showPassword;
   }
 
   render() {
@@ -150,7 +147,7 @@ export class LoginContainer extends Component {
       password,
       rememberMe,
       showPassword,
-    } = this.state;
+    } = this.componentState;
 
     const { state } = this.props;
     const { login: isLoading } = state.loadingStates;

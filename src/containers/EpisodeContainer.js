@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import { action } from 'mobx';
 import { css } from 'emotion';
 
 import { get as getEpisodeData } from '../services/episode';
-import { getAll as getEpisodeComments } from '../services/comment';
+import { getAll as getEpisodeComments, post as postComment } from '../services/comment';
 
 import { Comment } from '../components/EpisodeContainer/Comment';
 import { LikeButton } from '../components/EpisodeContainer/Buttons/LikeButton';
@@ -135,11 +136,28 @@ export class EpisodeContainer extends Component {
     `;
   }
 
+  @action.bound
+  handleCommentPost(comment) {
+    const { state } = this.props;
+    const { isLoggedIn } = state;
+
+    if (!isLoggedIn) {
+      alert('You must log in to comment!');
+      return Promise.reject();
+    }
+
+    return postComment(state, this.episodeId, comment);
+  }
+
   render() {
     const { state } = this.props;
     const { episodeData: episode } = state;
     const { episodeData: isLoading } = state.loadingStates;
     const { comments } = state;
+
+    const { isLoggedIn } = state;
+    const { loadingStates } = state;
+    const { commenting: isCommenting } = loadingStates;
 
     const { likes } = this;
 
@@ -181,7 +199,12 @@ export class EpisodeContainer extends Component {
                   )
                 </span>
               </h4>
-              <CommentInput episodeId={this.episodeId} />
+              <CommentInput
+                canComment={isLoggedIn}
+                episodeId={this.episodeId}
+                isLoading={isCommenting}
+                onSubmit={this.handleCommentPost}
+              />
             </div>
             <div className={commentsListContainer}>
               {

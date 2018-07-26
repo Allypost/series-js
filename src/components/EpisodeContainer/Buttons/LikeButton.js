@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 import { action } from 'mobx';
 
@@ -36,8 +35,6 @@ const containerActions = css`
   }
 `;
 
-@inject('state')
-@observer
 export class LikeButton extends Component {
 
   @action.bound
@@ -47,9 +44,7 @@ export class LikeButton extends Component {
 
   render() {
     const { likesCount } = this.props;
-    const { state } = this.props;
-    const { loadingStates } = state;
-    const { episodeLike: isLoading } = loadingStates;
+    const { loading: isLoading } = this.props;
     const { disabled: isDisabled } = this.props;
 
     const classes = {

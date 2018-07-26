@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
-import { action } from 'mobx';
-import { add as addEpisode } from '../../../services/episode';
+import { action, observable } from 'mobx';
+import { observer } from 'mobx-react';
 
 const modalHeader = css`
   font-size: 2.4em;
@@ -85,25 +84,18 @@ const cancelButton = css`
   color: #ff6f00;
 `;
 
-@inject('state')
-@observer
 export class AddEpisode extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.state = {
-      title: '',
-      description: '',
-      season: 1,
-      episode: 1,
-    };
+  @observable
+  componentState = {
+    title: '',
+    description: '',
+    season: 1,
+    episode: 1,
   }
 
   get containerClass() {
-    const { state } = this.props;
-    const { modalStates } = state;
-    const { addEpisode: show } = modalStates;
+    const { show } = this.props;
 
     if (!show) {
       return css`
@@ -116,75 +108,39 @@ export class AddEpisode extends Component {
   }
 
   @action.bound
-  handleClose(evt) {
-    evt.preventDefault();
-
-    this.close();
-  }
-
-  @action
-  close() {
-    const { state } = this.props;
-    const { modalStates } = state;
-
-    modalStates.addEpisode = !modalStates.addEpisode;
-  }
-
-  @action.bound
-  handleSave(evt) {
-    evt.preventDefault();
-    const { state } = this.props;
-    const { isLoggedIn } = state;
-
-    if (!isLoggedIn) {
-      alert('You have to be logged in to do that!');
-      return;
-    }
-
-    const { showData } = state;
-    const { _id: showId } = showData;
-    const {
-      title, description, episode, season,
-    } = this.state;
-    const data = {
-      showId,
-      title,
-      description,
-      episodeNumber: String(episode),
-      season: String(season),
-    };
-
-    const { user } = state;
-    const { token } = user;
-
-    addEpisode(state, token, data)
-      .then(() => this.close());
-  }
-
-  @action.bound
   handleTitleChange(evt) {
-    this.setState({ title: evt.target.value });
+    this.componentState.title = evt.target.value;
   }
 
   @action.bound
   handleDescriptionChange(evt) {
-    this.setState({ description: evt.target.value });
+    this.componentState.description = evt.target.value;
   }
 
   @action.bound
   handleEpisodeChange(evt) {
-    this.setState({ episode: evt.target.value });
+    this.componentState.episode = evt.target.value;
   }
 
   @action.bound
   handleSeasonChange(evt) {
-    this.setState({ season: evt.target.value });
+    this.componentState.season = evt.target.value;
   }
 
+  @action.bound
+  handleAddEpisode(evt) {
+    const { onAdd } = this.props;
+
+    return onAdd(evt, this.componentState);
+  }
+
+  @observer
   render() {
     const {
       title, description, episode, season,
-    } = this.state;
+    } = this.componentState;
+
+    const { onClose } = this.props;
 
     return (
       <div className={this.containerClass}>
@@ -246,14 +202,14 @@ export class AddEpisode extends Component {
           <div className={actionsContainer}>
             <button
               className={submitButton}
-              onClick={this.handleSave}
+              onClick={this.handleAddEpisode}
               type="button"
             >
               Save
             </button>
             <button
               className={cancelButton}
-              onClick={this.handleClose}
+              onClick={onClose}
               type="button"
             >
               Cancel

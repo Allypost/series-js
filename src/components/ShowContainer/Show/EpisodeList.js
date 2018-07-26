@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { css } from 'emotion';
 
 import { Episode } from '../Episodes/Episode';
@@ -9,30 +9,23 @@ const noEpisodesHeader = css`
   font-weight: 100;
 `;
 
-@inject('state')
 @observer
 export class EpisodeList extends Component {
 
-  hideEpisodes() {
-    const { state } = this.props;
-    const { episodes: isLoading, showData: showLoading } = state.loadingStates;
-    const { episodes: hasErrors } = state.errorStates;
-    const { episodes = [] } = state;
+  get hide() {
+    const { isLoading, hasErrors, episodes } = this.props;
 
-    return hasErrors || showLoading || isLoading || !episodes.length;
+    return hasErrors || isLoading || !episodes.length;
   }
 
   errorText() {
-    const { state } = this.props;
-    const { episodes: isLoading, showData: showLoading } = state.loadingStates;
-    const { episodes: hasErrors } = state.errorStates;
-    const { episodes } = state;
+    const { isLoading, hasErrors, episodes } = this.props;
 
     if (hasErrors) {
       return 'Could not get the episode list. Trying again soon...';
     }
 
-    if (showLoading || isLoading) {
+    if (isLoading) {
       return 'Loading...';
     }
 
@@ -44,11 +37,9 @@ export class EpisodeList extends Component {
   }
 
   render() {
-    const hideEpisodes = this.hideEpisodes();
-    const { state } = this.props;
-    const { sortedEpisodes: episodes } = state;
+    const { episodes } = this.props;
 
-    if (hideEpisodes) {
+    if (this.hide) {
       return (
         <h2 className={noEpisodesHeader}>
           <em>
@@ -58,12 +49,18 @@ export class EpisodeList extends Component {
       );
     }
 
-    return episodes.map((episode) => (
-      <Episode
-        episode={episode}
-        key={episode._id}
-      />
-    ));
+    const { episodeLoading } = this.props;
+    return episodes.map((episode) => {
+      const { [episode._id]: isLoading = true } = episodeLoading;
+      
+      return (
+        <Episode
+          episode={episode}
+          isLoading={isLoading}
+          key={episode._id}
+        />
+      );
+    });
   }
 
 }

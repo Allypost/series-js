@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css } from 'emotion';
-import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
+import { PropTypes } from 'prop-types';
 
 const prettyLink = css`
   color: #ff758c;
   text-decoration: none;
 `;
 
-@inject('state')
-@observer
 export class UserDisplay extends Component {
 
   @action.bound
@@ -21,10 +19,10 @@ export class UserDisplay extends Component {
     const confirm = window.confirm('Do you want to log out?');
 
     if (confirm) {
-      const { state } = this.props;
-      Object.keys(state.user)
+      const { user } = this.props;
+      Object.keys(user)
         .forEach((key) => {
-          delete state.user[key];
+          delete user[key];
         });
     }
   }
@@ -42,8 +40,7 @@ export class UserDisplay extends Component {
   }
 
   getLogoutLink() {
-    const { state } = this.props;
-    const { user } = state;
+    const { user } = this.props;
 
     return (
       <Link
@@ -59,8 +56,7 @@ export class UserDisplay extends Component {
   }
 
   render() {
-    const { state } = this.props;
-    const { isLoggedIn } = state;
+    const { isLoggedIn } = this.props;
 
     if (isLoggedIn) {
       return this.getLogoutLink();
@@ -70,3 +66,12 @@ export class UserDisplay extends Component {
   }
 
 }
+
+UserDisplay.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+  user: PropTypes.shape({
+    token: PropTypes.string,
+    username: PropTypes.string,
+    id: PropTypes.string,
+  }).isRequired,
+};

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
 import userImagePlaceholder from '../../img/placeholder.user.png';
@@ -31,8 +30,6 @@ const username = css`
   font-weight: 600;
 `;
 
-@inject('state')
-@observer
 export class Comment extends Component {
 
   render() {

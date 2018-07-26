@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 import { action } from 'mobx';
-
-import { dislike as dislikeShow } from '../../../services/show';
 
 import { containerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle as defaultTextStyle, ActionButton } from '../../_global/Buttons/ActionButton';
 
@@ -36,26 +33,21 @@ const iconStyle = css`
   transform: rotateZ(180deg);
 `;
 
-@inject('state')
-@observer
 export class DislikeButton extends Component {
 
   @action.bound
   handleClick(evt) {
     evt.preventDefault();
 
-    const { state } = this.props;
-    const { loadingStates } = state;
-    const { showLike: isLoading } = loadingStates;
-    const { disabled: isDisabled } = this.props;
+    const { isLoading, isDisabled } = this.props;
 
     if (isDisabled || isLoading) {
-      return;
+      return null;
     }
 
-    const { showData = {} } = state;
+    const { onClick } = this.props;
 
-    dislikeShow(state, showData._id);
+    return onClick('dislike');
   }
 
   render() {
@@ -66,10 +58,7 @@ export class DislikeButton extends Component {
       icon: iconStyle,
     };
 
-    const { state } = this.props;
-    const { loadingStates } = state;
-    const { showLike: isLoading } = loadingStates;
-    const { disabled: isDisabled } = this.props;
+    const { isDisabled, isLoading } = this.props;
 
     const { dislikesCount } = this.props;
     const showText = dislikesCount > 0;

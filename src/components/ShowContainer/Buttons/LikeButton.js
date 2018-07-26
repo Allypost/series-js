@@ -1,39 +1,28 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
-
-import { like as likeShow } from '../../../services/show';
 
 import { ActionButton } from '../../_global/Buttons/ActionButton';
 
-@inject('state')
-@observer
 export class LikeButton extends Component {
 
   @action.bound
   handleClick(evt) {
     evt.preventDefault();
 
-    const { state } = this.props;
-    const { loadingStates } = state;
-    const { showLike: isLoading } = loadingStates;
-    const { disabled: isDisabled } = this.props;
+    const { isLoading, isDisabled } = this.props;
 
     if (isDisabled || isLoading) {
-      return;
+      return null;
     }
 
-    const { showData = {} } = state;
+    const { onClick } = this.props;
 
-    likeShow(state, showData._id);
+    return onClick('like');
   }
 
   render() {
     const { likesCount } = this.props;
-    const { state } = this.props;
-    const { loadingStates } = state;
-    const { showLike: isLoading } = loadingStates;
-    const { disabled: isDisabled } = this.props;
+    const { isDisabled, isLoading } = this.props;
 
     const showText = likesCount >= 0;
 

@@ -95,12 +95,7 @@ export class Episode extends Component {
 
   getSeasonText() {
     const { episode } = this.props;
-    const { state } = this.props;
-    const { loadingStates } = state;
-    const { episodesData = {} } = loadingStates;
-    const isLoadingSet = episodesData[episode._id];
-    // eslint-disable-next-line no-undefined
-    const isLoading = isLoadingSet === undefined || isLoadingSet;
+    const { isLoading } = this.props;
 
     if (isLoading) {
       return '...';

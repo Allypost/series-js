@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
 import { AddEpisodeButton } from '../Buttons/AddEpisodeButton';
 import { FavouriteButton } from '../Buttons/FavouriteButton';
-import { AddEpisode } from './AddEpisode';
 
 const showActionsContainer = css`
   display: inline-grid;
@@ -16,17 +14,13 @@ const showActionsContainer = css`
   justify-items: center;
 `;
 
-@inject('state')
-@observer
 export class ShowActions extends Component {
 
   render() {
-    const { state } = this.props;
-    const { showData: isLoading = true } = state.loadingStates;
-    const { showData: hasErrors = true } = state.errorStates;
-    const { isLoggedIn } = state;
+    const { isFavourite, show } = this.props;
+    const { onAddEpisode, onFavourite } = this.props;
 
-    if (!isLoggedIn || isLoading || hasErrors) {
+    if (!show) {
       return (
         null
       );
@@ -34,9 +28,11 @@ export class ShowActions extends Component {
 
     return (
       <div className={showActionsContainer}>
-        <AddEpisodeButton />
-        <FavouriteButton />
-        <AddEpisode />
+        <AddEpisodeButton onClick={onAddEpisode} />
+        <FavouriteButton
+          isFavourite={isFavourite}
+          onClick={onFavourite}
+        />
       </div>
     );
   }

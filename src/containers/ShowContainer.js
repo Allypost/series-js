@@ -7,12 +7,14 @@ import defaultPoster from '../img/placeholder.png';
 
 import { BackButton } from '../components/ShowContainer/Buttons/BackButton';
 
-import { get as getShowData } from '../services/show';
-import { getAll as getShowEpisodes } from '../services/episode';
+import { get as getShowData, like as likeShow, dislike as dislikeShow } from '../services/show';
+import { getAll as getShowEpisodes, add as addEpisode } from '../services/episode';
 import { ShowTitle } from '../components/ShowContainer/Show/ShowTitle';
 import { ShowActions } from '../components/ShowContainer/Show/ShowActions';
 import { ShowDescription } from '../components/ShowContainer/Show/ShowDescription';
 import { EpisodeList } from '../components/ShowContainer/Show/EpisodeList';
+import { AddEpisode } from '../components/ShowContainer/Show/AddEpisode';
+
 
 const pageContainer = css`
   display: inline-grid;
@@ -138,10 +140,126 @@ export class ShowContainer extends Component {
     return backgroundFader;
   }
 
+  @action.bound
+  handleCloseAddEpisodeModal(evt) {
+    evt.preventDefault();
+
+    this.closeAddEpisodeModal();
+  }
+
+  @action
+  closeAddEpisodeModal() {
+    const { state } = this.props;
+    const { modalStates } = state;
+
+    modalStates.addEpisode = !modalStates.addEpisode;
+  }
+
+  @action.bound
+  handleAddEpisode(evt, formData) {
+    evt.preventDefault();
+    const { state } = this.props;
+    const { isLoggedIn } = state;
+
+    if (!isLoggedIn) {
+      alert('You have to be logged in to do that!');
+      return;
+    }
+
+    const { showData } = state;
+    const { _id: showId } = showData;
+    const {
+      title, description, episode, season,
+    } = formData;
+    const data = {
+      showId, title, description, episodeNumber: String(episode), season: String(season),
+    };
+
+    const { user } = state;
+    const { token } = user;
+
+    addEpisode(state, token, data)
+      .then(() => this.closeAddEpisodeModal());
+  }
+
+  get showAddEpisodeModal() {
+    const { state } = this.props;
+    const { modalStates } = state;
+    const { addEpisode: showModal } = modalStates;
+
+    return showModal;
+  }
+
+  @action.bound
+  handleAddEpisodeClick(evt) {
+    evt.preventDefault();
+
+    const { state } = this.props;
+    const { modalStates } = state;
+
+    modalStates.addEpisode = !modalStates.addEpisode;
+  }
+
+  get isFavourite() {
+    const { state } = this.props;
+    const { showData } = state;
+
+    return showData.isFavourite;
+  }
+
+  getNewFavouritesList() {
+    const { state } = this.props;
+    const { showData, favourites: oldFavourites } = state;
+
+    if (this.isFavourite) {
+      return oldFavourites.slice().filter((id) => id !== showData._id);
+    }
+
+    return [showData._id, ...oldFavourites];
+  }
+
+  @action.bound
+  handleFavouritesClick(evt) {
+    evt.preventDefault();
+    const newFavourites = this.getNewFavouritesList();
+
+    const { state } = this.props;
+    state.favourites.replace(newFavourites);
+  }
+
+  @action.bound
+  handleShowAction(type) {
+    const { state } = this.props;
+    const { showData } = state;
+
+    switch (type) {
+      case 'like':
+        return likeShow(state, showData._id);
+      case 'dislike':
+        return dislikeShow(state, showData._id);
+      default:
+        return null;
+    }
+  }
+
   render() {
     const { state } = this.props;
     const { showData } = state;
+    const { episodes } = state;
     const imageUrl = showData.imageUrl ? `https://api.infinum.academy${showData.imageUrl}` : defaultPoster;
+
+    const { isLoggedIn } = state;
+    const { loadingStates, errorStates } = state;
+
+    const { showData: isLoading } = loadingStates;
+    const { showData: hasErrors } = errorStates;
+
+    const { episodes: episodesLoading } = loadingStates;
+    const { episodes: episodesErrors } = errorStates;
+
+    const { showLike } = loadingStates;
+
+    const showActions = isLoggedIn && !isLoading && !hasErrors;
 
     return (
       <div
@@ -150,11 +268,34 @@ export class ShowContainer extends Component {
       >
         <BackButton />
         <div className={showContainer}>
-          <ShowTitle />
-          <ShowActions />
+          <ShowTitle
+            hasErrors={hasErrors}
+            isLiking={showLike}
+            isLoading={isLoading}
+            isLoggedIn={isLoggedIn}
+            likesCount={showData.likesCount}
+            onAction={this.handleShowAction}
+          >
+            {showData.title}
+          </ShowTitle>
+          <ShowActions
+            isFavourite={showData.isFavourite}
+            onAddEpisode={this.handleAddEpisodeClick}
+            onFavourite={this.handleFavouritesClick}
+            show={showActions}
+          />
+          <AddEpisode
+            onAdd={this.handleAddEpisode}
+            onClose={this.handleCloseAddEpisodeModal}
+            show={this.showAddEpisodeModal}
+          />
 
           <div className={leftSide}>
-            <ShowDescription />
+            <ShowDescription
+              description={showData.description}
+              hasErrors={hasErrors}
+              isLoading={isLoading}
+            />
 
             <h3 className={episodesHeader}>
               Seasons & episodes
@@ -162,7 +303,12 @@ export class ShowContainer extends Component {
 
             <div className={spacer} />
 
-            <EpisodeList />
+            <EpisodeList
+              episodeLoading={loadingStates.episodesData}
+              episodes={episodes}
+              hasErrors={episodesErrors}
+              isLoading={isLoading || episodesLoading}
+            />
           </div>
 
           <div className={rightSide}>

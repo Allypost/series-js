@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 
 const showDescription = css`
@@ -10,15 +9,11 @@ const showDescription = css`
   color: #616161;
 `;
 
-@inject('state')
-@observer
 export class ShowDescription extends Component {
 
-  getText() {
-    const { state } = this.props;
-    const { showData: isLoading = true } = state.loadingStates;
-    const { showData: hasErrors = true } = state.errorStates;
-    const { showData } = state;
+  get text() {
+    const { isLoading, hasErrors } = this.props;
+    const { description } = this.props;
 
     if (isLoading) {
       return (
@@ -36,7 +31,7 @@ export class ShowDescription extends Component {
       );
     }
 
-    if (!showData.description) {
+    if (!description) {
       return (
         <em>
           Show has no description...
@@ -44,13 +39,13 @@ export class ShowDescription extends Component {
       );
     }
 
-    return showData.description;
+    return description;
   }
 
   render() {
     return (
       <div className={showDescription}>
-        {this.getText()}
+        {this.text}
       </div>
     );
   }

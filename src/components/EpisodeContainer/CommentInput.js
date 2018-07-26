@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
+import { PropTypes } from 'prop-types';
 import { css } from 'emotion';
-import { action } from 'mobx';
-
-import { post as postComment } from '../../services/comment';
+import { action, observable, runInAction } from 'mobx';
 
 const commentsFormContainer = css`
   text-align: right;
@@ -75,21 +73,16 @@ const input = css`
   }
 `;
 
-@inject('state')
-@observer
 export class CommentInput extends Component {
 
-  constructor(...args) {
-    super(...args);
-
-    this.state = {
-      comment: '',
-    };
-  }
+  @observable
+  componentState = {
+    comment: '',
+  };
 
   @action.bound
   handleCommentInputChange(evt) {
-    this.setState({ comment: evt.target.value });
+    this.componentState.comment = evt.target.value;
   }
 
   @action.bound
@@ -117,31 +110,20 @@ export class CommentInput extends Component {
   }
 
   postComment() {
-    const { comment } = this.state;
-    const { episodeId } = this.props;
-    const { state } = this.props;
-    const { isLoggedIn } = state;
+    const { onSubmit } = this.props;
+    const { comment } = this.componentState;
 
-    if (!isLoggedIn) {
-      alert('You must log in to comment!');
-      return;
-    }
-
-    postComment(state, episodeId, comment)
-      .then((success) => {
-        if (success) {
-          this.setState({ comment: '' });
-        } else {
-          alert('Something went wrong. Please try again.');
-        }
-      });
+    onSubmit(comment)
+      .then(() => runInAction(() => {
+        this.componentState.comment = '';
+      }))
+      .catch(() => alert('Something went wrong. Please try again.'));
   }
 
   get placeholderText() {
-    const { state } = this.props;
-    const { isLoggedIn } = state;
+    const { canComment } = this.props;
 
-    if (isLoggedIn) {
+    if (canComment) {
       return 'Post a comment...';
     }
 
@@ -149,14 +131,12 @@ export class CommentInput extends Component {
   }
 
   render() {
-    const { comment } = this.state;
+    const { comment } = this.componentState;
 
-    const { state } = this.props;
-    const { isLoggedIn } = state;
-    const { loadingStates } = state;
-    const { commenting: isLoading } = loadingStates;
+    const { canComment } = this.props;
+    const { isLoading } = this.props;
 
-    const disabled = isLoading || !isLoggedIn;
+    const disabled = isLoading || !canComment;
 
     return (
       <div className={commentsFormContainer}>
@@ -181,3 +161,13 @@ export class CommentInput extends Component {
   }
 
 }
+
+CommentInput.propTypes = {
+  canComment: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func,
+};
+
+CommentInput.defaultProps = {
+  onSubmit: () => { },
+};

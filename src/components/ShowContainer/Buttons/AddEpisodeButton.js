@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
-import { action } from 'mobx';
+import { PropTypes } from 'prop-types';
 import { css } from 'emotion';
 
 import { containerStyle as defaultContainerStyle, containerActions as defaultContainerActions, iconStyle as defaultIconStyle, textStyle } from '../../_global/Buttons/ActionButtonStyles';
@@ -18,19 +17,7 @@ const iconStyle = css`
   vertical-align: baseline;
 `;
 
-@inject('state')
-@observer
 export class AddEpisodeButton extends Component {
-
-  @action.bound
-  handleClick(evt) {
-    evt.preventDefault();
-
-    const { state } = this.props;
-    const { modalStates } = state;
-
-    modalStates.addEpisode = !modalStates.addEpisode;
-  }
 
   render() {
     const classes = {
@@ -39,7 +26,7 @@ export class AddEpisodeButton extends Component {
       text: textStyle,
     };
 
-    const { onClick = this.handleClick } = this.props;
+    const { onClick } = this.props;
 
     return (
       <ActionButton
@@ -52,3 +39,11 @@ export class AddEpisodeButton extends Component {
   }
 
 }
+
+AddEpisodeButton.propTypes = {
+  onClick: PropTypes.func,
+};
+
+AddEpisodeButton.defaultProps = {
+  onClick: () => { },
+};
