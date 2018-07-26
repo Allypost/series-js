@@ -89,18 +89,12 @@ export class RegisterContainer extends Component {
   };
 
   @action.bound
-  handleUsernameChange(event) {
-    this.componentState.email = event.target.value;
-  }
+  handleInputChange(inputName, inputValue = 'value') {
+    return action((evt) => {
+      const { [inputValue]: value } = evt.target;
 
-  @action.bound
-  handlePasswordChange(event) {
-    this.componentState.password = event.target.value;
-  }
-
-  @action.bound
-  handleRememberChange(event) {
-    this.componentState.logMeIn = event.target.checked;
+      this.componentState[inputName] = value;
+    });
   }
 
   @action.bound
@@ -168,7 +162,7 @@ export class RegisterContainer extends Component {
             </span>
             <input
               className={cssUsername}
-              onChange={this.handleUsernameChange}
+              onChange={this.handleInputChange('email')}
               required
               type="email"
               value={email}
@@ -181,7 +175,7 @@ export class RegisterContainer extends Component {
             <div className={passwordContainer}>
               <input
                 className={cssPassword}
-                onChange={this.handlePasswordChange}
+                onChange={this.handleInputChange('password')}
                 required
                 type={showPassword ? 'text' : 'password'}
                 value={password}
@@ -202,7 +196,7 @@ export class RegisterContainer extends Component {
             <label className={cssRemember}>
               <input
                 defaultChecked={logMeIn}
-                onChange={this.handleRememberChange}
+                onChange={this.handleInputChange('logMeIn')}
                 type="checkbox"
               />
               Log me in

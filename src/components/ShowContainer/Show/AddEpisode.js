@@ -108,23 +108,11 @@ export class AddEpisode extends Component {
   }
 
   @action.bound
-  handleTitleChange(evt) {
-    this.componentState.title = evt.target.value;
-  }
-
-  @action.bound
-  handleDescriptionChange(evt) {
-    this.componentState.description = evt.target.value;
-  }
-
-  @action.bound
-  handleEpisodeChange(evt) {
-    this.componentState.episode = evt.target.value;
-  }
-
-  @action.bound
-  handleSeasonChange(evt) {
-    this.componentState.season = evt.target.value;
+  handleInputChange(inputName) {
+    return action((evt) => {
+      const { value } = evt.target;
+      this.componentState[inputName] = value;
+    });
   }
 
   @action.bound
@@ -157,7 +145,7 @@ export class AddEpisode extends Component {
           <div>
             <input
               className={titleStyle}
-              onChange={this.handleTitleChange}
+              onChange={this.handleInputChange('title')}
               required
               type="text"
               value={title}
@@ -169,7 +157,7 @@ export class AddEpisode extends Component {
           <div>
             <textarea
               className={descriptionStyle}
-              onChange={this.handleDescriptionChange}
+              onChange={this.handleInputChange('description')}
               required
               value={description}
             />
@@ -183,7 +171,7 @@ export class AddEpisode extends Component {
             </span>
             <input
               className={numbersStyle}
-              onChange={this.handleSeasonChange}
+              onChange={this.handleInputChange('season')}
               required
               type="number"
               value={season}
@@ -193,7 +181,7 @@ export class AddEpisode extends Component {
             </span>
             <input
               className={numbersStyle}
-              onChange={this.handleEpisodeChange}
+              onChange={this.handleInputChange('episode')}
               required
               type="number"
               value={episode}
