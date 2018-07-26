@@ -4,7 +4,7 @@ import { action } from 'mobx';
 import { css } from 'emotion';
 
 import { get as getEpisodeData } from '../services/episode';
-import { getAll as getEpisodeComments, post as postComment } from '../services/comment';
+import { getAll as getEpisodeComments, post as postComment, remove as deleteComment } from '../services/comment';
 
 import { Comment } from '../components/EpisodeContainer/Comment';
 import { LikeButton } from '../components/EpisodeContainer/Buttons/LikeButton';
@@ -140,6 +140,21 @@ export class EpisodeContainer extends Component {
     return postComment(state, this.episodeId, comment);
   }
 
+  @action.bound
+  handleCommentDelete(commentId) {
+    const { state } = this.props;
+    const { user } = state;
+    const { comments } = state;
+    const comment = comments.find((comment) => comment.userEmail === user.username);
+
+    if (!comment) {
+      alert('You can only delete your own comments!');
+      return;
+    }
+
+    deleteComment(state, commentId);
+  }
+
   render() {
     const { state } = this.props;
     const { episodeData: episode } = state;
@@ -151,6 +166,8 @@ export class EpisodeContainer extends Component {
     const { commenting: isCommenting } = loadingStates;
 
     const { likes } = this;
+
+    const { user } = state;
 
     if (isLoading) {
       return 'Loading...';
@@ -203,6 +220,8 @@ export class EpisodeContainer extends Component {
                   <Comment
                     comment={comment}
                     key={comment._id}
+                    onDelete={this.handleCommentDelete}
+                    user={user}
                   />
                 ))
               }

@@ -43,3 +43,7 @@ export async function get(model, cbObj) {
 export async function post(model, token, data, cbObj) {
   return doFetch('POST', model, { data, token, cbObj });
 }
+
+export async function del(model, token, cbObj) {
+  return doFetch('DELETE', model, { token, cbObj });
+}
