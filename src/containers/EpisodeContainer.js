@@ -32,15 +32,6 @@ const episodeData = css`
   grid-template-columns: repeat(6, 1fr);
 `;
 
-const episodeTitle = css`
-`;
-
-const episodeDescription = css`
-`;
-
-const commentsInputContainer = css`
-`;
-
 const commentsHeader = css`
   margin-bottom: .8em;
 `;
@@ -182,13 +173,13 @@ export class EpisodeContainer extends Component {
         </div>
         <div className={episodeData}>
           <div className={episodeDataContainer}>
-            <h2 className={episodeTitle}>
+            <h2>
               {episode.title}
             </h2>
-            <div className={episodeDescription}>
+            <div>
               {episode.description}
             </div>
-            <div className={commentsInputContainer}>
+            <div>
               <h4 className={commentsHeader}>
                 <span className={commentsHeaderText}>
                   Comments
