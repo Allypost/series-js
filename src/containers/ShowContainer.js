@@ -232,12 +232,14 @@ export class ShowContainer extends Component {
   handleShowAction(type) {
     const { state } = this.props;
     const { showData } = state;
+    const { user } = state;
+    const { token } = user;
 
     switch (type) {
       case 'like':
-        return likeShow(state, showData._id);
+        return likeShow(state, showData._id, token);
       case 'dislike':
-        return dislikeShow(state, showData._id);
+        return dislikeShow(state, showData._id, token);
       default:
         return null;
     }
