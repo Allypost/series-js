@@ -9,6 +9,15 @@ import { LoginContainer } from '../LoginContainer';
 @observer
 export class LoginContainerModal extends Component {
 
+  componentDidMount() {
+    const { state } = this.props;
+    const { isLoggedIn } = state;
+
+    if (isLoggedIn) {
+      this.handleClose(new Event(null));
+    }
+  }
+
   @action.bound
   handleClose(evt) {
     evt.preventDefault();

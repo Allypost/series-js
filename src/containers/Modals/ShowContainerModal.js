@@ -11,6 +11,15 @@ import { uploadFile } from '../../services/media';
 @observer
 export class ShowContainerModal extends Component {
 
+  componentDidMount() {
+    const { state } = this.props;
+    const { isLoggedIn } = state;
+
+    if (!isLoggedIn) {
+      this.handleClose(new Event(null));
+    }
+  }
+
   get showId() {
     const { match } = this.props;
     const { params } = match;
