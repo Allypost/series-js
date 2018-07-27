@@ -139,6 +139,11 @@ export class AddEpisode extends Component {
   @action.bound
   handleAddEpisode(evt) {
     const { onAdd } = this.props;
+    const { isLoading } = this.props;
+
+    if (isLoading) {
+      return null;
+    }
 
     return onAdd(evt, this.componentState);
   }
@@ -154,6 +159,7 @@ export class AddEpisode extends Component {
     } = this.componentState;
 
     const { onClose } = this.props;
+    const { isLoading } = this.props;
 
     return (
       <div>
@@ -166,6 +172,7 @@ export class AddEpisode extends Component {
           </legend>
           <Input
             className={inputStyle}
+            disabled={isLoading}
             floatingLabel
             label="Episode title"
             onChange={this.handleInputChange('title')}
@@ -180,6 +187,7 @@ export class AddEpisode extends Component {
               <Select
                 className={selectInput}
                 defaultValue={season}
+                disabled={isLoading}
                 onChange={this.handleInputChange('season')}
                 required
               >
@@ -202,6 +210,7 @@ export class AddEpisode extends Component {
               <Select
                 className={selectInput}
                 defaultValue={episode}
+                disabled={isLoading}
                 onChange={this.handleInputChange('episode')}
                 required
               >
@@ -220,6 +229,7 @@ export class AddEpisode extends Component {
           </div>
           <Textarea
             className={descriptionStyle}
+            disabled={isLoading}
             floatingLabel
             label="Episode description"
             onChange={this.handleInputChange('description')}
@@ -228,8 +238,13 @@ export class AddEpisode extends Component {
           <Button
             className={submitButton}
             color="accent"
+            disabled={isLoading}
           >
-            Add new episode
+            {
+              isLoading ?
+                'Adding episode...' :
+                'Add new episode'
+            }
           </Button>
         </Form>
         <Link

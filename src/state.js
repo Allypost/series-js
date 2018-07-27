@@ -108,6 +108,7 @@ class State {
     showData: false,
     showLike: false,
     episodes: false,
+    addEpisode: false,
     comments: false,
     commenting: false,
     episodeData: false,

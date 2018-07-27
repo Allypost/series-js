@@ -31,6 +31,7 @@ export class ShowContainerModal extends Component {
   handleAddEpisode(evt, data) {
     evt.preventDefault();
 
+    const { history } = this.props;
     const { state } = this.props;
     const { user } = state;
     const { token } = user;
@@ -43,7 +44,8 @@ export class ShowContainerModal extends Component {
       season: String(data.season),
     };
 
-    addEpisode(state, token, postData);
+    addEpisode(state, token, postData)
+      .then(() => history.push('./'));
   }
 
   render() {
