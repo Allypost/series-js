@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { PropTypes } from 'prop-types';
 import { css, cx } from 'emotion';
 import { action } from 'mobx';
 
@@ -57,3 +58,15 @@ export class Modal extends Component {
   }
 
 }
+
+Modal.propTypes = {
+  children: PropTypes.instanceOf(Object),
+  className: PropTypes.string,
+  onClose: PropTypes.func,
+};
+
+Modal.defaultProps = {
+  children: null,
+  className: '',
+  onClose: () => { },
+};
