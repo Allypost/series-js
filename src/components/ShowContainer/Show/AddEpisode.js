@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { css, cx } from 'emotion';
-import { action, observable } from 'mobx';
+import { action, observe, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 
 import Form from 'muicss/lib/react/form';
@@ -10,6 +10,7 @@ import Textarea from 'muicss/lib/react/textarea';
 import Option from 'muicss/lib/react/option';
 import Select from 'muicss/lib/react/select';
 import Button from 'muicss/lib/react/button';
+import Dropzone from 'react-dropzone';
 
 const container = css`
   postition: relative;
@@ -104,16 +105,75 @@ const cancelButtonIcon = css`
   line-height: inherit;
 `;
 
+const dropzoneContainer = css`
+  width: 100%;
+`;
+
+const dropzone = css`
+  display: grid;
+  cursor: pointer;
+  width: 100%;
+  min-height: 10em;
+  box-sizing: border-box;
+  padding: 1em;
+  border: 2px dashed #eeeeee;
+  align-items: center;
+  justify-items: center;
+  line-height: 1em;
+  text-align: center;
+`;
+
+const dropzoneUploading = css`
+  border-color: yellow;
+`;
+
+const cameraIcon = css`
+  color: #ff758c;
+`;
+
+const browseText = css`
+  color: #ff758c;
+`;
+
+const dropzoneContent = css`
+  height: 100%;
+  width: 50%;
+`;
+
+const dropzoneChange = css`
+  color: #ff758c;
+  padding-top: 1.2em;
+`;
+
+const dropzoneImagePreview = css`
+  height: 6em;
+`;
+
 export class AddEpisode extends Component {
+
+  componentDidMount() {
+    observe(this.componentState, 'image', this.imageChangeObserver);
+  }
+
+  componentWillUnmount() {
+    const { image } = this.componentState;
+
+    if (image) {
+      window.URL.revokeObjectURL(image.preview);
+    }
+  }
 
   @observable
   componentState = {
+    mediaId: '',
     title: '',
     description: '',
     season: 1,
     episode: 1,
     seasons: [...Array(8).keys()].map((i) => i + 1),
     episodes: [...Array(40).keys()].map((i) => i + 1),
+    image: null,
+    uploading: false,
   }
 
   get containerClass() {
@@ -132,9 +192,34 @@ export class AddEpisode extends Component {
   @observer
   get allowSubmit() {
     const { isLoading } = this.props;
-    const { title } = this.componentState;
+    const { title, uploading } = this.componentState;
 
-    return !isLoading && title.length;
+    return !isLoading && !uploading && title.length;
+  }
+
+  @action.bound
+  imageChangeObserver(diff) {
+    const { oldValue, newValue } = diff;
+
+    if (oldValue) {
+      window.URL.revokeObjectURL(oldValue.preview);
+    }
+
+    if (newValue) {
+      const { onImage } = this.props;
+
+      this.componentState.mediaId = '';
+      this.componentState.uploading = true;
+      onImage(newValue)
+        .then(({ _id }) => {
+          runInAction(() => {
+            this.componentState.mediaId = _id;
+          });
+        })
+        .finally(runInAction(() => {
+          this.componentState.uploading = false;
+        }));
+    }
   }
 
   @action.bound
@@ -157,14 +242,23 @@ export class AddEpisode extends Component {
     return onAdd(evt, this.componentState);
   }
 
+  @action.bound
+  handleFile(files = []) {
+    this.componentState.image = files.pop();
+  }
+
   @observer
   render() {
     const {
-      title, description, episode, season,
+      title, description, episode, season, image,
     } = this.componentState;
 
     const {
       episodes, seasons,
+    } = this.componentState;
+
+    const {
+      uploading,
     } = this.componentState;
 
     const { onClose } = this.props;
@@ -179,6 +273,44 @@ export class AddEpisode extends Component {
           <legend className={modalHeader}>
             Add new episode
           </legend>
+          <div className={dropzoneContainer}>
+            <Dropzone
+              className={cx(dropzone, { [dropzoneUploading]: uploading })}
+              multiple={false}
+              onDrop={this.handleFile}
+            >
+              {
+                image ?
+                  (
+                    <div className={dropzoneContent}>
+                      <img
+                        alt="Episode thumbnail preview"
+                        className={dropzoneImagePreview}
+                        src={image.preview}
+                      />
+                      <p className={dropzoneChange}>
+                        Change Photo
+                      </p>
+                    </div>
+                  ) :
+                  (
+                    <div>
+                      <p>
+                        <i className={cx('material-icons', cameraIcon)}>
+                          photo_camera
+                        </i>
+                      </p>
+                      <p>
+                        Drag your image here or
+                      </p>
+                      <p className={browseText}>
+                        browse
+                      </p>
+                    </div>
+                  )
+              }
+            </Dropzone>
+          </div>
           <Input
             className={inputStyle}
             disabled={isLoading}

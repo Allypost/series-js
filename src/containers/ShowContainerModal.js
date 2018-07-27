@@ -5,6 +5,7 @@ import { action } from 'mobx';
 import { Modal } from '../components/_global/Modal';
 import { AddEpisode } from '../components/ShowContainer/Show/AddEpisode';
 import { add as addEpisode } from '../services/episode';
+import { uploadFile } from '../services/media';
 
 @inject('state')
 @observer
@@ -38,6 +39,7 @@ export class ShowContainerModal extends Component {
 
     const postData = {
       showId: this.showId,
+      mediaId: data.mediaId,
       title: data.title,
       description: data.description,
       episodeNumber: String(data.episode),
@@ -46,6 +48,18 @@ export class ShowContainerModal extends Component {
 
     addEpisode(state, token, postData)
       .then(() => history.push('./'));
+  }
+
+  @action.bound
+  handleImage(image) {
+    const { state } = this.props;
+    const { user } = state;
+    const { token } = user;
+
+    const form = new FormData();
+    form.append('file', image);
+
+    return uploadFile(form, token);
   }
 
   render() {
@@ -62,6 +76,7 @@ export class ShowContainerModal extends Component {
           isLoading={isLoading}
           onAdd={this.handleAddEpisode}
           onClose={this.handleClose}
+          onImage={this.handleImage}
           show
         />
       </Modal>
