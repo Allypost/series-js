@@ -195,8 +195,14 @@ export class ShowContainer extends Component {
     evt.preventDefault();
 
     const { history } = this.props;
+    const { location } = this.props;
     
-    history.push('./add-episode');
+    // Just to keep me sane
+    const { pathname: pathName } = location;
+    
+    const trimmedPathName = pathName.replace(/\/$/, '');
+
+    history.push(`${trimmedPathName}/add-episode`);
   }
 
   get isFavourite() {
