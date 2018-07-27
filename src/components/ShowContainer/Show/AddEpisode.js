@@ -14,7 +14,8 @@ import Button from 'muicss/lib/react/button';
 const container = css`
   postition: relative;
   display: grid;
-  min-width: 400px;
+  width: 50vw;
+  max-width: 500px;
   grid-row-gap: 1em;
 `;
 
@@ -128,6 +129,14 @@ export class AddEpisode extends Component {
     return container;
   }
 
+  @observer
+  get allowSubmit() {
+    const { isLoading } = this.props;
+    const { title } = this.componentState;
+
+    return !isLoading && title.length;
+  }
+
   @action.bound
   handleInputChange(inputName) {
     return action((evt) => {
@@ -238,7 +247,7 @@ export class AddEpisode extends Component {
           <Button
             className={submitButton}
             color="accent"
-            disabled={isLoading}
+            disabled={!this.allowSubmit}
           >
             {
               isLoading ?
