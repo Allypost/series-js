@@ -2,8 +2,8 @@ import { observer, inject } from 'mobx-react';
 import React, { Component } from 'react';
 import { action } from 'mobx';
 
-import { Modal } from '../components/_global/Modal';
-import { LoginContainer } from './LoginContainer';
+import { Modal } from '../../components/_global/Modal';
+import { LoginContainer } from '../LoginContainer';
 
 @inject('state')
 @observer

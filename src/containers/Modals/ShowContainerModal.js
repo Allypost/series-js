@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { action } from 'mobx';
 
-import { Modal } from '../components/_global/Modal';
-import { AddEpisode } from '../components/ShowContainer/Show/AddEpisode';
-import { add as addEpisode } from '../services/episode';
-import { uploadFile } from '../services/media';
+import { Modal } from '../../components/_global/Modal';
+import { AddEpisode } from '../../components/ShowContainer/Show/AddEpisode';
+import { add as addEpisode } from '../../services/episode';
+import { uploadFile } from '../../services/media';
 
 @inject('state')
 @observer

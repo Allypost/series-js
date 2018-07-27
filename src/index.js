@@ -9,14 +9,14 @@ import state from './state';
 
 import { IndexContainer } from './containers/IndexContainer';
 import { ShowContainer } from './containers/ShowContainer';
-import { ShowContainerModal } from './containers/ShowContainerModal';
+import { ShowContainerModal } from './containers/Modals/ShowContainerModal';
 import { NavBar } from './containers/NavBar';
 import { Footer } from './containers/Footer';
 import { LoginContainer } from './containers/LoginContainer';
 import { LogoutContainer } from './containers/LogoutContainer';
 import { RegisterContainer } from './containers/RegisterContainer';
 import { EpisodeContainer } from './containers/EpisodeContainer';
-import { LoginContainerModal } from './containers/LoginContainerModal';
+import { LoginContainerModal } from './containers/Modals/LoginContainerModal';
 
 const routes = [
   {
