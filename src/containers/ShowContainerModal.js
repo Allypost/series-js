@@ -10,7 +10,9 @@ import { AddEpisode } from '../components/ShowContainer/Show/AddEpisode';
 export class ShowContainerModal extends Component {
 
   @action.bound
-  handleClose() {
+  handleClose(evt) {
+    evt.preventDefault();
+
     const { history } = this.props;
 
     history.push('./');
