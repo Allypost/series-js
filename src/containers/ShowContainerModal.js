@@ -47,7 +47,13 @@ export class ShowContainerModal extends Component {
     };
 
     addEpisode(state, token, postData)
-      .then(() => history.push('./'));
+      .then((success) => {
+        if (success) {
+          history.push('./');
+        } else {
+          alert('Something went wrong. Please try again.');
+        }
+      });
   }
 
   @action.bound

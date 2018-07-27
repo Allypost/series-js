@@ -27,10 +27,17 @@ export async function add(state, token, data) {
   });
   try {
     const episode = await _post('episodes', token, data);
+
+    if (Array.isArray(episode)) {
+      throw new Error(episode);
+    }
+
     runInAction(() => {
       state.episodes.push(episode);
       state.errorStates.addEpisode = false;
     });
+
+    return true;
   } catch (e) {
     runInAction(() => {
       state.errorStates.addEpisode = true;
@@ -39,6 +46,8 @@ export async function add(state, token, data) {
   runInAction(() => {
     state.loadingStates.addEpisode = false;
   });
+
+  return false;
 }
 
 async function getForList(state, episodeId) {
