@@ -10,6 +10,7 @@ const backBtnContainer = css`
 const backBtnLink = css`
   display: inline-block;
   margin: 1.3em 0;
+  text-decoration: none !important;
 `;
 
 const backBtnActions = css`
