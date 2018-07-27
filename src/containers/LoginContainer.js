@@ -75,6 +75,14 @@ const eyeImage = css`
   height: 1.2em;
 `;
 
+const inputLabel = css`
+  display: block;
+`;
+
+const labelContainer = css`
+  cursor: pointer;
+`;
+
 export function doLogin(appState, data, props) {
   return login(appState, data)
     .then((token) => {
@@ -152,8 +160,8 @@ export class LoginContainer extends Component {
           method="POST"
           onSubmit={this.handleLogin}
         >
-          <label className={css`cursor: pointer;`}>
-            <span>
+          <label className={labelContainer}>
+            <span className={inputLabel}>
               My username is
             </span>
             <input
@@ -164,8 +172,8 @@ export class LoginContainer extends Component {
               value={email}
             />
           </label>
-          <label className={css`cursor: pointer;`}>
-            <span>
+          <label className={labelContainer}>
+            <span className={inputLabel}>
               and my password is
             </span>
             <div className={passwordContainer}>

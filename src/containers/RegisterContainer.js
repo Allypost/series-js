@@ -76,6 +76,14 @@ const eyeImage = css`
   height: 1.2em;
 `;
 
+const inputLabel = css`
+  display: block;
+`;
+
+const labelContainer = css`
+  cursor: pointer;
+`;
+
 @inject('state')
 @observer
 export class RegisterContainer extends Component {
@@ -156,8 +164,8 @@ export class RegisterContainer extends Component {
           method="POST"
           onSubmit={this.handleLogin}
         >
-          <label className={css`cursor: pointer;`}>
-            <span>
+          <label className={labelContainer}>
+            <span className={inputLabel}>
               My username will be
             </span>
             <input
@@ -168,8 +176,8 @@ export class RegisterContainer extends Component {
               value={email}
             />
           </label>
-          <label className={css`cursor: pointer;`}>
-            <span>
+          <label className={labelContainer}>
+            <span className={inputLabel}>
               and my password will be
             </span>
             <div className={passwordContainer}>
