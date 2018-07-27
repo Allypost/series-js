@@ -17,8 +17,9 @@ const container = css`
 `;
 
 const content = css`
+  position: relative;
   align-self: center;
-  padding: 2.4em 3em;
+  padding: 1.5em;
   border-radius: 4px;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
