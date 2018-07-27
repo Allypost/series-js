@@ -9,6 +9,7 @@
     "husky": "^0.14.3",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
+    "muicss": "^0.9.39",
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
