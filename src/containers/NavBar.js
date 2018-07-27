@@ -1,6 +1,7 @@
 import { observer, inject } from 'mobx-react';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { action } from 'mobx';
 import { css } from 'emotion';
 import { UserDisplay } from '../components/_global/NavBar/UserDisplay';
 
@@ -40,6 +41,14 @@ const userContainer = css`
 @observer
 export class NavBar extends Component {
 
+  @action.bound
+  handleLogin() {
+    const { state } = this.props;
+    const { modalStates } = state;
+
+    modalStates.login = true;
+  }
+
   render() {
     const { state } = this.props;
     const { user, isLoggedIn } = state;
@@ -58,6 +67,7 @@ export class NavBar extends Component {
         <div className={userContainer}>
           <UserDisplay
             isLoggedIn={isLoggedIn}
+            onLogin={this.handleLogin}
             user={user}
           />
         </div>

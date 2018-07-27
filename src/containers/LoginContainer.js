@@ -83,23 +83,29 @@ const labelContainer = css`
   cursor: pointer;
 `;
 
-export function doLogin(appState, data, props) {
+const defaultCallback = (props, token) => {
+  if (!token) {
+    alert('Invalid credentials');
+    return token;
+  }
+
+  const { history } = props;
+
+  if (history && history.push) {
+    history.push('/');
+  } else {
+    window.location.href = '/';
+  }
+
+  return token;
+};
+
+export function doLogin(appState, data, props, callback = null) {
   return login(appState, data)
     .then((token) => {
-      if (!token) {
-        alert('Invalid credentials');
-        return token;
-      }
+      const cb = callback || defaultCallback.bind(this, props);
 
-      const { history } = props;
-
-      if (history && history.push) {
-        history.push('/');
-      } else {
-        window.location.href = '/';
-      }
-
-      return token;
+      return cb(token);
     });
 }
 
@@ -129,7 +135,9 @@ export class LoginContainer extends Component {
     evt.preventDefault();
 
     const { state } = this.props;
-    doLogin(state, this.componentState, this.props);
+    const { onLogin } = this.props;
+
+    doLogin(state, this.componentState, this.props, onLogin);
 
     return false;
   }

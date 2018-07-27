@@ -118,6 +118,7 @@ class State {
   @observable
   modalStates = {
     addEpisode: false,
+    login: false,
   }
 
   @observable

@@ -16,6 +16,7 @@ import { LoginContainer } from './containers/LoginContainer';
 import { LogoutContainer } from './containers/LogoutContainer';
 import { RegisterContainer } from './containers/RegisterContainer';
 import { EpisodeContainer } from './containers/EpisodeContainer';
+import { LoginContainerModal } from './containers/LoginContainerModal';
 
 const routes = [
   {
@@ -110,6 +111,7 @@ ReactDOM.render(
                 ))
           }
           <Footer />
+          <LoginContainerModal />
         </div>
       </Router>
     </Provider>
