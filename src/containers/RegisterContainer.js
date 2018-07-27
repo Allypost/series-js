@@ -88,6 +88,14 @@ const labelContainer = css`
 @observer
 export class RegisterContainer extends Component {
 
+  @action
+  componentDidMount() {
+    const { state } = this.props;
+    const { modalStates } = state;
+
+    modalStates.login = false;
+  }
+
   @observable
   componentState = {
     email: '',
