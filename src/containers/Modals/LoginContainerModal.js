@@ -17,11 +17,20 @@ export class LoginContainerModal extends Component {
       this.handleClose(new Event(null));
     }
 
-    document.addEventListener('keydown', this.handleClose, false);
+    document.addEventListener('keydown', this.handleEscape, false);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleClose, false);
+    document.removeEventListener('keydown', this.handleEscape, false);
+  }
+
+  @action.bound
+  handleEscape(evt) {
+    if (evt.keyCode === 27) {
+      return this.handleClose(evt);
+    }
+
+    return true;
   }
 
   @action.bound
