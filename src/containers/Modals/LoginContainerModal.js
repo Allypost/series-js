@@ -16,6 +16,12 @@ export class LoginContainerModal extends Component {
     if (isLoggedIn) {
       this.handleClose(new Event(null));
     }
+
+    document.addEventListener('keydown', this.handleClose, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleClose, false);
   }
 
   @action.bound

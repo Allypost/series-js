@@ -153,6 +153,7 @@ export class AddEpisode extends Component {
 
   componentDidMount() {
     observe(this.componentState, 'image', this.imageChangeObserver);
+    document.addEventListener('keydown', this.handleEscape, false);
   }
 
   componentWillUnmount() {
@@ -161,6 +162,8 @@ export class AddEpisode extends Component {
     if (image) {
       window.URL.revokeObjectURL(image.preview);
     }
+
+    document.removeEventListener('keydown', this.handleEscape, false);
   }
 
   @observable
@@ -174,6 +177,15 @@ export class AddEpisode extends Component {
     episodes: [...Array(40).keys()].map((i) => i + 1),
     image: null,
     uploading: false,
+  }
+
+  @action.bound
+  handleEscape(evt) {
+    if (evt.keyCode === 27) {
+      const { onClose } = this.props;
+
+      onClose(evt);
+    }
   }
 
   get containerClass() {
