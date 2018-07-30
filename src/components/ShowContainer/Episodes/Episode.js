@@ -101,14 +101,16 @@ export class Episode extends Component {
 
   render() {
     const { episode } = this.props;
-    const imageUrl = episode.imageUrl ? `https://api.infinum.academy${episode.imageUrl}` : defaultPoster;
+    const { imageUrl = '' } = episode;
+    const cleanImageUrl = imageUrl.replace(/^\//, '');
+    const posterUrl = imageUrl ? `https://api.infinum.academy/${cleanImageUrl}` : defaultPoster;
 
     return (
       <div className={episodeContainer}>
         <img
           alt={`${episode.title} poster`}
           className={episodeImage}
-          src={imageUrl}
+          src={posterUrl}
         />
         <div className={episodeDetails}>
           <div className={episodeTitleContainer}>

@@ -1,97 +1,191 @@
 import React, { Component } from 'react';
-import { css } from 'emotion';
-import { action, observable } from 'mobx';
+import { Link } from 'react-router-dom';
+import { css, cx } from 'emotion';
+import { action, observe, observable, runInAction } from 'mobx';
 import { observer } from 'mobx-react';
 
-const modalHeader = css`
-  font-size: 2.4em;
-  text-align: center;
-  margin-top: 0;
-  color: #ff758c;
-`;
+import Form from 'muicss/lib/react/form';
+import Input from 'muicss/lib/react/input';
+import Textarea from 'muicss/lib/react/textarea';
+import Option from 'muicss/lib/react/option';
+import Select from 'muicss/lib/react/select';
+import Button from 'muicss/lib/react/button';
+import Dropzone from 'react-dropzone';
 
 const container = css`
-  position: fixed;
-  z-index: 9999;
-  top: 20vh;
-  left: 50%;
-  width: 50%;
-  margin-left: -25%;
-  padding: 2em;
-  border: 1px solid #e0e0e0;
-  border-radius: .5em;
-  background-color: #ffffff;
-  box-shadow: 0 24px 38px 3px rgba(0, 0, 0, .14), 0 9px 46px 8px rgba(0, 0, 0, .12), 0 11px 15px -7px rgba(0, 0, 0, .2);
+  postition: relative;
+  display: grid;
+  width: 50vw;
+  max-width: 500px;
+  grid-row-gap: 1em;
 `;
 
-const inputHeader = css`
-  margin-bottom: 0;
-
-  &:first-child {
-    margin-top: 0;
-  }
-`;
-
-const input = css`
-  border: none;
-  outline: none;
-  color: #ff758c;
-  background-color: transparent;
-  border-bottom: 2px solid #ff758c;
-  font-kerning: normal;
-  font-size: 1em;
-`;
-
-const titleStyle = css`
-  ${input}
-  font-size: 1.5em;
-`;
-
-const descriptionStyle = css`
-  ${input}
-  width: 31.7vw;
-  height: 4.5em;
-  resize: none;
-`;
-
-const numbersStyle = css`
-  ${input}
-  width: 2.5em;
-`;
-
-const actionsContainer = css`
-  margin-top: 2em;
-`;
-
-const button = css`
-  border: 1px solid #e0e0e0;
-  background: #ffffff;
-  font-size: 1.2em;
-  padding: .8em 1.4em .7em;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  text-shadow: 1px 1px 0 rgba(0, 0, 0, .15);
+const modalHeader = css`
+  font-size: 1.63em !important;
+  font-weight: 300;
+  color: #212121;
 `;
 
 const submitButton = css`
-  ${button}
-  color: #2e7d32;
+  justify-self: center;
+  border-radius: 6px;
+  background-color: #ff758c;
+  font-size: 1em;
+  padding: .3em 1.8em;
+  box-sizing: content-box;
+
+  &:hover {
+    background-color: #ff6680;
+  }
+`;
+
+const selectInput = css`
+  padding: 0 .5em;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0;
+
+  & > select {
+    color: #ff758c;
+  }
+
+  &:focus > select {
+    border-color: #ff758c;
+  }
+`;
+
+const selectLabel = css`
+  line-height: 1.1em;
+  vertical-align: middle;
+`;
+
+const inputStyle = css`
+  & > input:focus {
+    border-color: #ff758c;
+
+    & ~ label {
+      color: #ff758c;
+    }
+  }
+`;
+
+const seasonEpisodeContainer = css`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+`;
+
+const selectContainer = css`
+  display: grid;
+  align-items: baseline;
+  justify-items: center;
+  grid-auto-flow: column;
+  grid-template-columns: fit-content(0) auto;
+`;
+
+const descriptionStyle = css`
+  & > textarea:focus {
+    border-color: #ff758c;
+
+    & ~ label {
+      color: #ff758c;
+    }
+  }
 `;
 
 const cancelButton = css`
-  ${button}
-  color: #ff6f00;
+  position: absolute;
+  top: .3em;
+  right: .63em;
+  width: 3.141592em;
+  height: 3.141592em;
+  line-height: 3.3em;
+`;
+
+const cancelButtonIcon = css`
+  line-height: inherit;
+`;
+
+const dropzoneContainer = css`
+  width: 100%;
+`;
+
+const dropzone = css`
+  display: grid;
+  cursor: pointer;
+  width: 100%;
+  min-height: 10em;
+  box-sizing: border-box;
+  padding: 1em;
+  border: 2px dashed #eeeeee;
+  align-items: center;
+  justify-items: center;
+  line-height: 1em;
+  text-align: center;
+`;
+
+const dropzoneUploading = css`
+  border-color: yellow;
+`;
+
+const cameraIcon = css`
+  color: #ff758c;
+`;
+
+const browseText = css`
+  color: #ff758c;
+`;
+
+const dropzoneContent = css`
+  height: 100%;
+  width: 50%;
+`;
+
+const dropzoneChange = css`
+  color: #ff758c;
+  padding-top: 1.2em;
+`;
+
+const dropzoneImagePreview = css`
+  height: 6em;
 `;
 
 export class AddEpisode extends Component {
 
+  componentDidMount() {
+    observe(this.componentState, 'image', this.imageChangeObserver);
+    document.addEventListener('keydown', this.handleEscape, false);
+  }
+
+  componentWillUnmount() {
+    const { image } = this.componentState;
+
+    if (image) {
+      window.URL.revokeObjectURL(image.preview);
+    }
+
+    document.removeEventListener('keydown', this.handleEscape, false);
+  }
+
   @observable
   componentState = {
+    mediaId: '',
     title: '',
     description: '',
     season: 1,
     episode: 1,
+    seasons: [...Array(8).keys()].map((i) => i + 1),
+    episodes: [...Array(40).keys()].map((i) => i + 1),
+    image: null,
+    uploading: false,
+  }
+
+  @action.bound
+  handleEscape(evt) {
+    if (evt.keyCode === 27) {
+      const { onClose } = this.props;
+
+      onClose(evt);
+    }
   }
 
   get containerClass() {
@@ -107,115 +201,218 @@ export class AddEpisode extends Component {
     return container;
   }
 
-  @action.bound
-  handleTitleChange(evt) {
-    this.componentState.title = evt.target.value;
+  @observer
+  get allowSubmit() {
+    const { isLoading } = this.props;
+    const { title, uploading } = this.componentState;
+
+    return !isLoading && !uploading && title.length;
   }
 
   @action.bound
-  handleDescriptionChange(evt) {
-    this.componentState.description = evt.target.value;
+  imageChangeObserver(diff) {
+    const { oldValue, newValue } = diff;
+
+    if (oldValue) {
+      window.URL.revokeObjectURL(oldValue.preview);
+    }
+
+    if (newValue) {
+      const { onImage } = this.props;
+
+      this.componentState.mediaId = '';
+      this.componentState.uploading = true;
+      onImage(newValue)
+        .then(({ _id }) => {
+          runInAction(() => {
+            this.componentState.mediaId = _id;
+          });
+        })
+        .finally(runInAction(() => {
+          this.componentState.uploading = false;
+        }));
+    }
   }
 
   @action.bound
-  handleEpisodeChange(evt) {
-    this.componentState.episode = evt.target.value;
-  }
-
-  @action.bound
-  handleSeasonChange(evt) {
-    this.componentState.season = evt.target.value;
+  handleInputChange(inputName) {
+    return action((evt) => {
+      const { value } = evt.target;
+      this.componentState[inputName] = value;
+    });
   }
 
   @action.bound
   handleAddEpisode(evt) {
     const { onAdd } = this.props;
+    const { isLoading } = this.props;
+
+    if (isLoading) {
+      return null;
+    }
 
     return onAdd(evt, this.componentState);
+  }
+
+  @action.bound
+  handleFile(files = []) {
+    this.componentState.image = files.pop();
   }
 
   @observer
   render() {
     const {
-      title, description, episode, season,
+      title, description, episode, season, image,
+    } = this.componentState;
+
+    const {
+      episodes, seasons,
+    } = this.componentState;
+
+    const {
+      uploading,
     } = this.componentState;
 
     const { onClose } = this.props;
+    const { isLoading } = this.props;
 
     return (
-      <div className={this.containerClass}>
-        <form
-          action="#"
-          method="POST"
+      <div>
+        <Form
+          className={container}
+          onSubmit={this.handleAddEpisode}
         >
-          <h1 className={modalHeader}>
-            Add episode
-          </h1>
-          <h1 className={inputHeader}>
-            Title
-          </h1>
-          <div>
-            <input
-              className={titleStyle}
-              onChange={this.handleTitleChange}
-              required
-              type="text"
-              value={title}
-            />
-          </div>
-          <h1 className={inputHeader}>
-            Description
-          </h1>
-          <div>
-            <textarea
-              className={descriptionStyle}
-              onChange={this.handleDescriptionChange}
-              required
-              value={description}
-            />
-          </div>
-          <h1 className={inputHeader}>
-            Season and Episode
-          </h1>
-          <div>
-            <span>
-              S
-            </span>
-            <input
-              className={numbersStyle}
-              onChange={this.handleSeasonChange}
-              required
-              type="number"
-              value={season}
-            />
-            <span>
-              Ep
-            </span>
-            <input
-              className={numbersStyle}
-              onChange={this.handleEpisodeChange}
-              required
-              type="number"
-              value={episode}
-            />
-          </div>
-          <div className={actionsContainer}>
-            <button
-              className={submitButton}
-              onClick={this.handleAddEpisode}
-              type="button"
+          <legend className={modalHeader}>
+            Add new episode
+          </legend>
+          <div className={dropzoneContainer}>
+            <Dropzone
+              className={cx(dropzone, { [dropzoneUploading]: uploading })}
+              multiple={false}
+              onDrop={this.handleFile}
             >
-              Save
-            </button>
-            <button
-              className={cancelButton}
-              onClick={onClose}
-              type="button"
-            >
-              Cancel
-            </button>
+              {
+                image ?
+                  (
+                    <div className={dropzoneContent}>
+                      <img
+                        alt="Episode thumbnail preview"
+                        className={dropzoneImagePreview}
+                        src={image.preview}
+                      />
+                      <p className={dropzoneChange}>
+                        Change Photo
+                      </p>
+                    </div>
+                  ) :
+                  (
+                    <div>
+                      <p>
+                        <i className={cx('material-icons', cameraIcon)}>
+                          photo_camera
+                        </i>
+                      </p>
+                      <p>
+                        Drag your image here or
+                      </p>
+                      <p className={browseText}>
+                        browse
+                      </p>
+                    </div>
+                  )
+              }
+            </Dropzone>
           </div>
-        </form>
+          <Input
+            className={inputStyle}
+            disabled={isLoading}
+            floatingLabel
+            label="Episode title"
+            onChange={this.handleInputChange('title')}
+            required
+            value={title}
+          />
+          <div className={seasonEpisodeContainer}>
+            <div className={selectContainer}>
+              <span className={selectLabel}>
+                Season:
+              </span>
+              <Select
+                className={selectInput}
+                defaultValue={season}
+                disabled={isLoading}
+                onChange={this.handleInputChange('season')}
+                required
+              >
+                {
+                  seasons
+                    .map((i) => (
+                      <Option
+                        key={i}
+                        label={i}
+                        value={i}
+                      />
+                    ))
+                }
+              </Select>
+            </div>
+            <div className={selectContainer}>
+              <span className={selectLabel}>
+                Episode:
+              </span>
+              <Select
+                className={selectInput}
+                defaultValue={episode}
+                disabled={isLoading}
+                onChange={this.handleInputChange('episode')}
+                required
+              >
+                {
+                  episodes
+                    .map((i) => (
+                      <Option
+                        key={i}
+                        label={i}
+                        value={i}
+                      />
+                    ))
+                }
+              </Select>
+            </div>
+          </div>
+          <Textarea
+            className={descriptionStyle}
+            disabled={isLoading}
+            floatingLabel
+            label="Episode description"
+            onChange={this.handleInputChange('description')}
+            value={description}
+          />
+          <Button
+            className={submitButton}
+            color="accent"
+            disabled={!this.allowSubmit}
+          >
+            {
+              isLoading ?
+                'Adding episode...' :
+                'Add new episode'
+            }
+          </Button>
+        </Form>
+        <Link
+          onClick={onClose}
+          to="/"
+        >
+          <Button
+            className={cancelButton}
+            variant="fab"
+          >
+            <i className={cx('material-icons', cancelButtonIcon)}>
+              close
+            </i>
+          </Button>
+        </Link>
       </div>
     );
   }

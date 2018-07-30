@@ -3,19 +3,20 @@ import { configure } from 'mobx';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
 import { css, injectGlobal } from 'emotion';
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
 
 import state from './state';
 
 import { IndexContainer } from './containers/IndexContainer';
 import { ShowContainer } from './containers/ShowContainer';
-import { NotFoundContainer } from './containers/NotFoundContainer';
+import { ShowContainerModal } from './containers/Modals/ShowContainerModal';
 import { NavBar } from './containers/NavBar';
 import { Footer } from './containers/Footer';
 import { LoginContainer } from './containers/LoginContainer';
 import { LogoutContainer } from './containers/LogoutContainer';
 import { RegisterContainer } from './containers/RegisterContainer';
 import { EpisodeContainer } from './containers/EpisodeContainer';
+import { LoginContainerModal } from './containers/Modals/LoginContainerModal';
 
 const routes = [
   {
@@ -26,6 +27,10 @@ const routes = [
   {
     component: ShowContainer,
     path: '/show/:showId',
+  },
+  {
+    component: ShowContainerModal,
+    path: '/show/:showId/add-episode',
     exact: true,
   },
   {
@@ -47,9 +52,6 @@ const routes = [
     component: LogoutContainer,
     path: '/logout',
     exact: true,
-  },
-  {
-    component: NotFoundContainer,
   },
 ];
 
@@ -98,19 +100,18 @@ ReactDOM.render(
       <Router>
         <div className={wrapper}>
           <NavBar />
-          <Switch>
-            {
-              routes
-                .map((routeData) =>
-                  (
-                    <Route
-                      key={routeData.path || '__'}
-                      {...routeData}
-                    />
-                  ))
-            }
-          </Switch>
+          {
+            routes
+              .map((routeData) =>
+                (
+                  <Route
+                    key={routeData.path || '__'}
+                    {...routeData}
+                  />
+                ))
+          }
           <Footer />
+          <LoginContainerModal />
         </div>
       </Router>
     </Provider>

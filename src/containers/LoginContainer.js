@@ -75,23 +75,37 @@ const eyeImage = css`
   height: 1.2em;
 `;
 
-export function doLogin(appState, data, props) {
+const inputLabel = css`
+  display: block;
+`;
+
+const labelContainer = css`
+  cursor: pointer;
+`;
+
+const defaultCallback = (props, token) => {
+  if (!token) {
+    alert('Invalid credentials');
+    return token;
+  }
+
+  const { history } = props;
+
+  if (history && history.push) {
+    history.push('/');
+  } else {
+    window.location.href = '/';
+  }
+
+  return token;
+};
+
+export function doLogin(appState, data, props, callback = null) {
   return login(appState, data)
     .then((token) => {
-      if (!token) {
-        alert('Invalid credentials');
-        return token;
-      }
+      const cb = callback || defaultCallback.bind(this, props);
 
-      const { history } = props;
-
-      if (history && history.push) {
-        history.push('/');
-      } else {
-        window.location.href = '/';
-      }
-
-      return token;
+      return cb(token);
     });
 }
 
@@ -108,18 +122,12 @@ export class LoginContainer extends Component {
   };
 
   @action.bound
-  handleUsernameChange(event) {
-    this.componentState.email = event.target.value;
-  }
+  handleInputChange(inputName, inputValue = 'value') {
+    return action((evt) => {
+      const { [inputValue]: value } = evt.target;
 
-  @action.bound
-  handlePasswordChange(event) {
-    this.componentState.password = event.target.value;
-  }
-
-  @action.bound
-  handleRememberChange(event) {
-    this.componentState.rememberMe = event.target.checked;
+      this.componentState[inputName] = value;
+    });
   }
 
   @action.bound
@@ -127,7 +135,9 @@ export class LoginContainer extends Component {
     evt.preventDefault();
 
     const { state } = this.props;
-    doLogin(state, this.componentState, this.props);
+    const { onLogin } = this.props;
+
+    doLogin(state, this.componentState, this.props, onLogin);
 
     return false;
   }
@@ -158,26 +168,26 @@ export class LoginContainer extends Component {
           method="POST"
           onSubmit={this.handleLogin}
         >
-          <label className={css`cursor: pointer;`}>
-            <span>
+          <label className={labelContainer}>
+            <span className={inputLabel}>
               My username is
             </span>
             <input
               className={cssUsername}
-              onChange={this.handleUsernameChange}
+              onChange={this.handleInputChange('email')}
               required
               type="email"
               value={email}
             />
           </label>
-          <label className={css`cursor: pointer;`}>
-            <span>
+          <label className={labelContainer}>
+            <span className={inputLabel}>
               and my password is
             </span>
             <div className={passwordContainer}>
               <input
                 className={cssPassword}
-                onChange={this.handlePasswordChange}
+                onChange={this.handleInputChange('password')}
                 required
                 type={showPassword ? 'text' : 'password'}
                 value={password}
@@ -198,7 +208,7 @@ export class LoginContainer extends Component {
             <label className={cssRemember}>
               <input
                 defaultChecked={rememberMe}
-                onChange={this.handleRememberChange}
+                onChange={this.handleInputChange('rememberMe', 'checked')}
                 type="checkbox"
               />
               Remember me

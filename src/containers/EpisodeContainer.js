@@ -109,7 +109,8 @@ export class EpisodeContainer extends Component {
     const { imageUrl } = episodeData;
 
     if (imageUrl) {
-      return `https://api.infinum.academy${imageUrl}`;
+      const cleanImageUrl = imageUrl.replace(/^\//, '');
+      return `https://api.infinum.academy/${cleanImageUrl}`;
     }
 
     return defaultPoster;
@@ -123,7 +124,7 @@ export class EpisodeContainer extends Component {
       background-position: center;
       background-repeat: no-repeat;
       background-size: contain;
-      background-image: url(${image});
+      background-image: url("${image}");
     `;
   }
 

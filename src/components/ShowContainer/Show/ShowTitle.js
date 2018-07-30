@@ -63,26 +63,21 @@ export class ShowTitle extends Component {
         <h1 className={showTitle}>
           {this.text}
         </h1>
-        {
-          isLoggedIn &&
-          (
-            <div className={showLikeContainer}>
-              <LikeButton
-                isDisabled={!isLoggedIn}
-                isLoading={isLiking}
-                likesCount={likesCount}
-                onClick={onAction}
-              />
-              <div className={likeButtonSpacer} />
-              <DislikeButton
-                dislikesCount={-likesCount}
-                isDisabled={!isLoggedIn}
-                isLoading={isLiking}
-                onClick={onAction}
-              />
-            </div>
-          )
-        }
+        <div className={showLikeContainer}>
+          <LikeButton
+            isDisabled={!isLoggedIn}
+            isLoading={isLiking}
+            likesCount={likesCount}
+            onClick={onAction}
+          />
+          <div className={likeButtonSpacer} />
+          <DislikeButton
+            dislikesCount={-likesCount}
+            isDisabled={!isLoggedIn}
+            isLoading={isLiking}
+            onClick={onAction}
+          />
+        </div>
       </div>
     );
   }

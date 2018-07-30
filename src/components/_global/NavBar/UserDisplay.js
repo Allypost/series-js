@@ -27,11 +27,21 @@ export class UserDisplay extends Component {
     }
   }
 
+  @action.bound
+  handleLogin(evt) {
+    evt.preventDefault();
+
+    const { onLogin } = this.props;
+
+    onLogin();
+  }
+
   // eslint-disable-next-line class-methods-use-this
   getLoginLink() {
     return (
       <Link
         className={prettyLink}
+        onClick={this.handleLogin}
         to="/login"
       >
         Log in

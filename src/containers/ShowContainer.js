@@ -13,7 +13,6 @@ import { ShowTitle } from '../components/ShowContainer/Show/ShowTitle';
 import { ShowActions } from '../components/ShowContainer/Show/ShowActions';
 import { ShowDescription } from '../components/ShowContainer/Show/ShowDescription';
 import { EpisodeList } from '../components/ShowContainer/Show/EpisodeList';
-import { AddEpisode } from '../components/ShowContainer/Show/AddEpisode';
 import { Episode } from '../components/ShowContainer/Episodes/Episode';
 
 
@@ -195,10 +194,15 @@ export class ShowContainer extends Component {
   handleAddEpisodeClick(evt) {
     evt.preventDefault();
 
-    const { state } = this.props;
-    const { modalStates } = state;
+    const { history } = this.props;
+    const { location } = this.props;
+    
+    // Just to keep me sane
+    const { pathname: pathName } = location;
+    
+    const trimmedPathName = pathName.replace(/\/$/, '');
 
-    modalStates.addEpisode = !modalStates.addEpisode;
+    history.push(`${trimmedPathName}/add-episode`);
   }
 
   get isFavourite() {
@@ -232,12 +236,14 @@ export class ShowContainer extends Component {
   handleShowAction(type) {
     const { state } = this.props;
     const { showData } = state;
+    const { user } = state;
+    const { token } = user;
 
     switch (type) {
       case 'like':
-        return likeShow(state, showData._id);
+        return likeShow(state, showData._id, token);
       case 'dislike':
-        return dislikeShow(state, showData._id);
+        return dislikeShow(state, showData._id, token);
       default:
         return null;
     }
@@ -291,11 +297,6 @@ export class ShowContainer extends Component {
             onAddEpisode={this.handleAddEpisodeClick}
             onFavourite={this.handleFavouritesClick}
             show={showActions}
-          />
-          <AddEpisode
-            onAdd={this.handleAddEpisode}
-            onClose={this.handleCloseAddEpisodeModal}
-            show={this.showAddEpisodeModal}
           />
 
           <div className={leftSide}>
@@ -363,7 +364,6 @@ export class ShowContainer extends Component {
             </div>
           </div>
         </div>
-        <div className={this.backgroundFaderClass} />
       </div>
     );
   }

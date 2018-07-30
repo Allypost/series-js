@@ -76,9 +76,25 @@ const eyeImage = css`
   height: 1.2em;
 `;
 
+const inputLabel = css`
+  display: block;
+`;
+
+const labelContainer = css`
+  cursor: pointer;
+`;
+
 @inject('state')
 @observer
 export class RegisterContainer extends Component {
+
+  @action
+  componentDidMount() {
+    const { state } = this.props;
+    const { modalStates } = state;
+
+    modalStates.login = false;
+  }
 
   @observable
   componentState = {
@@ -89,18 +105,12 @@ export class RegisterContainer extends Component {
   };
 
   @action.bound
-  handleUsernameChange(event) {
-    this.componentState.email = event.target.value;
-  }
+  handleInputChange(inputName, inputValue = 'value') {
+    return action((evt) => {
+      const { [inputValue]: value } = evt.target;
 
-  @action.bound
-  handlePasswordChange(event) {
-    this.componentState.password = event.target.value;
-  }
-
-  @action.bound
-  handleRememberChange(event) {
-    this.componentState.logMeIn = event.target.checked;
+      this.componentState[inputName] = value;
+    });
   }
 
   @action.bound
@@ -162,26 +172,26 @@ export class RegisterContainer extends Component {
           method="POST"
           onSubmit={this.handleLogin}
         >
-          <label className={css`cursor: pointer;`}>
-            <span>
+          <label className={labelContainer}>
+            <span className={inputLabel}>
               My username will be
             </span>
             <input
               className={cssUsername}
-              onChange={this.handleUsernameChange}
+              onChange={this.handleInputChange('email')}
               required
               type="email"
               value={email}
             />
           </label>
-          <label className={css`cursor: pointer;`}>
-            <span>
+          <label className={labelContainer}>
+            <span className={inputLabel}>
               and my password will be
             </span>
             <div className={passwordContainer}>
               <input
                 className={cssPassword}
-                onChange={this.handlePasswordChange}
+                onChange={this.handleInputChange('password')}
                 required
                 type={showPassword ? 'text' : 'password'}
                 value={password}
@@ -202,7 +212,7 @@ export class RegisterContainer extends Component {
             <label className={cssRemember}>
               <input
                 defaultChecked={logMeIn}
-                onChange={this.handleRememberChange}
+                onChange={this.handleInputChange('logMeIn')}
                 type="checkbox"
               />
               Log me in

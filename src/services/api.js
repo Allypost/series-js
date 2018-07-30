@@ -2,7 +2,9 @@ import Util from '../helpers/Util';
 
 const defaultFn = (param) => param;
 
-async function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
+async function doFetch(type, model, {
+  data = null, rawData = false, token = '', cbObj = {},
+}) {
   const {
     success = defaultFn,
     error = () => { },
@@ -14,12 +16,19 @@ async function doFetch(type, model, { data = null, token = '', cbObj = {} }) {
     headers: {
       Accept: 'application/json',
       Authorization: token || Util.getUserToken(),
-      'Content-Type': 'application/json',
     },
   };
 
+  if (!rawData) {
+    opts.headers['Content-Type'] = 'application/json';
+  }
+
   if (data) {
-    Object.assign(opts, { body: JSON.stringify(data) });
+    if (rawData) {
+      Object.assign(opts, { body: data });
+    } else {
+      Object.assign(opts, { body: JSON.stringify(data) });
+    }
   }
 
   return fetch(`https://api.infinum.academy/api/${model}`, opts)
@@ -40,8 +49,8 @@ export async function get(model, cbObj) {
   return doFetch('GET', model, { cbObj });
 }
 
-export async function post(model, token, data, cbObj) {
-  return doFetch('POST', model, { data, token, cbObj });
+export async function post(model, token, data, rawData = false) {
+  return doFetch('POST', model, { data, rawData, token });
 }
 
 export async function del(model, token, cbObj) {
