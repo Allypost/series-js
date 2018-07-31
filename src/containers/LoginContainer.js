@@ -7,6 +7,7 @@ import { action, observable } from 'mobx';
 import { login } from '../services/auth';
 
 import eyeImg from '../img/ic-akcije-show-password-red@3x.png';
+import { Checkbox } from '../components/_global/Inputs/Checkbox';
 
 const loginContainer = css`
   display: grid;
@@ -205,14 +206,13 @@ export class LoginContainer extends Component {
             </div>
           </label>
           <div>
-            <label className={cssRemember}>
-              <input
-                defaultChecked={rememberMe}
-                onChange={this.handleInputChange('rememberMe', 'checked')}
-                type="checkbox"
-              />
+            <Checkbox
+              className={cssRemember}
+              defaultChecked={rememberMe}
+              onChange={this.handleInputChange('rememberMe', 'checked')}
+            >
               Remember me
-            </label>
+            </Checkbox>
             <button
               className={cssSubmit}
               onClick={this.handleLogin}

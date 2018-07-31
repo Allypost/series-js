@@ -8,6 +8,7 @@ import { register } from '../services/auth';
 
 import eyeImg from '../img/ic-akcije-show-password-red@3x.png';
 import { doLogin } from './LoginContainer';
+import { Checkbox } from '../components/_global/Inputs/Checkbox';
 
 const loginContainer = css`
   display: grid;
@@ -209,14 +210,13 @@ export class RegisterContainer extends Component {
             </div>
           </label>
           <div>
-            <label className={cssRemember}>
-              <input
-                defaultChecked={logMeIn}
-                onChange={this.handleInputChange('logMeIn')}
-                type="checkbox"
-              />
+            <Checkbox
+              className={cssRemember}
+              defaultChecked={logMeIn}
+              onChange={this.handleInputChange('logMeIn', 'checked')}
+            >
               Log me in
-            </label>
+            </Checkbox>
             <button
               className={cssSubmit}
               onClick={this.handleLogin}
