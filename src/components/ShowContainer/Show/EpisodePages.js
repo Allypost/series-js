@@ -55,10 +55,7 @@ const disabledButton = css`
 `;
 
 const pageNumberContainer = css`
-  display: grid;
-  grid-auto-flow: row;
-  grid-template-columns: repeat(10, auto);
-  grid-column-gap: .5em;
+  display: inline-block;
 `;
 
 export class EpisodePages extends Component {
