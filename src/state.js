@@ -139,7 +139,7 @@ class State {
   constructor() {
     this.favourites.replace(getFavourites());
 
-    observe(this.favourites, (...args) => {
+    observe(this.favourites, () => {
       const { favourites } = this;
       const store = window.localStorage;
 
