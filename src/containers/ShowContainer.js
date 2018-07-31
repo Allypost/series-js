@@ -196,10 +196,10 @@ export class ShowContainer extends Component {
 
     const { history } = this.props;
     const { location } = this.props;
-    
+
     // Just to keep me sane
     const { pathname: pathName } = location;
-    
+
     const trimmedPathName = pathName.replace(/\/$/, '');
 
     history.push(`${trimmedPathName}/add-episode`);
@@ -256,11 +256,31 @@ export class ShowContainer extends Component {
     getEpisodeData(state, episodeId);
   }
 
+  get imageUrl() {
+    const { state } = this.props;
+
+    const { loadingStates, errorStates } = state;
+    const { showData: isLoading } = loadingStates;
+    const { showData: hasErrors } = errorStates;
+
+    if (isLoading || hasErrors) {
+      return defaultPoster;
+    }
+
+    const { showData } = state;
+    const { imageUrl } = showData;
+
+    if (imageUrl) {
+      return `https://api.infinum.academy${imageUrl}`;
+    }
+
+    return defaultPoster;
+  }
+
   render() {
     const { state } = this.props;
     const { showData } = state;
     const { sortedEpisodes: episodes } = state;
-    const imageUrl = showData.imageUrl ? `https://api.infinum.academy${showData.imageUrl}` : defaultPoster;
 
     const { isLoggedIn } = state;
     const { loadingStates, errorStates } = state;
@@ -337,7 +357,7 @@ export class ShowContainer extends Component {
             <img
               alt={`${showData.title} poster`}
               className={showImage}
-              src={imageUrl}
+              src={this.imageUrl}
             />
 
             <div className={spacer} />
