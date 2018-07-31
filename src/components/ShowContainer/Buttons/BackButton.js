@@ -24,10 +24,10 @@ const backBtn = css`
   & {
     display: inline-grid;
     cursor: pointer;
-    font-size: 3em;
+    font-size: 2.6em;
     font-family: monospace;
     line-height: 1.1em;
-    padding: 0 .3005em .12em;
+    padding: .12em .1615em;
     outline: none;
     border: 1px solid #ddd;
     border-radius: 100%;
@@ -35,11 +35,18 @@ const backBtn = css`
     color: #ff758c;
     transition: border .3s ease-in-out;
   }
+
+  & > i.material-icons {
+    font-size: 1em;
+    line-height: inherit;
+  }
+
   ${backBtnActions}
 `;
 
 const backBtnHover = css`
   position: relative;
+
   &::after {
     content: "";
     display: none;
@@ -60,7 +67,7 @@ const backBtnHover = css`
     position: absolute;
     display: none;
     top: 1.85em;
-    right: -1.1em;
+    right: -1.15em;
     border: solid transparent;
     border-right-color: rgba(0, 0, 0, .8);
     height: 0;
@@ -111,7 +118,9 @@ export class BackButton extends PureComponent {
             className={this.backBtn}
             type="button"
           >
-            &larr;
+            <i className="material-icons">
+              arrow_back
+            </i>
           </button>
         </Link>
       </div>
