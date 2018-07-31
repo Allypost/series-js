@@ -76,7 +76,7 @@ export class EpisodePages extends Component {
     const { linkList = [] } = this.props;
     const { currentElement } = this.props;
 
-    if (linkList <= 10 || currentElement < 6) {
+    if (linkList.length <= 10 || currentElement < 6) {
       return linkList.slice(0, 10).map((el, i) => [i + 1, el]);
     }
 
