@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import { css } from 'emotion';
 import { action } from 'mobx';
+import queryString from 'query-string';
 
 import defaultPoster from '../img/placeholder.png';
 
@@ -13,6 +14,7 @@ import { ShowTitle } from '../components/ShowContainer/Show/ShowTitle';
 import { ShowActions } from '../components/ShowContainer/Show/ShowActions';
 import { ShowDescription } from '../components/ShowContainer/Show/ShowDescription';
 import { EpisodeList } from '../components/ShowContainer/Show/EpisodeList';
+import { EpisodePages } from '../components/ShowContainer/Show/EpisodePages';
 import { Episode } from '../components/ShowContainer/Episodes/Episode';
 
 
@@ -77,6 +79,15 @@ const backgroundFader = css`
   background: rgba(0, 0, 0, .45);
 `;
 
+const episodesPagesContainer = css`
+  width: 100%;
+  text-align: center;
+`;
+
+const episodesPages = css`
+  margin: 1em auto;
+`;
+
 @inject('state')
 @observer
 export class ShowContainer extends Component {
@@ -108,6 +119,50 @@ export class ShowContainer extends Component {
     const { showId } = params;
 
     return showId;
+  }
+
+  get chunkLength() {
+    return 10;
+  }
+
+  get chunk() {
+    const { location } = this.props;
+    const { search } = location;
+    const query = queryString.parse(search);
+
+    return Number(query.page || 1);
+  }
+
+  @observer
+  get pages() {
+    const { state } = this.props;
+    const { episodes } = state;
+    const showId = this.getShowId();
+
+    const chunks = episodes.length / this.chunkLength;
+    const pagesCount = Math.ceil(chunks);
+
+    const emptyArray = Array.from(' '.repeat(pagesCount));
+
+    const pages =
+      emptyArray
+        .map((_, i) => i + 1)
+        .map((i) => `/show/${showId}?page=${i}`);
+
+    return pages;
+  }
+
+  @observer
+  get episodesChunk() {
+    const { state } = this.props;
+
+    const { chunk = 1 } = this;
+    const { sortedEpisodes: episodes } = state;
+
+    const startPosition = (chunk - 1) * this.chunkLength;
+    const endPosition = chunk * this.chunkLength;
+
+    return episodes.slice(startPosition, endPosition);
   }
 
   @action.bound
@@ -280,7 +335,7 @@ export class ShowContainer extends Component {
   render() {
     const { state } = this.props;
     const { showData } = state;
-    const { sortedEpisodes: episodes } = state;
+    const { episodes } = state;
 
     const { isLoggedIn } = state;
     const { loadingStates, errorStates } = state;
@@ -294,6 +349,14 @@ export class ShowContainer extends Component {
     const { showLike } = loadingStates;
 
     const showActions = isLoggedIn && !isLoading && !hasErrors;
+
+    if (this.pages.length > 10 && this.chunk > this.pages.length) {
+      const { history } = this.props;
+      
+      history.push(this.pages.pop());
+
+      return null;
+    }
 
     return (
       <div
@@ -332,25 +395,48 @@ export class ShowContainer extends Component {
 
             <div className={spacer} />
 
+            {
+              (episodes.length > this.chunkLength) &&
+              (
+                <div className={episodesPagesContainer}>
+                  <EpisodePages
+                    className={episodesPages}
+                    currentElement={this.chunk}
+                    linkList={this.pages}
+                  />
+                </div>
+              )
+            }
+
             <EpisodeList
               hasErrors={episodesErrors}
               isLoading={isLoading || episodesLoading}
             >
               {
-                episodes.map((episode) => {
-                  const { [episode._id]: isLoading = true } = loadingStates.episodesData;
+                this
+                  .episodesChunk
+                  .map((episode) => {
+                    const { [episode._id]: isLoading = true } = loadingStates.episodesData;
 
-                  return (
-                    <Episode
-                      episode={episode}
-                      getEpisodeData={this.getEpisodeData}
-                      isLoading={isLoading}
-                      key={episode._id}
-                    />
-                  );
-                })
+                    return (
+                      <Episode
+                        episode={episode}
+                        getEpisodeData={this.getEpisodeData}
+                        isLoading={isLoading}
+                        key={episode._id}
+                      />
+                    );
+                  })
               }
             </EpisodeList>
+
+            <div className={episodesPagesContainer}>
+              <EpisodePages
+                className={episodesPages}
+                currentElement={this.chunk}
+                linkList={this.pages}
+              />
+            </div>
           </div>
 
           <div className={rightSide}>
