@@ -59,7 +59,7 @@ export class Checkbox extends Component {
 }
 
 Checkbox.propTypes = {
-  children: PropTypes.instanceOf(Object),
+  children: PropTypes.oneOfType([PropTypes.instanceOf(Object), PropTypes.string]),
   className: PropTypes.string,
   defaultChecked: PropTypes.bool,
   onChange: PropTypes.func,
