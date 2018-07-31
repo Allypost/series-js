@@ -107,11 +107,13 @@ export class Episode extends Component {
 
     return (
       <div className={episodeContainer}>
-        <img
-          alt={`${episode.title} poster`}
-          className={episodeImage}
-          src={posterUrl}
-        />
+        <Link to={`/episode/${episode._id}`}>
+          <img
+            alt={`${episode.title} poster`}
+            className={episodeImage}
+            src={posterUrl}
+          />
+        </Link>
         <div className={episodeDetails}>
           <div className={episodeTitleContainer}>
             <span className={episodeSeason}>
