@@ -56,6 +56,12 @@ export class Comment extends Component {
   handleDelete(evt) {
     evt.preventDefault();
 
+    const confirm = window.confirm('Are you sure you want to delete the comment?');
+
+    if (!confirm) {
+      return true;
+    }
+
     const { comment } = this.props;
     const { onDelete } = this.props;
 
