@@ -14,6 +14,11 @@ const buttonContainer = css`
   line-height: 2rem;
   align-self: center;
   vertical-align: middle;
+  margin-right: .2em;
+
+  &:last-child {
+    margin-right: 0;
+  }
 `;
 
 const button = css`
