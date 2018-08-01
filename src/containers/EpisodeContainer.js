@@ -158,30 +158,32 @@ export class EpisodeContainer extends Component {
 
   render() {
     const { state } = this.props;
-    const { episodeData: episode } = state;
-    const { episodeData: isLoading } = state.loadingStates;
-    const { comments } = state;
+    const { loadingStates } = state;
 
     const { isLoggedIn } = state;
-    const { loadingStates } = state;
+
+    const { episodeData: episode } = state;
+    const { episodeData: isLoading } = loadingStates;
+
+    const { comments } = state;
+    const { comments: commentsLoading } = loadingStates;
     const { commenting: isCommenting } = loadingStates;
 
     const { likes } = this;
-
     const { user } = state;
-
-    if (isLoading) {
-      return 'Loading...';
-    }
 
     return (
       <div className={episodeContainer}>
         <div className={this.headerContainer}>
           <div className={backButtonContainer}>
-            <BackButton
-              text="Back to TV show"
-              to={`/show/${episode.showId}`}
-            />
+            {
+              !isLoading && (
+                <BackButton
+                  text="Back to TV show"
+                  to={`/show/${episode.showId}`}
+                />
+              )
+            }
           </div>
           <div className={likeButtonContainer}>
             <LikeButton likesCount={likes} />
@@ -192,10 +194,33 @@ export class EpisodeContainer extends Component {
         <div className={episodeData}>
           <div className={episodeDataContainer}>
             <h2>
-              {episode.title}
+              {
+                isLoading ?
+                  (
+                    <em>
+                      Loading title...
+                    </em>
+                  ) :
+                  (
+                    episode.title ||
+                    (
+                      <em>
+                        No title
+                      </em>
+                    )
+                  )
+              }
             </h2>
             <div>
-              {episode.description}
+              {
+                isLoading ?
+                  (
+                    <em>
+                      We&apos;re fetching the data...
+                    </em>
+                  ) :
+                  episode.description
+              }
             </div>
             <div>
               <h4 className={commentsHeader}>
@@ -204,14 +229,18 @@ export class EpisodeContainer extends Component {
                 </span>
                 <span className={commentsHeaderNum}>
                   (
-                  {comments.length}
+                  {
+                    commentsLoading ?
+                      'Loading...' :
+                      comments.length
+                  }
                   )
                 </span>
               </h4>
               <CommentInput
                 canComment={isLoggedIn}
                 episodeId={this.episodeId}
-                isLoading={isCommenting}
+                isLoading={isCommenting || commentsLoading}
                 onSubmit={this.handleCommentPost}
               />
             </div>
