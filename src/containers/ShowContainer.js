@@ -401,6 +401,7 @@ export class ShowContainer extends Component {
               (
                 <div className={episodesPagesContainer}>
                   <EpisodePages
+                    chunkSize={this.chunkSize}
                     className={episodesPages}
                     currentElement={this.chunk}
                     linkList={this.pages}
@@ -436,6 +437,7 @@ export class ShowContainer extends Component {
               (
                 <div className={episodesPagesContainer}>
                   <EpisodePages
+                    chunkSize={this.chunkSize}
                     className={episodesPages}
                     currentElement={this.chunk}
                     linkList={this.pages}

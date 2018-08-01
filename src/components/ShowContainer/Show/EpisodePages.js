@@ -75,23 +75,25 @@ export class EpisodePages extends Component {
   get linkList() {
     const { linkList = [] } = this.props;
     const { currentElement } = this.props;
+    const { chunkSize = 10 } = this.props;
+    const chunkBoundary = Math.floor(chunkSize / 2) + 1;
 
-    if (linkList.length <= 10 || currentElement < 6) {
-      return linkList.slice(0, 10).map((el, i) => [i + 1, el]);
+    if (linkList.length <= chunkSize || currentElement < chunkBoundary) {
+      return linkList.slice(0, chunkSize).map((el, i) => [i, el]);
     }
 
-    const startIndex = Math.max(0, currentElement - 6);
+    const startIndex = Math.max(0, currentElement - chunkBoundary);
     const endIndex = Math.min(currentElement + 4, linkList.length);
     const slicedList = linkList.slice(startIndex, endIndex);
 
-    if (slicedList.length === 10) {
-      return slicedList.map((el, i) => [i + (currentElement - 5), el]);
+    if (slicedList.length === chunkSize) {
+      return slicedList.map((el, i) => [i + (currentElement - chunkBoundary), el]);
     }
 
-    const fillCount = 10 - slicedList.length;
+    const fillCount = chunkSize - slicedList.length;
     const rest = linkList.slice(linkList.length - slicedList.length - fillCount, linkList.length - slicedList.length);
 
-    return [...rest, ...slicedList].map((el, i) => [linkList.length - (9 - i), el]);
+    return [...rest, ...slicedList].map((el, i) => [linkList.length - (chunkSize - i), el]);
   }
 
   render() {
@@ -133,10 +135,10 @@ export class EpisodePages extends Component {
                 to={url}
               >
                 <button
-                  className={cx(button, { [selectedButton]: currentElement === i })}
+                  className={cx(button, { [selectedButton]: currentElement === i + 1 })}
                   type="button"
                 >
-                  {i}
+                  {i + 1}
                 </button>
               </Link>))
           }
