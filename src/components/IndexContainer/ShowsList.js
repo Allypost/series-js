@@ -5,6 +5,7 @@ import { ShowCard } from './ShowCard';
 
 const errorHeader = css`
   grid-column: 2 / -2;
+  font-weight: bold;
 `;
 
 export const container = css`
