@@ -4,7 +4,7 @@ import { css } from 'emotion';
 import { ShowCard } from './ShowCard';
 
 const errorHeader = css`
-  grid-column: 1 / -1;
+  grid-column: 2 / -2;
 `;
 
 export const container = css`
