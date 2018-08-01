@@ -121,7 +121,7 @@ export class ShowContainer extends Component {
     return showId;
   }
 
-  get chunkLength() {
+  get chunkSize() {
     return 10;
   }
 
@@ -139,7 +139,7 @@ export class ShowContainer extends Component {
     const { episodes } = state;
     const showId = this.getShowId();
 
-    const chunks = episodes.length / this.chunkLength;
+    const chunks = episodes.length / this.chunkSize;
     const pagesCount = Math.ceil(chunks);
 
     const emptyArray = Array.from(' '.repeat(pagesCount));
@@ -159,8 +159,8 @@ export class ShowContainer extends Component {
     const { chunk = 1 } = this;
     const { sortedEpisodes: episodes } = state;
 
-    const startPosition = (chunk - 1) * this.chunkLength;
-    const endPosition = chunk * this.chunkLength;
+    const startPosition = (chunk - 1) * this.chunkSize;
+    const endPosition = chunk * this.chunkSize;
 
     return episodes.slice(startPosition, endPosition);
   }
@@ -349,10 +349,11 @@ export class ShowContainer extends Component {
     const { showLike } = loadingStates;
 
     const showActions = isLoggedIn && !isLoading && !hasErrors;
+    const showEpisodePages = !isLoading && !episodesLoading && !hasErrors && !episodesErrors && (episodes.length > this.chunkSize);
 
     if (this.pages.length > 10 && this.chunk > this.pages.length) {
       const { history } = this.props;
-      
+
       history.push(this.pages.pop());
 
       return null;
@@ -396,7 +397,7 @@ export class ShowContainer extends Component {
             <div className={spacer} />
 
             {
-              (episodes.length > this.chunkLength) &&
+              showEpisodePages &&
               (
                 <div className={episodesPagesContainer}>
                   <EpisodePages
@@ -430,13 +431,18 @@ export class ShowContainer extends Component {
               }
             </EpisodeList>
 
-            <div className={episodesPagesContainer}>
-              <EpisodePages
-                className={episodesPages}
-                currentElement={this.chunk}
-                linkList={this.pages}
-              />
-            </div>
+            {
+              showEpisodePages &&
+              (
+                <div className={episodesPagesContainer}>
+                  <EpisodePages
+                    className={episodesPages}
+                    currentElement={this.chunk}
+                    linkList={this.pages}
+                  />
+                </div>
+              )
+            }
           </div>
 
           <div className={rightSide}>
