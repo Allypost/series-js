@@ -7,14 +7,17 @@ import { action, observable } from 'mobx';
 import { login } from '../services/auth';
 
 import eyeImg from '../img/ic-akcije-show-password-red@3x.png';
+import { Checkbox } from '../components/_global/Inputs/Checkbox';
 
 const loginContainer = css`
   display: grid;
+  height: 100%;
   grid-column: 5 / span 4;
+  grid-row-gap: 1em;
   grid-row: body;
   font-size: 1.8em;
-  line-height: 2em;
   color: #424242;
+  align-self: center;
 `;
 
 const cssUsername = css`
@@ -34,9 +37,10 @@ const cssPassword = css`
 `;
 
 const cssRemember = css`
-  font-size: .5em;
-  cursor: pointer;
   display: inline-block;
+  cursor: pointer;
+  font-size: .5em;
+  margin-bottom: 2em;
 `;
 
 const cssSubmit = css`
@@ -45,8 +49,8 @@ const cssSubmit = css`
   background-color: #ff758c;
   color: #fff;
   font-size: .55em;
-  font-variant: all-small-caps;
-  padding: .69em 5em;
+  text-transform: uppercase;
+  padding: .7em 5em;
   border: none;
   border-radius: .35em;
 `;
@@ -54,8 +58,7 @@ const cssSubmit = css`
 const loginFooter = css`
   display: grid;
   font-size: .5em;
-  grid-row: footer;
-  align-items: end;
+  align-items: baseline;
   color: #757575;
 `;
 
@@ -80,7 +83,16 @@ const inputLabel = css`
 `;
 
 const labelContainer = css`
+  display: block;
   cursor: pointer;
+`;
+
+const formContainer = css`
+  align-self: center;
+`;
+
+const submitContainer = css`
+  margin-top: .5em;
 `;
 
 const defaultCallback = (props, token) => {
@@ -165,6 +177,7 @@ export class LoginContainer extends Component {
     return (
       <div className={loginContainer}>
         <form
+          className={formContainer}
           method="POST"
           onSubmit={this.handleLogin}
         >
@@ -204,15 +217,14 @@ export class LoginContainer extends Component {
               </a>
             </div>
           </label>
-          <div>
-            <label className={cssRemember}>
-              <input
-                defaultChecked={rememberMe}
-                onChange={this.handleInputChange('rememberMe', 'checked')}
-                type="checkbox"
-              />
+          <div className={submitContainer}>
+            <Checkbox
+              className={cssRemember}
+              defaultChecked={rememberMe}
+              onChange={this.handleInputChange('rememberMe', 'checked')}
+            >
               Remember me
-            </label>
+            </Checkbox>
             <button
               className={cssSubmit}
               onClick={this.handleLogin}

@@ -79,15 +79,17 @@ class State {
   get sortedEpisodes() {
     const { episodes = [] } = this;
 
-    const sortedEpisodes = episodes.slice().sort((a, b) => {
-      if (a.season === b.season) {
-        return Number(a.episodeNumber) - Number(b.episodeNumber);
-      }
+    return (
+      episodes
+        .slice()
+        .sort((a, b) => {
+          if (a.season === b.season) {
+            return Number(a.episodeNumber) - Number(b.episodeNumber);
+          }
 
-      return Number(a.season) - Number(b.season);
-    });
-
-    return sortedEpisodes;
+          return Number(a.season) - Number(b.season);
+        })
+    );
   }
 
   @observable
@@ -137,7 +139,7 @@ class State {
   constructor() {
     this.favourites.replace(getFavourites());
 
-    observe(this.favourites, (...args) => {
+    observe(this.favourites, () => {
       const { favourites } = this;
       const store = window.localStorage;
 

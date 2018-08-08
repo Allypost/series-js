@@ -30,10 +30,10 @@ const showLikeContainer = css`
 export class ShowTitle extends Component {
 
   get text() {
-    const { loading, hasErrors } = this.props;
+    const { isLoading, hasErrors } = this.props;
     const { children } = this.props;
 
-    if (loading) {
+    if (isLoading) {
       return (
         <em>
           Loading...
